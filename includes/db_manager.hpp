@@ -6,6 +6,7 @@ class DatabaseManager{
 
 public:
   DatabaseManager();
+  inline pqxx::connection& getConnection() const{return *conn;}
   bool connect_to_db();
   void disconnect_db();
   void create_schema();
