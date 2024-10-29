@@ -6,6 +6,8 @@ class DatabaseManager{
 
 public:
   DatabaseManager();
-  void connect_to_db();
+  bool connect_to_db();
   void disconnect_db();
+  void create_schema();
+  void delete_schema();
 };
