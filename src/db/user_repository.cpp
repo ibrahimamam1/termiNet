@@ -2,15 +2,25 @@
 #include <ctime>
 #include <exception>
 #include <iostream>
+#include <pqxx/internal/statement_parameters.hxx>
+#include <string>
 
 UserRepository::UserRepository(DatabaseManager *db) : db_instance(db) {}
 
+bool UserRepository::is_user_already_in_db(std::string& email){
+  pqxx::work tx( *(db_instance->conn) );
+  pqxx::result res(tx.exec("select email from users"));
+  for(auto row: res){
+    if(row[0].c_str() == email)
+      return true;
+  }
+  return false;
+}
+
 void UserRepository::add_new_user_entry(UserModel &user) {
 
-  std::cout << "Yahhooooo\n";;
   pqxx::work tx( *(db_instance->conn) );
   
-  std::cout << "Initialised tx\n";
 
   // convert created_at from a time_t var to a postgres compatible type
   std::tm *ptm = std::localtime(&user.created_at);

@@ -1,11 +1,11 @@
 #include <iostream>
 #include "../includes/db_manager.hpp"
-#include "../includes/user_repository.hpp"
+#include "../includes/controllers/user_controller.hpp"
 #include <pqxx/pqxx>
 int main (int argc, char *argv[]) {
   
   DatabaseManager *db = new DatabaseManager();
-  UserRepository user_rep( db);
+  UserController user_controller( db);
   if( !db->connect_to_db() ){
     std::cout << "Connection To database Failed";
     return 0;
@@ -13,8 +13,10 @@ int main (int argc, char *argv[]) {
 
   db->create_schema();
   
-  UserModel user1(1 , "iba", "iba@gmail.com", "compilers are cool", time(0));
-  user_rep.add_new_user_entry(user1);
+  UserModel user1(2 , "iba2", "iba2@gmail.com", "compilers are cool", time(0));
+  std::cout << "User Model Created\n";
+
+  user_controller.signup(user1);
   db->disconnect_db();
   return 0;
 }
