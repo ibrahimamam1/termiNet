@@ -7,6 +7,7 @@
 #include <stdexcept>
 
 DatabaseManager::DatabaseManager():conn(nullptr){}
+pqxx::connection& DatabaseManager::getConnection(){return *conn;}
 bool DatabaseManager::connect_to_db(){
   
   try{

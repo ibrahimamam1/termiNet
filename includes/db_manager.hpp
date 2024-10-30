@@ -2,11 +2,11 @@
 #include <pqxx/pqxx>
 
 class DatabaseManager{
+public:
   pqxx::connection *conn;
 
-public:
   DatabaseManager();
-  inline pqxx::connection& getConnection() const{return *conn;}
+  pqxx::connection& getConnection();
   bool connect_to_db();
   void disconnect_db();
   void create_schema();

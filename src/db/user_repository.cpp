@@ -3,12 +3,12 @@
 #include <exception>
 #include <iostream>
 
-UserRepository::UserRepository(DatabaseManager &db) : db_instance(db) {}
+UserRepository::UserRepository(DatabaseManager *db) : db_instance(db) {}
 
 void UserRepository::add_new_user_entry(UserModel &user) {
 
-  std::cout << "Yahhooooo\n";
-  pqxx::work tx( db_instance.getConnection());
+  std::cout << "Yahhooooo\n";;
+  pqxx::work tx( *(db_instance->conn) );
   
   std::cout << "Initialised tx\n";
 

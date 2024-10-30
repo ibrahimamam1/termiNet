@@ -5,7 +5,7 @@
 int main (int argc, char *argv[]) {
   
   DatabaseManager *db = new DatabaseManager();
-  UserRepository user_rep(*db);
+  UserRepository user_rep( db);
   if( !db->connect_to_db() ){
     std::cout << "Connection To database Failed";
     return 0;
