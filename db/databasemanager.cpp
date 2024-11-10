@@ -20,10 +20,10 @@ void DatabaseManager::create_schema(){
         "create table if not exists users("
         "user_id integer primary key,"
         "user_name text,"
+        "user_email text,"
+        "user_sex text,"
         "user_dob date,"
-        "user_sex char,"
-        "email text,"
-        "bio text,"
+        "user_bio text,"
         "created_at date"
         ");"
         );

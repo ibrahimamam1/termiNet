@@ -13,6 +13,8 @@ termiNet_autogen/timestamp: \
 	/home/rgb/Desktop/termiNet/main.cpp \
 	/home/rgb/Desktop/termiNet/mainwindow.cpp \
 	/home/rgb/Desktop/termiNet/mainwindow.h \
+	/home/rgb/Desktop/termiNet/tests/login_signup/signup_test.cpp \
+	/home/rgb/Desktop/termiNet/tests/login_signup/signup_test.h \
 	/usr/include/alloca.h \
 	/usr/include/asm-generic/errno-base.h \
 	/usr/include/asm-generic/errno.h \

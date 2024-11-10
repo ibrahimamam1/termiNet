@@ -3,6 +3,7 @@
  uic:./ui_mainwindow.h
 /home/rgb/Desktop/termiNet/login_signup/signup.cpp
  uic:ui_signup.h
+/home/rgb/Desktop/termiNet/tests/login_signup/signup_test.cpp
 /home/rgb/Desktop/termiNet/mainwindow.h
  mmc:Q_OBJECT
  mdp:/home/rgb/Desktop/termiNet/build/Desktop-Debug/termiNet_autogen/moc_predefs.h
@@ -1266,5 +1267,6 @@
  mdp:/usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/stdarg.h
  mdp:/usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/stdbool.h
  mdp:/usr/lib/gcc/x86_64-pc-linux-gnu/14.2.1/include/stddef.h
+/home/rgb/Desktop/termiNet/tests/login_signup/signup_test.h
 /home/rgb/Desktop/termiNet/main.cpp
 /home/rgb/Desktop/termiNet/db/databasemanager.h

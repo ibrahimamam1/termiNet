@@ -47,7 +47,7 @@
 			{
 				"command" : 3,
 				"file" : 1,
-				"line" : 23,
+				"line" : 24,
 				"parent" : 0
 			},
 			{
@@ -71,19 +71,19 @@
 			{
 				"command" : 4,
 				"file" : 1,
-				"line" : 66,
+				"line" : 56,
 				"parent" : 0
 			},
 			{
 				"command" : 5,
 				"file" : 1,
-				"line" : 49,
+				"line" : 41,
 				"parent" : 0
 			},
 			{
 				"command" : 8,
 				"file" : 1,
-				"line" : 13,
+				"line" : 11,
 				"parent" : 0
 			},
 			{
@@ -235,6 +235,10 @@
 				},
 				{
 					"backtrace" : 6,
+					"define" : "QT_SQL_LIB"
+				},
+				{
+					"backtrace" : 6,
 					"define" : "QT_WIDGETS_LIB"
 				}
 			],
@@ -268,6 +272,11 @@
 					"backtrace" : 6,
 					"isSystem" : true,
 					"path" : "/usr/include/qt6/QtGui"
+				},
+				{
+					"backtrace" : 6,
+					"isSystem" : true,
+					"path" : "/usr/include/qt6/QtSql"
 				}
 			],
 			"language" : "CXX",
@@ -331,6 +340,11 @@
 			{
 				"backtrace" : 6,
 				"fragment" : "/usr/lib/libQt6Widgets.so.6.8.0",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 6,
+				"fragment" : "/usr/lib/libQt6Sql.so.6.8.0",
 				"role" : "libraries"
 			},
 			{

@@ -18,12 +18,14 @@ set(PROJECT_SOURCES
         login_signup/login.h login_signup/login.cpp login_signup/login.ui
         login_signup/signup.h login_signup/signup.cpp login_signup/signup.ui
         db/databasemanager.h db/databasemanager.cpp
+        tests/login_signup/signup_test.h tests/login_signup/signup_test.cpp
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(termiNet
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
+
     )
 else()
     if(ANDROID)

@@ -480,6 +480,12 @@
 			"MU",
 			"EWIEGA46WW/moc_mainwindow.cpp",
 			null
+		],
+		[
+			"/home/rgb/Desktop/termiNet/tests/login_signup/signup_test.h",
+			"MU",
+			"EHBJMNGCCY/moc_signup_test.cpp",
+			null
 		]
 	],
 	"HEADER_EXTENSIONS" : [ "h", "hh", "h++", "hm", "hpp", "hxx", "in", "txx" ],
@@ -546,7 +552,12 @@
 		[ "/home/rgb/Desktop/termiNet/login_signup/login.cpp", "MU", null ],
 		[ "/home/rgb/Desktop/termiNet/login_signup/signup.cpp", "MU", null ],
 		[ "/home/rgb/Desktop/termiNet/main.cpp", "MU", null ],
-		[ "/home/rgb/Desktop/termiNet/mainwindow.cpp", "MU", null ]
+		[ "/home/rgb/Desktop/termiNet/mainwindow.cpp", "MU", null ],
+		[
+			"/home/rgb/Desktop/termiNet/tests/login_signup/signup_test.cpp",
+			"MU",
+			null
+		]
 	],
 	"UIC_OPTIONS" : [],
 	"UIC_SEARCH_PATHS" : [],

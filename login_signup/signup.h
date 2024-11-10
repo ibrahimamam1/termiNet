@@ -15,7 +15,9 @@ class Signup : public QDialog
 
 public:
    explicit Signup(QWidget *parent, DatabaseManager* instance);
-    ~Signup();
+    bool validate_signup_form(std::string name ,std::string email ,std::string sex ,std::string dob ,std::string pass,std::string pass2);
+   void readUserTable();
+   ~Signup();
 
 private slots:
     void on_create_account_btn_clicked();
