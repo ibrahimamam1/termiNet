@@ -4,11 +4,10 @@ UserRepository::UserRepository() {}
 void UserRepository::addUserToDb(std::string name, std::string email, std::string sex, char* dob, char* created_at){
     QSqlQuery q;
     q.prepare(
-        "INSERT into users(user_id, user_name, user_email, user_sex, user_dob, user_bio, created_at)"
-        "values(:user_id, :user_name, :user_email, :user_sex, :user_dob,:user_bio, :created_at)"
+        "INSERT into users(user_name, user_email, user_sex, user_dob, user_bio, created_at)"
+        "values(:user_name, :user_email, :user_sex, :user_dob,:user_bio, :created_at)"
         );
 
-    q.bindValue(":user_id", 1);
     q.bindValue(":user_name",  QString::fromStdString(name));
     q.bindValue(":user_email", QString::fromStdString(email));
     q.bindValue(":user_sex",   QString::fromStdString(sex));

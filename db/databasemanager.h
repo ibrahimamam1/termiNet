@@ -4,6 +4,9 @@
 #include<QtSql/QSqlDatabase>
 #include<QtSql/QSqlQuery>
 #include<QtSql/QSqlError>
+#include <QDebug>
+#include <QFile>
+#include <QTextStream>
 
 class DatabaseManager
 {
@@ -12,8 +15,7 @@ public:
     DatabaseManager();
     bool connect();
     void disconnect();
-    void create_schema();
-    void delete_schema();
+    bool executeSqlFile(const QString path);
 
     ~DatabaseManager();
 };

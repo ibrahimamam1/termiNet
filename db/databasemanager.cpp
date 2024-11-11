@@ -13,50 +13,39 @@ bool DatabaseManager::connect(){
     return db.open();
 }
 
-void DatabaseManager::create_schema(){
-    QSqlQuery q;
+bool DatabaseManager::executeSqlFile(const QString path){
+    QFile file(path);
 
-    q.exec(
-        "create table if not exists users("
-        "user_id integer primary key,"
-        "user_name text,"
-        "user_email text,"
-        "user_sex text,"
-        "user_dob date,"
-        "user_bio text,"
-        "created_at date"
-        ");"
-        );
-    q.exec(
-        "create table if not exists threads("
-        "thread_id integer primary key,"
-        "title varchar(200) not null,"
-        "content text,"
-        "created_at date,"
-        "author_id integer not null,"
-        "community_id integer,"
-        "parent_thread_id integer"
-        ");"
-        );
+    if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
+        qDebug() << "Failed to open file\n";
+        return false;
+    }
 
-    q.exec(
-        "create table if not exists communities("
-        "community_id integer primary key,"
-        "name varchar(50) not null,"
-        "description text,"
-        "created_at date"
-        ");"
-        );
+    QTextStream in(&file);
+    QString sqlQuery;
+    QSqlQuery query;
 
-    qDebug()<< "Schema Succesfully created\n";
+    while (!in.atEnd()) {
+        QString line = in.readLine().trimmed();
+        if (line.isEmpty() || line.startsWith("--")) {
+            continue; // Ignore empty lines and comments
+        }
+        sqlQuery += line;
+        if (line.endsWith(";")) {
+            // Execute the SQL command and clear for the next command
+            sqlQuery.chop(1);  // Remove the trailing semicolon for QSqlQuery
+            if (!query.exec(sqlQuery)) {
+                qDebug() << "SQL execution error:" << query.lastError().text();
+                return false;
+            }
+            sqlQuery.clear();
+        }
+    }
+    file.close();
+    return true;
 }
 
-void DatabaseManager::delete_schema(){
-    QSqlQuery q;
-    q.exec("drop table users");
-    q.exec("drop table threads");
-    q.exec("drop table communities");
-}
+
 DatabaseManager::~DatabaseManager(){
     db.close();
 }
