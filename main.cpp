@@ -17,8 +17,8 @@ int main(int argc, char *argv[])
         //db->delete_schema();
         //db->create_schema();
         Signup* signupWindow = new Signup(nullptr, db);
-        // signupWindow->show();
-        signupWindow->readUserTable();
+        signupWindow->show();
+        //signupWindow->readUserTable();
     }
     else qDebug() << "Please Check Your DB Connection\n";
 

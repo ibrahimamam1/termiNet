@@ -6,6 +6,8 @@ termiNet_autogen/timestamp: \
 	/home/rgb/Desktop/termiNet/build/Desktop-Debug/termiNet_autogen/moc_predefs.h \
 	/home/rgb/Desktop/termiNet/db/databasemanager.cpp \
 	/home/rgb/Desktop/termiNet/db/databasemanager.h \
+	/home/rgb/Desktop/termiNet/db/user_repository.cpp \
+	/home/rgb/Desktop/termiNet/db/user_repository.h \
 	/home/rgb/Desktop/termiNet/login_signup/login.cpp \
 	/home/rgb/Desktop/termiNet/login_signup/login.h \
 	/home/rgb/Desktop/termiNet/login_signup/signup.cpp \

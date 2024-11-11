@@ -105,6 +105,14 @@ build CMakeFiles/termiNet.dir/tests/login_signup/signup_test.cpp.o: CXX_COMPILER
   OBJECT_DIR = CMakeFiles/termiNet.dir
   OBJECT_FILE_DIR = CMakeFiles/termiNet.dir/tests/login_signup
 
+build CMakeFiles/termiNet.dir/db/user_repository.cpp.o: CXX_COMPILER__termiNet_unscanned_Debug /home/rgb/Desktop/termiNet/db/user_repository.cpp || cmake_object_order_depends_target_termiNet
+  DEFINES = -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_WIDGETS_LIB
+  DEP_FILE = CMakeFiles/termiNet.dir/db/user_repository.cpp.o.d
+  FLAGS = -DQT_QML_DEBUG -g -std=gnu++17 -fdiagnostics-color=always -mno-direct-extern-access
+  INCLUDES = -I/home/rgb/Desktop/termiNet/build/Desktop-Debug/termiNet_autogen/include -isystem /usr/include/qt6/QtCore -isystem /usr/include/qt6 -isystem /usr/lib/qt6/mkspecs/linux-g++ -isystem /usr/include/qt6/QtWidgets -isystem /usr/include/qt6/QtGui -isystem /usr/include/qt6/QtSql
+  OBJECT_DIR = CMakeFiles/termiNet.dir
+  OBJECT_FILE_DIR = CMakeFiles/termiNet.dir/db
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target termiNet
@@ -113,7 +121,7 @@ build CMakeFiles/termiNet.dir/tests/login_signup/signup_test.cpp.o: CXX_COMPILER
 #############################################
 # Link the executable termiNet
 
-build termiNet: CXX_EXECUTABLE_LINKER__termiNet_Debug CMakeFiles/termiNet.dir/termiNet_autogen/mocs_compilation.cpp.o CMakeFiles/termiNet.dir/main.cpp.o CMakeFiles/termiNet.dir/mainwindow.cpp.o CMakeFiles/termiNet.dir/login_signup/login.cpp.o CMakeFiles/termiNet.dir/login_signup/signup.cpp.o CMakeFiles/termiNet.dir/db/databasemanager.cpp.o CMakeFiles/termiNet.dir/tests/login_signup/signup_test.cpp.o | /usr/lib/libQt6Widgets.so.6.8.0 /usr/lib/libQt6Sql.so.6.8.0 /usr/lib/libQt6Gui.so.6.8.0 /usr/lib/libGLX.so /usr/lib/libOpenGL.so /usr/lib/libQt6Core.so.6.8.0 || termiNet_autogen termiNet_autogen_timestamp_deps
+build termiNet: CXX_EXECUTABLE_LINKER__termiNet_Debug CMakeFiles/termiNet.dir/termiNet_autogen/mocs_compilation.cpp.o CMakeFiles/termiNet.dir/main.cpp.o CMakeFiles/termiNet.dir/mainwindow.cpp.o CMakeFiles/termiNet.dir/login_signup/login.cpp.o CMakeFiles/termiNet.dir/login_signup/signup.cpp.o CMakeFiles/termiNet.dir/db/databasemanager.cpp.o CMakeFiles/termiNet.dir/tests/login_signup/signup_test.cpp.o CMakeFiles/termiNet.dir/db/user_repository.cpp.o | /usr/lib/libQt6Widgets.so.6.8.0 /usr/lib/libQt6Sql.so.6.8.0 /usr/lib/libQt6Gui.so.6.8.0 /usr/lib/libGLX.so /usr/lib/libOpenGL.so /usr/lib/libQt6Core.so.6.8.0 || termiNet_autogen termiNet_autogen_timestamp_deps
   FLAGS = -DQT_QML_DEBUG -g
   LINK_LIBRARIES = /usr/lib/libQt6Widgets.so.6.8.0  /usr/lib/libQt6Sql.so.6.8.0  /usr/lib/libQt6Gui.so.6.8.0  /usr/lib/libGLX.so  /usr/lib/libOpenGL.so  /usr/lib/libQt6Core.so.6.8.0
   OBJECT_DIR = CMakeFiles/termiNet.dir

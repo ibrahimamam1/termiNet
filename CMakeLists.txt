@@ -25,6 +25,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(termiNet
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
+        db/user_repository.h db/user_repository.cpp
 
     )
 else()

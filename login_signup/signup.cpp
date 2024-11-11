@@ -1,5 +1,6 @@
 #include "signup.h"
 #include "ui_signup.h"
+#include "../db/user_repository.h"
 #include<iostream>
 #include<iomanip>
 #include<string>
@@ -84,8 +85,7 @@ bool Signup::validate_signup_form(std::string name, std::string email, std::stri
 
 void Signup::on_create_account_btn_clicked()
 {
-    qDebug() << "Retreiving Data From Form";
-
+    //get data from form
     std::string name = ui->user_name->text().toStdString();
     std::string email = ui->user_email->text().toStdString();
     std::string sex = ui->user_sex->text().toStdString();
@@ -95,10 +95,8 @@ void Signup::on_create_account_btn_clicked()
     time_t created_at = std::time(nullptr);
 
     if(validate_signup_form(name , email , sex , dob , pass, pass2)){
-        qDebug() << "Valid Form Data\n";
 
-        // convert dob from std string and created_at from a time_t  to a postgres compatible type
-
+        // convert dob and created_at to a postgres compatible type
         std::tm tm = {};
         std::istringstream ss(dob);
 
@@ -119,68 +117,13 @@ void Signup::on_create_account_btn_clicked()
         char created_at_string[11];
         strftime(created_at_string, sizeof(created_at_string), "%Y-%m-%d", ptm);
 
-        qDebug() << created_at_string;
-
-
-        //add user entry to DB , will trigger a trigger which handles id generation , auth and hash generation on server side
-
-        // QSqlQuery q;
-        // q.prepare(
-        //     "INSERT into users(user_id, user_name, user_email, user_sex, user_dob, user_bio, created_at)"
-        //     "values(:user_id, :user_name, :user_email, :user_sex, :user_dob,:user_bio, :created_at)"
-        //     );
-
-        // q.bindValue(":user_id", 0);
-        // q.bindValue(":user_name",  QString::fromStdString(name));
-        // q.bindValue(":user_email", QString::fromStdString(email));
-        // q.bindValue(":user_sex",   QString::fromStdString(sex));
-        // q.bindValue(":user_dob",   QString::fromStdString(dob_string));
-        // q.bindValue(":user_bio",   QString::fromStdString(" "));
-        // q.bindValue(":created_at", QString::fromStdString(created_at_string));
-
-        // if (!q.exec()) {
-        //     qDebug() << "Insert failed:" << q.lastError().text();
-        // } else {
-        //     qDebug() << "Insert successful";
-        // }
-
-        QSqlQuery q;
-        q.exec();
+        //add user entry to DB, static void addUserToDb(std::string name, std::string email, std::string sex, char* dob, char* created_at);
+        UserRepository::addUserToDb(name, email, sex, dob_string, created_at_string);
     }
     else
         qDebug() << "Invalid Form Data\n";
 
-    // //make a new User Model
-    // db->create_auth_entry(user);
 
-    // //if create auth is succesfull
-    // db->add_new_user(user);
 }
-void Signup::readUserTable() {
-    QSqlQuery query;
 
-    // Execute the SELECT query
-    if (query.exec("SELECT user_id, user_name, user_email, user_sex, user_dob, created_at FROM users")) {
-        // Iterate over each row in the result set
-        while (query.next()) {
-            int userId = query.value("user_id").toInt();
-            QString userName = query.value("user_name").toString();
-            QString userEmail = query.value("user_email").toString();
-            QString userSex = query.value("user_sex").toString();
-            QString userDob = query.value("user_dob").toString();
-            QString createdAt = query.value("created_at").toString();
-
-            // Print the user details
-            qDebug() << "User ID:" << userId
-                     << "Name:" << userName
-                     << "Email:" << userEmail
-                     << "Sex:" << userSex
-                     << "DOB:" << userDob
-                     << "Created At:" << createdAt;
-        }
-    } else {
-        // Print error if the query execution fails
-        qDebug() << "Failed to execute query:" << query.lastError().text();
-    }
-}
 

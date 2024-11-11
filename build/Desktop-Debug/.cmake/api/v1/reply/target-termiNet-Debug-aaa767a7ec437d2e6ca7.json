@@ -47,7 +47,7 @@
 			{
 				"command" : 3,
 				"file" : 1,
-				"line" : 24,
+				"line" : 25,
 				"parent" : 0
 			},
 			{
@@ -71,13 +71,13 @@
 			{
 				"command" : 4,
 				"file" : 1,
-				"line" : 56,
+				"line" : 58,
 				"parent" : 0
 			},
 			{
 				"command" : 5,
 				"file" : 1,
-				"line" : 41,
+				"line" : 43,
 				"parent" : 0
 			},
 			{
@@ -296,7 +296,9 @@
 				2,
 				6,
 				9,
-				12
+				12,
+				14,
+				16
 			]
 		}
 	],
@@ -388,7 +390,9 @@
 				2,
 				6,
 				9,
-				12
+				12,
+				14,
+				16
 			]
 		},
 		{
@@ -400,8 +404,10 @@
 				8,
 				11,
 				13,
-				14,
-				15
+				15,
+				17,
+				18,
+				19
 			]
 		},
 		{
@@ -411,14 +417,14 @@
 				4,
 				7,
 				10,
-				16
+				20
 			]
 		},
 		{
 			"name" : "CMake Rules",
 			"sourceIndexes" : 
 			[
-				17
+				21
 			]
 		}
 	],
@@ -494,6 +500,28 @@
 			"backtrace" : 4,
 			"compileGroupIndex" : 0,
 			"path" : "db/databasemanager.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"path" : "tests/login_signup/signup_test.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 0,
+			"path" : "tests/login_signup/signup_test.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"path" : "db/user_repository.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 0,
+			"path" : "db/user_repository.cpp",
 			"sourceGroupIndex" : 0
 		},
 		{

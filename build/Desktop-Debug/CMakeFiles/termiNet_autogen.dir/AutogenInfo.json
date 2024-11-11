@@ -464,6 +464,12 @@
 			null
 		],
 		[
+			"/home/rgb/Desktop/termiNet/db/user_repository.h",
+			"MU",
+			"SQIZ3OIOWK/moc_user_repository.cpp",
+			null
+		],
+		[
 			"/home/rgb/Desktop/termiNet/login_signup/login.h",
 			"MU",
 			"WIXDBT7BNA/moc_login.cpp",
@@ -549,6 +555,7 @@
 	"SOURCES" : 
 	[
 		[ "/home/rgb/Desktop/termiNet/db/databasemanager.cpp", "MU", null ],
+		[ "/home/rgb/Desktop/termiNet/db/user_repository.cpp", "MU", null ],
 		[ "/home/rgb/Desktop/termiNet/login_signup/login.cpp", "MU", null ],
 		[ "/home/rgb/Desktop/termiNet/login_signup/signup.cpp", "MU", null ],
 		[ "/home/rgb/Desktop/termiNet/main.cpp", "MU", null ],
