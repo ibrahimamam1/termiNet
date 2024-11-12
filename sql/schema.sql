@@ -5,7 +5,8 @@ create table if not exists users(
     user_sex text,
     user_dob date,
     user_bio text,
-    created_at date
+    passwd text,
+    created_at date,
 );
 
 create table if not exists threads(
@@ -15,7 +16,7 @@ create table if not exists threads(
     created_at date,
     author_id integer not null,
     community_id integer,
-    parent_thread_id integer
+    parent_thread_id integer,
 );
 
 create table if not exists communities(

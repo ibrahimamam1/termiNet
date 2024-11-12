@@ -1,7 +1,7 @@
 #include "user_repository.h"
 
 UserRepository::UserRepository() {}
-void UserRepository::addUserToDb(std::string name, std::string email, std::string sex, char* dob, char* created_at){
+void UserRepository::addUserToDb(std::string name, std::string email, std::string sex, char* dob, std::string passwd, char* created_at){
     QSqlQuery q;
     int id; //generate a unique id using a stored sequence in database
     if (q.exec("SELECT NEXTVAL('IDSEQ');")) {
@@ -16,8 +16,8 @@ void UserRepository::addUserToDb(std::string name, std::string email, std::strin
     }
 
     q.prepare(
-        "INSERT into users(user_id, user_name, user_email, user_sex, user_dob, user_bio, created_at)"
-        "values(:user_id, :user_name, :user_email, :user_sex, :user_dob,:user_bio, :created_at)"
+        "INSERT into users(user_id, user_name, user_email, user_sex, user_dob, user_bio, passwd, created_at)"
+        "values(:user_id, :user_name, :user_email, :user_sex, :user_dob, :user_bio, :passwd, :created_at)"
         );
 
     q.bindValue(":user_id", id);
@@ -26,6 +26,7 @@ void UserRepository::addUserToDb(std::string name, std::string email, std::strin
     q.bindValue(":user_sex",   QString::fromStdString(sex));
     q.bindValue(":user_dob",   QString::fromStdString(dob));
     q.bindValue(":user_bio",   QString::fromStdString(" "));
+    q.bindValue(":passwd",   QString::fromStdString(passwd));
     q.bindValue(":created_at", QString::fromStdString(created_at));
 
     if (!q.exec()) {
