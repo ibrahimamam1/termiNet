@@ -1,0 +1,79 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-Debug-e516736cdf17dc5afee2.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "termiNet",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "termiNet::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-termiNet-Debug-f4dc13aa31be4d5c7b2c.json",
+					"name" : "termiNet",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "termiNet_autogen::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-termiNet_autogen-Debug-0f666b6190fbbc273d76.json",
+					"name" : "termiNet_autogen",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "termiNet_autogen_timestamp_deps::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-termiNet_autogen_timestamp_deps-Debug-9d13910d0682704c8ea5.json",
+					"name" : "termiNet_autogen_timestamp_deps",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/rgb/Desktop/termiNet/build/Desktop-Debug",
+		"source" : "/home/rgb/Desktop/termiNet"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 7
+	}
+}

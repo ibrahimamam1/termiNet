@@ -3,11 +3,24 @@
 UserRepository::UserRepository() {}
 void UserRepository::addUserToDb(std::string name, std::string email, std::string sex, char* dob, char* created_at){
     QSqlQuery q;
+    int id; //generate a unique id using a stored sequence in database
+    if (q.exec("SELECT NEXTVAL('IDSEQ');")) {
+        if (q.next()) {
+            id = q.value(0).toInt();
+            qDebug() << "Generate Id : "<< id;
+        } else {
+            qDebug() << "Failed to retrieve the next sequence value.";
+        }
+    } else {
+        qDebug() << "Failed to execute the sequence query:" << q.lastError().text();
+    }
+
     q.prepare(
-        "INSERT into users(user_name, user_email, user_sex, user_dob, user_bio, created_at)"
-        "values(:user_name, :user_email, :user_sex, :user_dob,:user_bio, :created_at)"
+        "INSERT into users(user_id, user_name, user_email, user_sex, user_dob, user_bio, created_at)"
+        "values(:user_id, :user_name, :user_email, :user_sex, :user_dob,:user_bio, :created_at)"
         );
 
+    q.bindValue(":user_id", id);
     q.bindValue(":user_name",  QString::fromStdString(name));
     q.bindValue(":user_email", QString::fromStdString(email));
     q.bindValue(":user_sex",   QString::fromStdString(sex));
