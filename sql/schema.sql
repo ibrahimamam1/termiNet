@@ -28,7 +28,7 @@ created_at date
 
 create table if not exists auth(
     auth_id integer primary key,
-    user_id integer references users(user_id),
+    user_id integer ,
     password_hash text
 );
 

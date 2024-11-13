@@ -6,7 +6,7 @@ DECLARE
     p_password_hash TEXT;
 BEGIN
     -- Generate a unique auth_id
-    select (EXTRACT(EPOCH FROM NOW())::bigint * 100000) into sn;
+    select (EXTRACT(EPOCH FROM NOW())::bigint) into sn;
     p_auth_id := sn + (select NEXTVAL('AUTHIDSEQ'));
 
     -- Hash the password from the NEW record
