@@ -9,7 +9,7 @@ class UserRepository
 {
 public:
     UserRepository();
-    static void addUserToDb(std::string name, std::string email, std::string sex, char* dob, char* created_at);
+    static void addUserToDb(std::string name, std::string email, std::string sex, char* dob, std::string passwd, char* created_at);
     static void readUserFromDb();
 };
 

@@ -118,7 +118,7 @@ void Signup::on_create_account_btn_clicked()
         strftime(created_at_string, sizeof(created_at_string), "%Y-%m-%d", ptm);
 
         //add user entry to DB, static void addUserToDb(std::string name, std::string email, std::string sex, char* dob, char* created_at);
-        UserRepository::addUserToDb(name, email, sex, dob_string, created_at_string);
+        UserRepository::addUserToDb(name, email, sex, dob_string, pass, created_at_string);
     }
     else
         qDebug() << "Invalid Form Data\n";

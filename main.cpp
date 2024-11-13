@@ -14,8 +14,7 @@ int main(int argc, char *argv[])
     //w.show();
 
     if(db->connect()){
-        //db->delete_schema();
-        //db->create_schema();
+
         Signup* signupWindow = new Signup(nullptr, db);
         signupWindow->show();
         //signupWindow->readUserTable();

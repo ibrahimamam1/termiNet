@@ -26,6 +26,9 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         db/user_repository.h db/user_repository.cpp
+        sql/schema.sql
+        sql/id_generator.sql
+        sql/auth_trigger.sql
 
     )
 else()
