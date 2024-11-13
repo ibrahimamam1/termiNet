@@ -16,7 +16,10 @@ int main(int argc, char *argv[])
     if(db->connect()){
 
         Signup* signupWindow = new Signup(nullptr, db);
-        signupWindow->show();
+        Login* loginWindow = new Login();
+
+        loginWindow->show();
+        //signupWindow->show();
         //signupWindow->readUserTable();
     }
     else qDebug() << "Please Check Your DB Connection\n";
