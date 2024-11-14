@@ -1,13 +1,15 @@
 termiNet_autogen/timestamp: \
 	/home/rgb/Desktop/termiNet/CMakeLists.txt \
 	/home/rgb/Desktop/termiNet/build/Desktop-Debug/.qtc/package-manager/auto-setup.cmake \
-	/home/rgb/Desktop/termiNet/build/Desktop-Debug/CMakeFiles/3.30.5/CMakeCXXCompiler.cmake \
-	/home/rgb/Desktop/termiNet/build/Desktop-Debug/CMakeFiles/3.30.5/CMakeSystem.cmake \
+	/home/rgb/Desktop/termiNet/build/Desktop-Debug/CMakeFiles/3.31.0/CMakeCXXCompiler.cmake \
+	/home/rgb/Desktop/termiNet/build/Desktop-Debug/CMakeFiles/3.31.0/CMakeSystem.cmake \
 	/home/rgb/Desktop/termiNet/build/Desktop-Debug/termiNet_autogen/moc_predefs.h \
 	/home/rgb/Desktop/termiNet/db/databasemanager.cpp \
 	/home/rgb/Desktop/termiNet/db/databasemanager.h \
 	/home/rgb/Desktop/termiNet/db/user_repository.cpp \
 	/home/rgb/Desktop/termiNet/db/user_repository.h \
+	/home/rgb/Desktop/termiNet/home/home.cpp \
+	/home/rgb/Desktop/termiNet/home/home.h \
 	/home/rgb/Desktop/termiNet/login_signup/login.cpp \
 	/home/rgb/Desktop/termiNet/login_signup/login.h \
 	/home/rgb/Desktop/termiNet/login_signup/signup.cpp \
@@ -761,15 +763,23 @@ termiNet_autogen/timestamp: \
 	/usr/share/cmake/Modules/FindThreads.cmake \
 	/usr/share/cmake/Modules/FindVulkan.cmake \
 	/usr/share/cmake/Modules/GNUInstallDirs.cmake \
+	/usr/share/cmake/Modules/Internal/CMakeCXXLinkerInformation.cmake \
+	/usr/share/cmake/Modules/Internal/CMakeCommonLinkerInformation.cmake \
 	/usr/share/cmake/Modules/Internal/CheckCompilerFlag.cmake \
 	/usr/share/cmake/Modules/Internal/CheckFlagCommonConfig.cmake \
 	/usr/share/cmake/Modules/Internal/CheckSourceCompiles.cmake \
+	/usr/share/cmake/Modules/Linker/GNU-CXX.cmake \
+	/usr/share/cmake/Modules/Linker/GNU.cmake \
 	/usr/share/cmake/Modules/MacroAddFileDependencies.cmake \
+	/usr/share/cmake/Modules/Platform/Linker/GNU.cmake \
+	/usr/share/cmake/Modules/Platform/Linker/Linux-GNU-CXX.cmake \
+	/usr/share/cmake/Modules/Platform/Linker/Linux-GNU.cmake \
 	/usr/share/cmake/Modules/Platform/Linux-GNU-CXX.cmake \
 	/usr/share/cmake/Modules/Platform/Linux-GNU.cmake \
 	/usr/share/cmake/Modules/Platform/Linux-Initialize.cmake \
 	/usr/share/cmake/Modules/Platform/Linux.cmake \
 	/usr/share/cmake/Modules/Platform/UnixPaths.cmake \
+	/home/rgb/Desktop/termiNet/home/home.ui \
 	/home/rgb/Desktop/termiNet/login_signup/login.ui \
 	/home/rgb/Desktop/termiNet/login_signup/signup.ui \
 	/home/rgb/Desktop/termiNet/mainwindow.ui \

@@ -24,17 +24,17 @@ void Login::on_login_btn_clicked()
     QSqlQuery q;
     q.prepare("SELECT login_check(:email, :password)");
 
-    q.bindValue(":email", email);
-    q.bindValue(":password", pass);
+    q.bindValue(":email", QString::fromStdString(email));
+    q.bindValue(":password", QString::fromStdString(pass));
 
     // Execute the query
-    if (!query.exec()) {
-        qDebug() << "Error executing login_check:" << query.lastError().text();
+    if (!q.exec()) {
+        qDebug() << "Error executing login_check:" << q.lastError().text();
     }
 
     // Retrieve and check the result
-    if (query.next()) {
-        login = query.value(0).toBool();
+    if (q.next()) {
+        login = q.value(0).toBool();
     } else {
         qDebug() << "No result returned from login_check function.";
     }
