@@ -477,12 +477,6 @@
 			null
 		],
 		[
-			"/home/rgb/Desktop/termiNet/home/home.h",
-			"MU",
-			"QBSWXKAREC/moc_home.cpp",
-			null
-		],
-		[
 			"/home/rgb/Desktop/termiNet/login_signup/login.h",
 			"MU",
 			"WIXDBT7BNA/moc_login.cpp",
@@ -498,6 +492,12 @@
 			"/home/rgb/Desktop/termiNet/mainwindow.h",
 			"MU",
 			"EWIEGA46WW/moc_mainwindow.cpp",
+			null
+		],
+		[
+			"/home/rgb/Desktop/termiNet/screens/home/home.h",
+			"MU",
+			"FYRF533WZU/moc_home.cpp",
 			null
 		],
 		[
@@ -569,11 +569,11 @@
 	[
 		[ "/home/rgb/Desktop/termiNet/db/databasemanager.cpp", "MU", null ],
 		[ "/home/rgb/Desktop/termiNet/db/user_repository.cpp", "MU", null ],
-		[ "/home/rgb/Desktop/termiNet/home/home.cpp", "MU", null ],
 		[ "/home/rgb/Desktop/termiNet/login_signup/login.cpp", "MU", null ],
 		[ "/home/rgb/Desktop/termiNet/login_signup/signup.cpp", "MU", null ],
 		[ "/home/rgb/Desktop/termiNet/main.cpp", "MU", null ],
 		[ "/home/rgb/Desktop/termiNet/mainwindow.cpp", "MU", null ],
+		[ "/home/rgb/Desktop/termiNet/screens/home/home.cpp", "MU", null ],
 		[
 			"/home/rgb/Desktop/termiNet/tests/login_signup/signup_test.cpp",
 			"MU",
