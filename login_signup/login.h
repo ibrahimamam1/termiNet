@@ -5,6 +5,7 @@
 #include<QtSql/QSqlDatabase>
 #include<QtSql/QSqlQuery>
 #include<QtSql/QSqlError>
+#include "../models/usermodel.h"
 
 namespace Ui {
 class Login;
@@ -17,6 +18,8 @@ class Login : public QDialog
 public:
     explicit Login(QWidget *parent = nullptr);
     ~Login();
+signals:
+    void loginSuccessful();
 
 private slots:
     void on_login_btn_clicked();

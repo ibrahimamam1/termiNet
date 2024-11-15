@@ -30,6 +30,7 @@ void Login::on_login_btn_clicked()
     // Execute the query
     if (!q.exec()) {
         qDebug() << "Error executing login_check:" << q.lastError().text();
+        return ;
     }
 
     // Retrieve and check the result
@@ -40,7 +41,39 @@ void Login::on_login_btn_clicked()
     }
 
     if(login){
-        qDebug() << "Login Successfull , to next page";
+
+        UserModel *user = UserModel::getInstance();
+
+        //get all user data and convert to user model
+        q.prepare("SELECT * FROM users WHERE user_email=:email");
+        q.bindValue(":email", QString::fromStdString(email));
+
+        if(!q.exec()){
+            qDebug() << "Failed to get Login Data\n";
+            return ;
+        }
+
+        if(q.next()){
+            user->setId(q.value(0).toInt());
+            user->setName(q.value(1).toString().toStdString());
+            user->setEmail(q.value(2).toString().toStdString());
+            user->setSex(q.value(3).toString().toStdString());
+            user->setDob(q.value(4).toString().toStdString());
+            user->setBio(q.value(5).toString().toStdString());
+            user->setCreatedAt(q.value(7).toString().toStdString());
+
+            //debug test
+            // qDebug()<<"Id : "<<user->getId();
+            // qDebug()<<"Name : "<<user->getName();
+            // qDebug()<<"Email : "<<user->getEmail();
+            // qDebug()<<"DOB : "<<user->getDob();
+            // qDebug()<<"Bio : "<<user->getBio();
+            // qDebug()<<"Created At : "<<user->getCreatedAt();
+
+            //Go to next screen here
+            emit loginSuccessful();
+        }
+
     }
     else{
         qDebug() << "Login Failed";

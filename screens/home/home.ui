@@ -23,9 +23,9 @@
       <height>421</height>
      </rect>
     </property>
-    <layout class="QVBoxLayout" name="verticalLayout" stretch="2,8">
+    <layout class="QVBoxLayout" name="bodyContainer" stretch="2,8">
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,4,2,1,1,1">
+      <layout class="QHBoxLayout" name="topBar" stretch="1,4,2,0,0,0">
        <item>
         <widget class="QLabel" name="label_4">
          <property name="text">
@@ -54,21 +54,21 @@
         </spacer>
        </item>
        <item>
-        <widget class="QLabel" name="label_13">
+        <widget class="QPushButton" name="create_post_btn">
          <property name="text">
-          <string>Create Thread</string>
+          <string>Create Post</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="label_2">
+        <widget class="QPushButton" name="pushButton_2">
          <property name="text">
-          <string>Message</string>
+          <string>Messages</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="label">
+        <widget class="QPushButton" name="pushButton_3">
          <property name="text">
           <string>Profile</string>
          </property>
@@ -77,9 +77,9 @@
       </layout>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout" stretch="2,6,2">
+      <layout class="QHBoxLayout" name="mainBody" stretch="2,6,2">
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_3" stretch="2,8">
+        <layout class="QVBoxLayout" name="CenterArea" stretch="2,8">
          <item>
           <layout class="QVBoxLayout" name="verticalLayout_6">
            <item>
@@ -154,10 +154,10 @@
         </layout>
        </item>
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_2" stretch=""/>
+        <layout class="QVBoxLayout" name="leftArea" stretch=""/>
        </item>
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_4"/>
+        <layout class="QVBoxLayout" name="rightArea"/>
        </item>
       </layout>
      </item>

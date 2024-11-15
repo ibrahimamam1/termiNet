@@ -32,6 +32,11 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         sql/login_check.sql
         screens/home/home.h screens/home/home.cpp screens/home/home.ui
         screens/home/home.h screens/home/home.cpp screens/home/home.ui
+        screens/widgets/createpost.h screens/widgets/createpost.cpp
+        models/usermodel.h models/usermodel.cpp
+        db/thread_repository.h db/thread_repository.cpp
+        models/threadmodel.h models/threadmodel.cpp
+
 
 
 
