@@ -30,6 +30,10 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         sql/id_generator.sql
         sql/auth_trigger.sql
         sql/login_check.sql
+        screens/home/home.h screens/home/home.cpp screens/home/home.ui
+        screens/home/home.h screens/home/home.cpp screens/home/home.ui
+
+
 
     )
 else()

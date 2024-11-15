@@ -2,6 +2,7 @@
 #include "login_signup/signup.h"
 #include "login_signup/login.h"
 #include "db/databasemanager.h"
+#include "home/home.h"
 #include "tests/login_signup/signup_test.h"
 
 #include <QApplication>
@@ -15,10 +16,12 @@ int main(int argc, char *argv[])
 
     if(db->connect()){
 
-        Signup* signupWindow = new Signup(nullptr, db);
-        Login* loginWindow = new Login();
+        // Signup* signupWindow = new Signup(nullptr, db);
+        // Login* loginWindow = new Login();
+        Home* homePage = new Home();
+        homePage->show();
 
-        loginWindow->show();
+        //loginWindow->show();
         //signupWindow->show();
         //signupWindow->readUserTable();
     }
