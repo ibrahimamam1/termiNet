@@ -45,3 +45,34 @@ void ThreadRepository::addThreadtoDb(ThreadModel& thread){
     }
 
 }
+std::vector<ThreadModel> ThreadRepository::loadAllThreadsFromDb(){
+    std::vector<ThreadModel>threads;
+    QSqlQuery q;
+
+    if(q.exec("SELECT * from threads;")){
+        while(q.next()){
+            ThreadModel t(q.value(0).toInt(), q.value(1).toString().toStdString(), q.value(2).toString().toStdString(), q.value(3).toString().toStdString(), q.value(4).toInt(), q.value(5).toInt(), q.value(6).toInt());
+            threads.push_back(t);
+        }
+    }
+    else{
+        qDebug() << "failed To Execute get threads query";
+    }
+
+    return threads;
+}
+
+std::string ThreadRepository::getAuthorName(int auth_id){
+    QSqlQuery q;
+    q.prepare("Select user_name from users where user_id=:author_id");
+    q.bindValue(":author_id", auth_id);
+
+    if(q.exec()){
+        if(q.next()){
+            return q.value(0).toString().toStdString();
+        }
+    }
+
+    qDebug() << "Failed to get the author name";
+    return NULL;
+}

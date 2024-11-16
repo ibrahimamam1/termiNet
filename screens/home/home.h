@@ -2,7 +2,9 @@
 #define HOME_H
 
 #include <QMainWindow>
+#include<vector>
 #include "../widgets/createpost.h"
+#include "../widgets/threadwidget.h"
 #include "../../models/usermodel.h"
 
 namespace Ui {
@@ -20,8 +22,11 @@ class Home : public QMainWindow
 
 public:
     explicit Home(QWidget *parent = nullptr);
+    void clearCenterWidget();
     void setUser(UserModel *usr);
     void showUserInfo();
+    void loadThreads();
+    void showThreads();
     ~Home();
 
 private slots:
@@ -30,6 +35,7 @@ private slots:
 private:
     Ui::Home *ui;
     UserModel *user;
+    std::vector<ThreadModel>threads;
 };
 
 #endif // HOME_H
