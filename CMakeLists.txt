@@ -26,16 +26,14 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         db/user_repository.h db/user_repository.cpp
-        sql/schema.sql
-        sql/id_generator.sql
-        sql/auth_trigger.sql
-        sql/login_check.sql
         screens/home/home.h screens/home/home.cpp screens/home/home.ui
         screens/home/home.h screens/home/home.cpp screens/home/home.ui
         screens/widgets/createpost.h screens/widgets/createpost.cpp
         models/usermodel.h models/usermodel.cpp
         db/thread_repository.h db/thread_repository.cpp
         models/threadmodel.h models/threadmodel.cpp
+        screens/widgets/threadwidget.h screens/widgets/threadwidget.cpp
+
 
 
 

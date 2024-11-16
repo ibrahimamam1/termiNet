@@ -1,4 +1,5 @@
 #include "threadmodel.h"
+#include"../db/thread_repository.h"
 
 // Default constructor
 ThreadModel::ThreadModel()
@@ -27,6 +28,7 @@ std::string ThreadModel::getCreatedAt() const { return created_at; }
 void ThreadModel::setCreatedAt(const std::string &created_at) { this->created_at = created_at; }
 
 int ThreadModel::getAuthorId() const { return author_id; }
+std::string ThreadModel::getAuthorName() const{return ThreadRepository::getAuthorName(this->author_id);}
 void ThreadModel::setAuthorId(int author_id) { this->author_id = author_id; }
 
 int ThreadModel::getCommunityId() const { return community_id; }

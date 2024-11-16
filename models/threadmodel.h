@@ -3,6 +3,7 @@
 
 #include <string>
 
+
 class ThreadModel
 {
 private:
@@ -36,6 +37,7 @@ public:
     void setCreatedAt(const std::string &created_at);
 
     int getAuthorId() const;
+    std::string getAuthorName() const;
     void setAuthorId(int author_id);
 
     int getCommunityId() const;

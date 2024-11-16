@@ -1,13 +1,17 @@
 #ifndef THREAD_REPOSITORY_H
 #define THREAD_REPOSITORY_H
 #include<QSqlError>
+#include<string>
+#include<vector>
 #include "../models/threadmodel.h"
 
 class ThreadRepository
 {
 public:
     ThreadRepository();
-    void addThreadtoDb(ThreadModel& thread);
+    static void addThreadtoDb(ThreadModel& thread);
+    static std::vector<ThreadModel> loadAllThreadsFromDb();
+    static std::string getAuthorName(int auth_id);
 };
 
 #endif // THREAD_REPOSITORY_H

@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
         //user logged in, i want to destroy the login window and control to come back here
         QObject::connect(loginWindow, &Login::loginSuccessful, [&]() {
             loginWindow->deleteLater();           // Destroy login window
-            homePage->setUser(user);
+            homePage->loadThreads();
             homePage->show();            // Show home page
         });
 

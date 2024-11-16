@@ -20,7 +20,7 @@
       <x>169</x>
       <y>90</y>
       <width>931</width>
-      <height>421</height>
+      <height>551</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="bodyContainer" stretch="2,8">
@@ -79,7 +79,7 @@
      <item>
       <layout class="QHBoxLayout" name="mainBody" stretch="2,6,2">
        <item>
-        <layout class="QVBoxLayout" name="CenterArea" stretch="2,8">
+        <layout class="QVBoxLayout" name="leftArea" stretch="2,8">
          <item>
           <layout class="QVBoxLayout" name="verticalLayout_6">
            <item>
@@ -154,7 +154,7 @@
         </layout>
        </item>
        <item>
-        <layout class="QVBoxLayout" name="leftArea" stretch=""/>
+        <layout class="QVBoxLayout" name="centerArea"/>
        </item>
        <item>
         <layout class="QVBoxLayout" name="rightArea"/>
