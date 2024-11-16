@@ -15,7 +15,7 @@ set(PROJECT_SOURCES
         mainwindow.cpp
         mainwindow.h
         mainwindow.ui
-        login_signup/login.h login_signup/login.cpp login_signup/login.ui
+        login_signup/login.h login_signup/login.cpp
         login_signup/signup.h login_signup/signup.cpp login_signup/signup.ui
         db/databasemanager.h db/databasemanager.cpp
         tests/login_signup/signup_test.h tests/login_signup/signup_test.cpp

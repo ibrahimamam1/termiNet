@@ -7,31 +7,55 @@
 #include "models/usermodel.h"
 
 #include <QApplication>
+#include <QMessageBox>
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    DatabaseManager *db = new DatabaseManager();
-    UserModel *user = UserModel::getInstance();
-    Home* homePage = new Home();
 
+    // Create database manager
+    std::unique_ptr<DatabaseManager> db = std::make_unique<DatabaseManager>();
 
-    if(db->connect()){
+    // Create and show login window
+    auto loginWindow = new Login();
+    loginWindow->setAttribute(Qt::WA_DeleteOnClose); // Auto-delete when closed
+    loginWindow->show();
 
-        Login* loginWindow = new Login(nullptr);
+    //try to connect to database
+    int retry = 0;
+    while (!db->connect()) {
+        //show error message
+        QMessageBox retryBox;
+        retryBox.setIcon(QMessageBox::Warning);
+        retryBox.setWindowTitle("Connection Error");
+        retryBox.setText("Failed to connect to Server");
+        retryBox.setInformativeText(QString("Retrying..."));
+        retryBox.exec();
 
-
-        //user logged in, i want to destroy the login window and control to come back here
-        QObject::connect(loginWindow, &Login::loginSuccessful, [&]() {
-            loginWindow->deleteLater();           // Destroy login window
-            homePage->loadThreads();
-            homePage->show();            // Show home page
-        });
-
-        loginWindow->show();
+        if(retry == 3){
+            // all retries failed
+            QMessageBox errorBox;
+            errorBox.setIcon(QMessageBox::Critical);
+            errorBox.setWindowTitle("Connection Error");
+            errorBox.setText("Failed to connect to Server");
+            errorBox.setInformativeText("Please check your internet connection and try again later.");
+            errorBox.exec();
+            return 1;
+        }
+        retry++;
     }
-    else qDebug() << "Please Check Your DB Connection\n";
 
-    //test_validate_signup_form();
+
+    // Connect login success signal
+    QObject::connect(loginWindow, &Login::loginSuccessful, [loginWindow]() {
+        auto homePage = new Home();
+        homePage->setAttribute(Qt::WA_DeleteOnClose);
+        homePage->loadThreads();
+        homePage->show();
+        loginWindow->close();
+    });
+
     return a.exec();
+
+
 }
