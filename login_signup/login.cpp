@@ -14,80 +14,54 @@ Login::Login(QWidget *parent)
     loginBtn = new QPushButton(this);
     forgotPassword = new QLabel(this);
     createAccount = new QLabel(this);
-    divider = new QHBoxLayout();  // Removed parent
-    socials = new QHBoxLayout();  // Fixed typo from 'social' to 'socials'
+    divider = new DividerWidget(this);
+    socials = new SocialsWidget(this);  // Fixed typo from 'social' to 'socials'
 
     //setup Fonts
     QFont welcomeFont = welcomeText->font();
     welcomeFont.setPointSize(22);
     welcomeFont.setBold(true);
 
-    // Set basic properties of elements
+    // Setup Logo
     logo->setPixmap(QPixmap("../assets/logo.png"));
+
+    //setup Welcome Text
     welcomeText->setText("Welcome Back!");
     welcomeText->setFont(welcomeFont);
+
+    //setUp Form field with email and password
     emailField->setPlaceholderText("Enter Your Email");
     passwordField->setPlaceholderText("Enter Password");
     passwordField->setEchoMode(QLineEdit::Password);
     loginBtn->setText("Login");
-
-    // Connect login button to slot
-    connect(loginBtn, &QPushButton::clicked, this, &Login::on_login_btn_clicked);
-
-    // Style forgot password label
-    forgotPassword->setText("<a href='#' style='color: #007bff; text-decoration: underline;'>Forgot Password?</a>");
-    forgotPassword->setTextFormat(Qt::RichText);
-    forgotPassword->setTextInteractionFlags(Qt::TextBrowserInteraction);
-
-    // Style create account label
-    createAccount->setText("<a href='#' style='color: #007bff; text-decoration: underline;'>Create an Account</a>");
-    createAccount->setTextFormat(Qt::RichText);
-    createAccount->setTextInteractionFlags(Qt::TextBrowserInteraction);
-
-    // Add form items to formContainer
     formContainer->addWidget(emailField, 2);
     formContainer->addWidget(passwordField, 2);
     formContainer->addWidget(loginBtn, 1);
+    connect(loginBtn, &QPushButton::clicked, this, &Login::on_login_btn_clicked); // Connect login button to slot
 
-    // Add divider items
-    QFrame* leftLine = new QFrame(this);
-    leftLine->setFrameShape(QFrame::HLine);
-    leftLine->setFrameShadow(QFrame::Sunken);
+    // SetUp forgot password label
+    forgotPassword->setText("<a href='#' style='color: #007bff; text-decoration: underline;'>Forgot Password?</a>");
+    forgotPassword->setTextFormat(Qt::RichText);
+    forgotPassword->setTextInteractionFlags(Qt::TextBrowserInteraction);
+    connect(forgotPassword, &QLabel::linkActivated, this, &Login::onForgotPasswordClicked); //link to forgot password handler
 
-    QFrame* rightLine = new QFrame(this);
-    rightLine->setFrameShape(QFrame::HLine);
-    rightLine->setFrameShadow(QFrame::Sunken);
+    // SetUp create account label
+    createAccount->setText("<a href='#' style='color: #007bff; text-decoration: underline;'>Create an Account</a>");
+    createAccount->setTextFormat(Qt::RichText);
+    createAccount->setTextInteractionFlags(Qt::TextBrowserInteraction);
+    connect(createAccount, &QLabel::linkActivated, this, &Login::onCreateAccountClicked); //link to on click event handler
 
-    QLabel* orLabel = new QLabel("OR", this);
-    orLabel->setAlignment(Qt::AlignCenter);
-
-    divider->addWidget(leftLine, 4);
-    divider->addWidget(orLabel, 2);
-    divider->addWidget(rightLine, 4);
-
-    // Add social items
-    socials->addItem(new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum));
-    QLabel* googleLogo = new QLabel(this);
-    QLabel* facebookLogo = new QLabel(this);
-    googleLogo->setPixmap(QPixmap("../assets/google.png"));
-    facebookLogo->setPixmap(QPixmap("../assets/facebook.png"));
-    socials->addWidget(googleLogo, 1);
-    socials->addWidget(facebookLogo, 1);
-    socials->addItem(new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum));
-
-    // Set login container to take full space
-    this->setLayout(loginContainer);
-
-    // Add elements to loginContainer
+    // Setup Logincontainer
+    this->setLayout(loginContainer); //ensures login container takes all available space
     loginContainer->addWidget(logo, 1);
     loginContainer->addWidget(welcomeText, 1, Qt::AlignCenter);
     loginContainer->addLayout(formContainer, 4);
     loginContainer->addWidget(forgotPassword, 1);
     loginContainer->addWidget(createAccount, 1);
-    loginContainer->addLayout(divider, 1);
-    loginContainer->addLayout(socials, 1);
+    loginContainer->addWidget(divider, 1);
+    loginContainer->addWidget(socials, 1);
 
-    //add login container and make sure it is alaways in the center
+    //Centralise Login Container so that is always is in the center of the window
     mainContainer->addStretch(4);
     mainContainer->addLayout(loginContainer,2);
     mainContainer->addStretch(4);

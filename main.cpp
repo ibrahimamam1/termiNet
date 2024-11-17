@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
     // Create database manager
-    std::unique_ptr<DatabaseManager> db = std::make_unique<DatabaseManager>();
+    DatabaseManager* db = DatabaseManager::getInstance();
 
     // Create and show login window
     auto loginWindow = new Login();

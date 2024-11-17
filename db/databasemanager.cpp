@@ -1,6 +1,14 @@
 #include "databasemanager.h"
 
+std::unique_ptr<DatabaseManager> DatabaseManager::instance = nullptr;
 DatabaseManager::DatabaseManager(){}
+
+DatabaseManager* DatabaseManager::getInstance(){
+    if(instance == nullptr){
+        instance = std::unique_ptr<DatabaseManager>(new DatabaseManager());
+    }
+    return instance.get();
+}
 
 
 bool DatabaseManager::connect(){

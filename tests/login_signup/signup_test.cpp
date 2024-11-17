@@ -5,7 +5,7 @@
 
 void test_validate_signup_form() {
     DatabaseManager* db;
-    Signup signup(nullptr , db);
+    Signup signup(nullptr);
 
     // Username edge cases
     assert(!signup.validate_signup_form("Jo", "test@example.com", "M", "01/01/2000", "Pass123!", "Pass123!") &&

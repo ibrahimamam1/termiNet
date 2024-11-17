@@ -13,6 +13,8 @@
 #include<QLabel>
 #include<QLineEdit>
 #include<QPushButton>
+#include"widgets/divider.h"
+#include "widgets/socials.h"
 #include "../models/usermodel.h"
 
 
@@ -22,8 +24,8 @@ class Login : public QDialog
     QHBoxLayout *mainContainer;
     QVBoxLayout *loginContainer;
     QVBoxLayout *formContainer;
-    QHBoxLayout *divider;
-    QHBoxLayout *socials;
+    DividerWidget *divider;
+    SocialsWidget *socials;
     QLabel *logo;
     QLabel *welcomeText;
     QLineEdit *emailField;

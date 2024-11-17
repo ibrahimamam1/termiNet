@@ -1,22 +1,135 @@
 #include "signup.h"
-#include "ui_signup.h"
 #include "../db/user_repository.h"
 #include<iostream>
 #include<iomanip>
 #include<string>
 #include<cctype>
 
-Signup::Signup(QWidget *parent, DatabaseManager* instance)
+Signup::Signup(QWidget *parent)
     : QDialog(parent)
-    , ui(new Ui::Signup)
-    , db(instance)
+    , db(DatabaseManager::getInstance())
 {
-    ui->setupUi(this);
+    mainContainer = new QHBoxLayout(this);
+    signUpContainer = new QVBoxLayout();
+    signUpFormContainer = new QVBoxLayout();
+    titleText = new QLabel(this);
+    userNameBox = new QVBoxLayout();
+    userNameLabel = new QLabel(this);
+    userNameField = new QLineEdit(this);
+    emailBox = new QVBoxLayout();
+    emailLabel = new QLabel(this);
+    emailField = new QLineEdit(this);
+    dateOfBirthBox = new QVBoxLayout();
+    dobLabel = new QLabel(this);
+    dobField = new QLineEdit(this);
+    paswordBox = new QVBoxLayout();
+    passwordLabel = new QLabel(this);
+    passwordField = new QLineEdit(this);
+    comfirmPasswordBox = new QVBoxLayout();
+    comfirmPasswordLabel = new QLabel(this);
+    comfirmPasswordField = new QLineEdit(this);
+    signupBtn = new QPushButton(this);
+    divider = new DividerWidget(this);
+    socials = new SocialsWidget(this);
+
+    //setup title text
+    QFont titleFont = titleText->font();
+    titleFont.setBold(true);
+    titleFont.setPointSize(20);
+    titleFont.setFamily("Ubuntu");
+
+    titleText->setText("Register");
+    titleText->setFont(titleFont);
+
+    //setup signup Form
+    userNameLabel->setText("UserName");
+    userNameField->setPlaceholderText("Enter Your UserName");
+    userNameBox->addWidget(userNameLabel, 1);
+    userNameBox->addWidget(userNameField, 2);
+    userNameBox->addStretch(4);
+
+    emailLabel->setText("Email");
+    emailField->setPlaceholderText("Enter Your Email");
+    emailBox->addWidget(emailLabel, 1);
+    emailBox->addWidget(emailField, 2);
+    emailBox->addStretch(4);
+
+    dobLabel->setText("Date of Birth");
+    dobField->setPlaceholderText("YYYY-MM-DD");
+    dateOfBirthBox->addWidget(dobLabel, 1);
+    dateOfBirthBox->addWidget(dobField, 2);
+    dateOfBirthBox->addStretch(4);
+
+    passwordLabel->setText("Password");
+    passwordField->setPlaceholderText("Enter Your Password");
+    passwordField->setEchoMode(QLineEdit::Password);
+    paswordBox->addWidget(passwordLabel, 1);
+    paswordBox->addWidget(passwordField, 2);
+    paswordBox->addStretch(4);
+
+    comfirmPasswordLabel->setText("Confirm Password");
+    comfirmPasswordField->setPlaceholderText("Confirm Your Password");
+    comfirmPasswordField->setEchoMode(QLineEdit::Password);
+    comfirmPasswordBox->addWidget(comfirmPasswordLabel, 1);
+    comfirmPasswordBox->addWidget(comfirmPasswordField, 2);
+    comfirmPasswordBox->addStretch(4);
+
+    signupBtn->setText("Create Account");
+    connect(signupBtn, &QPushButton::clicked, this, &Signup::on_create_account_btn_clicked);
+
+    // Add all layouts to signup form container
+    signUpFormContainer->addLayout(userNameBox, 1);
+    signUpFormContainer->addLayout(emailBox, 1);
+    signUpFormContainer->addLayout(dateOfBirthBox, 1);
+    signUpFormContainer->addLayout(paswordBox, 1);
+    signUpFormContainer->addLayout(comfirmPasswordBox, 1);
+    signUpFormContainer->addWidget(signupBtn, 1);
+    signUpFormContainer->addStretch(4);
+
+
+    //setup signupContainer layout
+    signUpContainer->addWidget(titleText, 1);
+    signUpContainer->addLayout(signUpFormContainer, 5);
+    signUpContainer->addWidget(divider, 1);
+    signUpContainer->addWidget(socials, 1);
+
+    // Set main container and centralise signup container
+    mainContainer->addStretch(4);
+    mainContainer->addLayout(signUpContainer, 2);
+    mainContainer->addStretch(4);
+    setLayout(mainContainer);
+
+    // Set window properties
+    setWindowTitle("Sign Up");
+    setMinimumWidth(400);
+    setMinimumHeight(600);
 }
 
 Signup::~Signup()
 {
-    delete ui;
+    // Clean up dynamically allocated memory
+    delete mainContainer;
+    delete signUpContainer;
+    delete signUpFormContainer;
+    delete titleText;
+    delete userNameBox;
+    delete userNameLabel;
+    delete userNameField;
+    delete emailBox;
+    delete emailLabel;
+    delete emailField;
+    delete dateOfBirthBox;
+    delete dobLabel;
+    delete dobField;
+    delete paswordBox;
+    delete passwordLabel;
+    delete passwordField;
+    delete comfirmPasswordBox;
+    delete comfirmPasswordLabel;
+    delete comfirmPasswordField;
+    delete signupBtn;
+    delete divider;
+    delete socials;
 }
 
 #include <regex>
@@ -86,12 +199,12 @@ bool Signup::validate_signup_form(std::string name, std::string email, std::stri
 void Signup::on_create_account_btn_clicked()
 {
     //get data from form
-    std::string name = ui->user_name->text().toStdString();
-    std::string email = ui->user_email->text().toStdString();
-    std::string sex = ui->user_sex->text().toStdString();
-    std::string dob = ui->user_dob->text().toStdString();
-    std::string pass = ui->user_pass->text().toStdString();
-    std::string pass2 = ui->user_comfirm_pass->text().toStdString();
+    std::string name = userNameField->text().toStdString();
+    std::string email = emailField->text().toStdString();
+    std::string sex = "M";
+    std::string dob = dobField->text().toStdString();
+    std::string pass = passwordField->text().toStdString();
+    std::string pass2 = comfirmPasswordField->text().toStdString();
     time_t created_at = std::time(nullptr);
 
     if(validate_signup_form(name , email , sex , dob , pass, pass2)){
