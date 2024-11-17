@@ -1,18 +1,19 @@
 #include "user_repository.h"
 
 UserRepository::UserRepository() {}
-void UserRepository::addUserToDb(std::string name, std::string email, std::string sex, char* dob, std::string passwd, char* created_at){
+bool UserRepository::addUserToDb(std::string name, std::string email, std::string sex, char* dob, std::string passwd, char* created_at){
     QSqlQuery q;
     int id; //generate a unique id using a stored sequence in database
     if (q.exec("SELECT NEXTVAL('IDSEQ');")) {
         if (q.next()) {
             id = q.value(0).toInt();
-            qDebug() << "Generate Id : "<< id;
         } else {
             qDebug() << "Failed to retrieve the next sequence value.";
+            return false;
         }
     } else {
         qDebug() << "Failed to execute the sequence query:" << q.lastError().text();
+        return false;
     }
 
     q.prepare(
@@ -31,9 +32,11 @@ void UserRepository::addUserToDb(std::string name, std::string email, std::strin
 
     if (!q.exec()) {
         qDebug() << "Insert failed:" << q.lastError().text();
-    } else {
-        qDebug() << "Insert successful";
+        return false;
     }
+    qDebug() << "Insert successful";
+    return true;
+
 
 }
 

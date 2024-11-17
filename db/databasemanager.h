@@ -11,8 +11,10 @@
 class DatabaseManager
 {
     QSqlDatabase db;
+    static std::unique_ptr<DatabaseManager> instance;
 public:
     DatabaseManager();
+    static DatabaseManager* getInstance();
     bool connect();
     void disconnect();
     bool executeSqlFile(const QString path);

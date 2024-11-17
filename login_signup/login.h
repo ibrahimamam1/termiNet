@@ -5,15 +5,34 @@
 #include<QtSql/QSqlDatabase>
 #include<QtSql/QSqlQuery>
 #include<QtSql/QSqlError>
+#include<QVBoxLayout>
+#include<QHBoxLayout>
+#include<QSpacerItem>
+#include<Qt>
+#include<QFrame>
+#include<QLabel>
+#include<QLineEdit>
+#include<QPushButton>
+#include"widgets/divider.h"
+#include "widgets/socials.h"
 #include "../models/usermodel.h"
 
-namespace Ui {
-class Login;
-}
 
 class Login : public QDialog
 {
     Q_OBJECT
+    QHBoxLayout *mainContainer;
+    QVBoxLayout *loginContainer;
+    QVBoxLayout *formContainer;
+    DividerWidget *divider;
+    SocialsWidget *socials;
+    QLabel *logo;
+    QLabel *welcomeText;
+    QLineEdit *emailField;
+    QLineEdit *passwordField;
+    QPushButton *loginBtn;
+    QLabel *forgotPassword;
+    QLabel *createAccount;
 
 public:
     explicit Login(QWidget *parent = nullptr);
@@ -23,9 +42,9 @@ signals:
 
 private slots:
     void on_login_btn_clicked();
+    void onForgotPasswordClicked();
+    void onCreateAccountClicked();
 
-private:
-    Ui::Login *ui;
 };
 
 #endif // LOGIN_H

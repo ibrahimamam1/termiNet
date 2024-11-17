@@ -15,10 +15,10 @@ set(PROJECT_SOURCES
         mainwindow.cpp
         mainwindow.h
         mainwindow.ui
-        login_signup/login.h login_signup/login.cpp login_signup/login.ui
-        login_signup/signup.h login_signup/signup.cpp login_signup/signup.ui
+        login_signup/login.h login_signup/login.cpp
+        login_signup/signup.h login_signup/signup.cpp
         db/databasemanager.h db/databasemanager.cpp
-        tests/login_signup/signup_test.h tests/login_signup/signup_test.cpp
+
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -33,6 +33,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         db/thread_repository.h db/thread_repository.cpp
         models/threadmodel.h models/threadmodel.cpp
         screens/widgets/threadwidget.h screens/widgets/threadwidget.cpp
+        login_signup/widgets/divider.h login_signup/widgets/divider.cpp
+        login_signup/widgets/socials.h login_signup/widgets/socials.cpp
 
 
 
