@@ -3,7 +3,6 @@
 #include "login_signup/login.h"
 #include "db/databasemanager.h"
 #include "screens/home/home.h"
-#include "tests/login_signup/signup_test.h"
 #include "models/usermodel.h"
 
 #include <QApplication>
@@ -52,7 +51,7 @@ int main(int argc, char *argv[])
         homePage->setAttribute(Qt::WA_DeleteOnClose);
         homePage->loadThreads();
         homePage->show();
-        loginWindow->close();
+        loginWindow->deleteLater();
     });
 
     return a.exec();

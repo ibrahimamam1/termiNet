@@ -1,6 +1,7 @@
 #ifndef SIGNUP_H
 #define SIGNUP_H
 
+#include <QMessageBox>
 #include <QDialog>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -12,6 +13,7 @@
 #include "widgets/divider.h"
 #include "widgets/socials.h"
 #include "../db/databasemanager.h"
+#include "../screens/home/home.h"
 
 class Signup : public QDialog
 {
@@ -43,10 +45,12 @@ class Signup : public QDialog
 
 public:
    explicit Signup(QWidget *parent = nullptr);
-    bool validate_signup_form(std::string name ,std::string email ,std::string sex ,std::string dob ,std::string pass,std::string pass2);
+    bool validate_signup_form(std::string name ,std::string email ,std::string sex ,std::string dob ,std::string pass,std::string pass2, std::string& errorMsg);
    void readUserTable();
    ~Signup();
-
+   signals:
+   signals:
+   void signupSuccessful();
 private slots:
     void on_create_account_btn_clicked();
 

@@ -165,7 +165,12 @@ void Login::onCreateAccountClicked()
     //Switch To create Account Page
     auto signupPage = new Signup();
     signupPage->setAttribute(Qt::WA_DeleteOnClose);
+    this->hide();
     signupPage->show();
-    this->close();
+    // Connect login success signal
+    QObject::connect(signupPage, &Signup::signupSuccessful, [this, signupPage]() {
+        emit loginSuccessful();
+    });
+
 }
 

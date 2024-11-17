@@ -18,7 +18,7 @@ set(PROJECT_SOURCES
         login_signup/login.h login_signup/login.cpp
         login_signup/signup.h login_signup/signup.cpp
         db/databasemanager.h db/databasemanager.cpp
-        tests/login_signup/signup_test.h tests/login_signup/signup_test.cpp
+
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

@@ -55,7 +55,7 @@ Signup::Signup(QWidget *parent)
     emailBox->addStretch(4);
 
     dobLabel->setText("Date of Birth");
-    dobField->setPlaceholderText("YYYY-MM-DD");
+    dobField->setPlaceholderText("DD-MM-YYYY");
     dateOfBirthBox->addWidget(dobLabel, 1);
     dateOfBirthBox->addWidget(dobField, 2);
     dateOfBirthBox->addStretch(4);
@@ -135,24 +135,25 @@ Signup::~Signup()
 #include <regex>
 #include <iostream>
 
-bool Signup::validate_signup_form(std::string name, std::string email, std::string sex, std::string dob, std::string pass, std::string pass2) {
+bool Signup::validate_signup_form(std::string name, std::string email, std::string sex, std::string dob, std::string pass, std::string pass2, std::string& errorMsg) {
     // Validate Username
     if(name.length() == 0 || email.length()==0 || sex.length()==0 || dob.length()==0 || pass.length()==0 || pass2.length()==0){
-        qDebug() << "Fields cannot be left empty\n";
+        errorMsg = "Fields cannot be left empty\n";
+        return false;
     }
     if (name.length() < 3) {
-        qDebug() << "User Name must be at least 3 characters\n";
+        errorMsg = "User Name must be at least 3 characters\n";
         return false;
     }
     if (!isalpha(name[0])) {
-        qDebug() << "User Name cannot start with a number\n";
+        errorMsg = "User Name cannot start with a number\n";
         return false;
     }
 
     // Validate Email
     std::regex email_pattern(R"((\w+)(\.{0,1})(\w*)@(\w+)\.(\w+))");
     if (!std::regex_match(email, email_pattern)) {
-        qDebug() << "Invalid Email format\n";
+        errorMsg = "Invalid Email address\n";
         return false;
     }
 
@@ -163,18 +164,18 @@ bool Signup::validate_signup_form(std::string name, std::string email, std::stri
         int month = std::stoi(dob.substr(3, 2));
         int year = std::stoi(dob.substr(6, 4));
         if (day < 1 || day > 31 || month < 1 || month > 12) {
-            qDebug() << "Invalid date in Date of Birth\n";
+            errorMsg =  "Invalid date in Date of Birth\n";
             return false;
         }
     } else {
-        qDebug() << "Date of Birth must be in dd/mm/yyyy format\n";
+        errorMsg = "Date of Birth must be in dd/mm/yyyy format\n";
         return false;
     }
 
     // Validate Password
     bool is_char = false, is_number = false, is_alpha = false;
     if (pass.length() < 6) {
-        qDebug() << "Password must be at least 6 characters long\n";
+        errorMsg = "Password must be at least 6 characters long\n";
         return false;
     }
     for (char c : pass) {
@@ -184,11 +185,11 @@ bool Signup::validate_signup_form(std::string name, std::string email, std::stri
         if (is_char && is_number && is_alpha) break;
     }
     if (!(is_char && is_number && is_alpha)) {
-        qDebug() << "Password must contain at least one letter, one digit, and one special character\n";
+        errorMsg = "Password must contain at least one letter, one digit, and one special character\n";
         return false;
     }
     if (pass != pass2) {
-        qDebug() << "Passwords do not match. Please confirm your password\n";
+        errorMsg = "Passwords do not match. Please confirm your password\n";
         return false;
     }
 
@@ -207,7 +208,19 @@ void Signup::on_create_account_btn_clicked()
     std::string pass2 = comfirmPasswordField->text().toStdString();
     time_t created_at = std::time(nullptr);
 
-    if(validate_signup_form(name , email , sex , dob , pass, pass2)){
+    std::string errorMsg;
+
+    if(!validate_signup_form(name , email , sex , dob , pass, pass2, errorMsg)){
+        //show appropriate error Message
+        QMessageBox errorBox;
+        errorBox.setIcon(QMessageBox::Critical);
+        errorBox.setWindowTitle("Invalid Data Failed");
+        errorBox.setText(QString::fromStdString(errorMsg));
+        errorBox.setInformativeText("Please Try Again");
+        errorBox.exec();
+    }
+    else
+    {
 
         // convert dob and created_at to a postgres compatible type
         std::tm tm = {};
@@ -231,12 +244,28 @@ void Signup::on_create_account_btn_clicked()
         strftime(created_at_string, sizeof(created_at_string), "%Y-%m-%d", ptm);
 
         //add user entry to DB, static void addUserToDb(std::string name, std::string email, std::string sex, char* dob, char* created_at);
-        UserRepository::addUserToDb(name, email, sex, dob_string, pass, created_at_string);
+       bool addedUser = UserRepository::addUserToDb(name, email, sex, dob_string, pass, created_at_string);
+        if(addedUser){
+            //show success message
+            QMessageBox errorBox;
+            errorBox.setIcon(QMessageBox::Information);
+            errorBox.setWindowTitle("Account Created");
+            errorBox.setText("Account Created Successfully");
+            errorBox.setInformativeText("Enjoy Sharing Your Ideas");
+
+           emit signupSuccessful();
+
+        }else{
+            //show error message and retry
+            QMessageBox errorBox;
+            errorBox.setIcon(QMessageBox::Critical);
+            errorBox.setWindowTitle("Signup Failed");
+            errorBox.setText("Creating Your Account Failed");
+            errorBox.setInformativeText("Please Check Your Internet Connection");
+            errorBox.exec();
+        }
     }
-    else
-        qDebug() << "Invalid Form Data\n";
 
 
 }
-
 
