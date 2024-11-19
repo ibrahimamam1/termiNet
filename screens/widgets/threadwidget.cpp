@@ -4,14 +4,15 @@
 #include "../../db/thread_repository.h"
 
 ThreadWidget::ThreadWidget(const QString &userNameText, const QString &postTimeText,
-                           const QString &titleText, const QString &contentText, int t_id, QWidget *parent)
+                           const QString &titleText, const QString &contentText,int commentCount, int t_id, QWidget *parent)
     : QWidget(parent),
     threadContainer(new QVBoxLayout()),
     userName(new QLabel(userNameText, this)),
     postTime(new QLabel(postTimeText, this)),
     title(new QLabel(titleText, this)),
     content(new QTextEdit(this)),
-    comment(new QTextEdit(this)),
+    commentIcon(new QLabel(this, "comments:")),
+    commentCount(new QLabel(this)),
     postComment(new QPushButton("Post Comment", this)),
     thread_id(t_id)
 {
@@ -21,7 +22,6 @@ ThreadWidget::ThreadWidget(const QString &userNameText, const QString &postTimeT
     title->setStyleSheet("font-size: 16px; font-weight: bold;");
     content->setReadOnly(true);  // Make the content read-only
     content->setText(contentText);
-    comment->setPlaceholderText("Write a comment...");
 
     // Add widgets to the layout
     threadContainer->addWidget(userName);
