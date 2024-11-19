@@ -19,13 +19,14 @@ class ThreadWidget : public QWidget
     QLabel *postTime;
     QLabel *title;
     QTextEdit *content;
-    QTextEdit *comment;
+    QLabel *commentIcon;
+    QLabel *commentCount;
     QPushButton *postComment;
     int thread_id;
 
 public:
     explicit ThreadWidget(const QString &userNameText, const QString &postTimeText,
-                          const QString &titleText, const QString &contentText, int t_id, QWidget *parent = nullptr);
+                          const QString &titleText, const QString &contentText, int comment_count, int t_id, QWidget *parent = nullptr);
     ~ThreadWidget();
 
 private:
