@@ -10,6 +10,7 @@ private:
     int thread_id;
     std::string title;
     std::string content;
+    int comment_count;
     std::string created_at;
     int author_id;
     int community_id;
@@ -19,7 +20,7 @@ public:
     ThreadModel();
 
     // Parameterized constructor
-    ThreadModel(int thread_id, const std::string &title, const std::string &content,
+    ThreadModel(int thread_id, const std::string &title, const std::string &content, int c_count,
                 const std::string &created_at, int author_id, int community_id,
                 int parent_thread_id);
 
@@ -32,6 +33,9 @@ public:
 
     std::string getContent() const;
     void setContent(const std::string &content);
+
+    int getCommentCount() const;
+    void setCommentCount(const int count);
 
     std::string getCreatedAt() const;
     void setCreatedAt(const std::string &created_at);

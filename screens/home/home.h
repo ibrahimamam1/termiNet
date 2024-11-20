@@ -17,9 +17,10 @@ class Home : public QMainWindow
     QHBoxLayout *headerContainer;
     QHBoxLayout *bodyContainer;
     QVBoxLayout *leftArea;
-    QVBoxLayout *centerArea;
+    QVBoxLayout *threadsArea;
     QVBoxLayout *rightArea;
-    QWidget* currentRightWidget;
+    QWidget *currentRightWidget;
+    QVBoxLayout *centerArea; //can be threads or can be comments to a thread
 
     CreatePost* createPostWidget;
     //Messages* messageBoxWidget = nullptr;

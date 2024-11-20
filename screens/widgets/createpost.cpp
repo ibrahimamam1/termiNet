@@ -25,7 +25,7 @@ void CreatePost::on_postBtn_clicked()
     QString text = this->textArea->toPlainText();
 
     UserModel *user = UserModel::getInstance();
-    ThreadModel thread(0, title.toStdString(), text.toStdString(), "", user->getId(), -1, -1);
+    ThreadModel thread(0, title.toStdString(), text.toStdString(), 0, "", user->getId(), -1, -1);
     threadRepo->addThreadtoDb(thread);
 
 
