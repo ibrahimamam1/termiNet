@@ -18,20 +18,18 @@ Home::Home(QWidget *parent) : QMainWindow(parent), user(UserModel::getInstance()
     searchBar->setPlaceholderText("Search...");
     connect(searchBar, &QLineEdit::returnPressed, this, &Home::on_search_triggered);
 
-    createPostIcon = new QLabel(this);
+    createPostIcon = new ClickableLabel(this);
     createPostIcon->setPixmap(QPixmap("../../assets/createPost.png"));
     createPostIcon->setCursor(Qt::PointingHandCursor);
-    createPostIcon->setTextFormat(Qt::RichText);
-    createPostIcon->setTextInteractionFlags(Qt::TextBrowserInteraction);
-    connect(createPostIcon, &QLabel::linkActivated, this, &Home::on_create_post_icon_clicked);
+    connect(createPostIcon, &ClickableLabel::clicked, this, &Home::onCreatePostIconClicked);
 
-    messageIcon = new QLabel(this);
+    messageIcon = new ClickableLabel(this);
     messageIcon->setPixmap(QPixmap("../../assets/messageIcon.png"));
     messageIcon->setCursor(Qt::PointingHandCursor);
     messageIcon->setTextInteractionFlags(Qt::TextBrowserInteraction);
     connect(messageIcon, &QLabel::linkActivated, this, &Home::on_message_icon_clicked);
 
-    profileIcon = new QLabel(this);
+    profileIcon = new ClickableLabel(this);
     profileIcon->setPixmap(QPixmap("../../assets/profileIcon.png"));
     profileIcon->setCursor(Qt::PointingHandCursor);
     profileIcon->setTextInteractionFlags(Qt::TextBrowserInteraction);
@@ -130,12 +128,12 @@ void Home::showThreads(){
     }
 }
 
-void Home::on_create_post_icon_clicked(){
+void Home::onCreatePostIconClicked(){
     // Hide any currently visible widget and switch to post widget
     qDebug() << "Create Post Btn Clicked";
-    // currentRightWidget->hide();
-    // currentRightWidget = createPostWidget;
-    // currentRightWidget->show();
+    currentRightWidget->hide();
+    currentRightWidget = createPostWidget;
+    currentRightWidget->show();
 
 }
 void Home::on_search_triggered(){

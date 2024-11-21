@@ -16,6 +16,7 @@ class ThreadWidget : public QWidget
     QLabel *title;
     QTextEdit *content;
     QPushButton *commentButton;
+    QFrame *line;
     int thread_id;
 
 public:

@@ -6,8 +6,10 @@ CreatePost::CreatePost(QWidget *parent)
 {
 
     mainContainer = new QVBoxLayout(this);
-    titleArea = new QLineEdit("Enter Title");
+    titleArea = new QLineEdit();
+    titleArea->setPlaceholderText("Enter Title");
     textArea = new QTextEdit();
+    textArea->setPlaceholderText("Your Post Goes here");
     postBtn = new QPushButton("Post");
 
     mainContainer->addWidget(titleArea, 2);

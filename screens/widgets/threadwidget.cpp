@@ -13,14 +13,20 @@ ThreadWidget::ThreadWidget(const QString &userNameText, const QString &postTimeT
     title(new QLabel(titleText, this)),
     content(new QTextEdit(this)),
     commentButton(new QPushButton(this)),
+    line(new QFrame()),
     thread_id(t_id)
 {
     // Set up styles
-    userName->setStyleSheet("font-weight: bold; font-size: 14px;");
+    QFont userNameFont;
+    userNameFont.setWeight(QFont::DemiBold);
+    userNameFont.setUnderline(true);
+    userName->setFont(userNameFont);
+    userName->setStyleSheet("font-size: 12px; color: gray;");
     postTime->setStyleSheet("font-size: 12px; color: gray;");
     title->setStyleSheet("font-size: 16px; font-weight: bold;");
     content->setReadOnly(true);
     content->setText(contentText);
+    content->setStyleSheet("background-color: transparent;");
 
     // Configure the comment button
     commentButton->setIcon(QIcon("../../assets/comment.png"));
@@ -43,8 +49,9 @@ ThreadWidget::ThreadWidget(const QString &userNameText, const QString &postTimeT
         "}"
         );
 
-    // Ensure icon and text are vertically aligned
-    //commentButton->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+    //setup horixontal line
+    line->setFrameShape(QFrame::HLine);
+    line->setFrameShadow(QFrame::Sunken);
 
     // Set size policies for widgets
     content->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -55,6 +62,8 @@ ThreadWidget::ThreadWidget(const QString &userNameText, const QString &postTimeT
     threadContainer->addWidget(title);
     threadContainer->addWidget(content); // Ensure it stretches
     threadContainer->addWidget(commentButton);
+    threadContainer->addStretch(1);
+    threadContainer->addWidget(line);
 
     // Set layout for the widget
     setLayout(threadContainer);

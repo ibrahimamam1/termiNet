@@ -6,6 +6,7 @@
 #include <QVBoxLayout>
 #include <QScrollArea>
 #include<vector>
+#include"../widgets/clickablelabel.h"
 #include "../widgets/createpost.h"
 #include "../widgets/threadwidget.h"
 #include "../../models/usermodel.h"
@@ -28,9 +29,9 @@ class Home : public QMainWindow
 
     QLabel *logo;
     QLineEdit *searchBar; //is there a search bar widget in QT?
-    QLabel *createPostIcon;
-    QLabel *messageIcon;
-    QLabel *profileIcon;
+    ClickableLabel *createPostIcon;
+    ClickableLabel *messageIcon;
+    ClickableLabel *profileIcon;
 
     QVBoxLayout *homeNav;
     QLabel *homeNavHome;
@@ -51,7 +52,7 @@ public:
     ~Home();
 
 private slots:
-    void on_create_post_icon_clicked();
+    void onCreatePostIconClicked();
     void on_search_triggered();
     void on_message_icon_clicked();
     void on_profile_icon_clicked();
