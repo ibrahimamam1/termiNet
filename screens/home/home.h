@@ -43,6 +43,7 @@ class Home : public QMainWindow
 public:
     explicit Home(QWidget *parent = nullptr);
     void clearCenterWidget();
+    void addThreadsToCenterWidget();
     void setUser(UserModel *usr);
     void showUserInfo();
     void loadThreads();
@@ -54,10 +55,13 @@ private slots:
     void on_search_triggered();
     void on_message_icon_clicked();
     void on_profile_icon_clicked();
+    void onCommentBtnClicked(int parentThreadId);
+    void goBackToHomePressed();
 
 private:
     UserModel *user;
     std::vector<ThreadModel>threads;
+    std::vector<ThreadModel>savedThreads;
 };
 
 #endif // HOME_H

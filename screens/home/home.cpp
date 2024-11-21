@@ -12,23 +12,27 @@ Home::Home(QWidget *parent) : QMainWindow(parent), user(UserModel::getInstance()
 
     // Header layout
     headerContainer = new QHBoxLayout();
-    logo = new QLabel("Logo", this);
+    logo = new QLabel(this);
+    logo->setPixmap(QPixmap("../../assets/logo.png"));
     searchBar = new QLineEdit(this);
     searchBar->setPlaceholderText("Search...");
     connect(searchBar, &QLineEdit::returnPressed, this, &Home::on_search_triggered);
 
-    createPostIcon = new QLabel("Create", this);
+    createPostIcon = new QLabel(this);
+    createPostIcon->setPixmap(QPixmap("../../assets/createPost.png"));
     createPostIcon->setCursor(Qt::PointingHandCursor);
     createPostIcon->setTextFormat(Qt::RichText);
     createPostIcon->setTextInteractionFlags(Qt::TextBrowserInteraction);
     connect(createPostIcon, &QLabel::linkActivated, this, &Home::on_create_post_icon_clicked);
 
-    messageIcon = new QLabel("Messages", this);
+    messageIcon = new QLabel(this);
+    messageIcon->setPixmap(QPixmap("../../assets/messageIcon.png"));
     messageIcon->setCursor(Qt::PointingHandCursor);
     messageIcon->setTextInteractionFlags(Qt::TextBrowserInteraction);
     connect(messageIcon, &QLabel::linkActivated, this, &Home::on_message_icon_clicked);
 
-    profileIcon = new QLabel("Profile", this);
+    profileIcon = new QLabel(this);
+    profileIcon->setPixmap(QPixmap("../../assets/profileIcon.png"));
     profileIcon->setCursor(Qt::PointingHandCursor);
     profileIcon->setTextInteractionFlags(Qt::TextBrowserInteraction);
     connect(profileIcon, &QLabel::linkActivated, this, &Home::on_profile_icon_clicked);
@@ -114,92 +118,9 @@ void Home::loadThreads()
     threads = ThreadRepository::loadAllThreadsFromDb();
     qDebug() << "There are " << threads.size() << " threads loaded";
 
-    // Clear existing widgets in threadsArea
-    QLayoutItem *item;
-    while ((item = threadsArea->takeAt(0)) != nullptr) {
-        delete item->widget(); // Deletes the widget
-        delete item;           // Deletes the layout item
-    }
+    clearCenterWidget();
+    addThreadsToCenterWidget();
 
-    for (const auto &thread : threads) {
-        qDebug() << "Creating widget for thread ID:" << thread.getThreadId();
-
-        // Create the ThreadWidget
-        ThreadWidget *threadWidget = new ThreadWidget(
-            QString::fromStdString(thread.getAuthorName()),
-            QString::fromStdString(thread.getCreatedAt()),
-            QString::fromStdString(thread.getTitle()),
-            QString::fromStdString(thread.getContent()),
-            thread.getCommentCount(),
-            thread.getThreadId(),
-            this // Pass 'this' as the parent widget
-            );
-
-        // Add the ThreadWidget to the threadsArea layout
-        threadsArea->addWidget(threadWidget);
-
-        // Connect the signal to a lambda
-        connect(threadWidget, &ThreadWidget::switchToCommentScreen, this, [this, threadWidget](int threadId) {
-            qDebug() << "Switching to comment screen for thread ID:" << threadId;
-
-            // Clear the current layout
-            QLayoutItem *item;
-            while ((item = centerArea->takeAt(0)) != nullptr) {
-                delete item->widget(); // Deletes the widget
-                delete item;           // Deletes the layout item
-            }
-
-            // Create layouts for comment screen
-            QVBoxLayout *commentSection = new QVBoxLayout();
-            QVBoxLayout *parentThreadContainer = new QVBoxLayout();
-            QVBoxLayout *commentsContainer = new QVBoxLayout();
-
-            // Clone the current threadWidget for the parent thread
-            ThreadWidget *parentThreadWidget = new ThreadWidget(
-                threadWidget->getUserName(),
-                threadWidget->getPostTime(),
-                threadWidget->getTitle(),
-                threadWidget->getContent(),
-                threadWidget->getCommentCount(),
-                threadWidget->getThreadId(),
-                this
-                );
-
-            parentThreadContainer->addWidget(parentThreadWidget);
-
-            // Fetch and display comments
-            std::vector<ThreadModel> comments = ThreadRepository::loadAllCommentsFromDb(threadId);
-            for (const auto &comment : comments) {
-                ThreadWidget *commentWidget = new ThreadWidget(
-                    QString::fromStdString(comment.getAuthorName()),
-                    QString::fromStdString(comment.getCreatedAt()),
-                    QString::fromStdString(comment.getTitle()),
-                    QString::fromStdString(comment.getContent()),
-                    comment.getCommentCount(),
-                    comment.getThreadId(),
-                    this
-                    );
-                commentsContainer->addWidget(commentWidget);
-            }
-
-            // Assemble the comment section layout
-            commentSection->addLayout(parentThreadContainer, 2);
-            commentSection->addLayout(commentsContainer, 8);
-
-            // Set the new layout to the center area
-            QLayout *oldLayout = centerArea->layout();
-            if (oldLayout) {
-                QLayoutItem *item;
-                while ((item = oldLayout->takeAt(0)) != nullptr) {
-                    delete item->widget();
-                    delete item;
-                }
-                delete oldLayout;
-            }
-
-            centerArea->addLayout(commentSection);
-        });
-    }
 }
 
 
@@ -226,4 +147,135 @@ void Home::on_message_icon_clicked(){
 void Home::on_profile_icon_clicked(){
     qDebug() << "Profiles Btn Clicked";
 }
+void Home::onCommentBtnClicked(int parentThreadID){
+            qDebug() << "Inside Home: Switching to comment screen for thread ID:" << parentThreadID;
+            savedThreads = threads;
+
+            clearCenterWidget();
+            qDebug() << "Okay cleared center widget";
+
+            // Create layouts for comment screen
+            QVBoxLayout *commentSection = new QVBoxLayout();
+
+            QPushButton *goBack = new QPushButton();
+            goBack->setText("Back");
+            connect(goBack, &QPushButton::clicked , this, &Home::goBackToHomePressed);
+
+            QVBoxLayout *parentThreadContainer = new QVBoxLayout();
+            QVBoxLayout *commentsContainer = new QVBoxLayout();
+            QVBoxLayout *replyContainer = new QVBoxLayout();
+
+            //get parent thread using ThreadID
+            ThreadModel parentThread = ThreadRepository::getSingleThread(parentThreadID);
+            ThreadWidget *parentThreadWidget = new ThreadWidget(
+                                                   QString::fromStdString(parentThread.getAuthorName()),
+                                                   QString::fromStdString(parentThread.getCreatedAt()),
+                                                   QString::fromStdString(parentThread.getTitle()),
+                                                   QString::fromStdString(parentThread.getContent()),
+                                                   parentThread.getCommentCount(),
+                                                   parentThread.getThreadId(),
+                                                   this
+                );
+
+            parentThreadContainer->addWidget(parentThreadWidget);
+
+            //Fetch and display comments
+            threads.clear();
+            threads = ThreadRepository::loadAllCommentsFromDb(parentThreadWidget->getThreadId());
+            for (const auto &thread : threads) {
+                ThreadWidget *commentWidget = new ThreadWidget(
+                    QString::fromStdString(thread.getAuthorName()),
+                    QString::fromStdString(thread.getCreatedAt()),
+                    QString::fromStdString(thread.getTitle()),
+                    QString::fromStdString(thread.getContent()),
+                    thread.getCommentCount(),
+                    thread.getThreadId(),
+                    this
+                    );
+                commentsContainer->addWidget(commentWidget);
+            }
+            commentsContainer->addStretch(1);
+
+            //setup reply box
+            QTextEdit *reply = new QTextEdit(this);
+            reply->setPlaceholderText("Your Reply...");
+
+            QHBoxLayout *replyButtonContainer = new QHBoxLayout();
+            QPushButton *replyButton = new QPushButton("Post", this);
+
+            connect(replyButton, &QPushButton::clicked, this, [this, reply, parentThreadID]() {
+                qDebug() << "Yup you want to comment a thread huh";
+                QString title = "";
+                QString text = reply->toPlainText();
+
+                UserModel *user = UserModel::getInstance();
+                ThreadModel thread(0, title.toStdString(), text.toStdString(),0, "", user->getId(), -1, parentThreadID);
+                ThreadRepository::addThreadtoDb(thread);
+
+                reply->clear();
+            });
+
+            replyButtonContainer->addStretch(2);
+            replyButtonContainer->addWidget(replyButton, 1);
+            replyButtonContainer->addStretch(2);
+
+            replyContainer->addWidget(reply, 3);
+            replyContainer->addLayout(replyButtonContainer, 2);
+
+            // // // Assemble the comment section layout
+            commentSection->addWidget(goBack, 1);
+            commentSection->addLayout(parentThreadContainer, 2);
+            commentSection->addLayout(commentsContainer, 8);
+            commentSection->addLayout(replyContainer, 2);
+
+
+
+            centerArea->addLayout(commentSection);
+}
+
+void Home::goBackToHomePressed(){
+
+    clearCenterWidget();
+    qDebug() << "Should Clear Center Widget";
+    threads.clear();
+    threads = savedThreads;
+    addThreadsToCenterWidget();
+    centerArea->addLayout(threadsArea);
+
+}
+
+void Home::clearCenterWidget(){
+    QLayoutItem *item;
+    while ((item = centerArea->takeAt(0)) != nullptr) {
+        delete item->widget(); // Deletes the widget
+        delete item;           // Deletes the layout item
+    }
+
+}
+
+void Home::addThreadsToCenterWidget(){
+    for (const auto &thread : threads) {
+        qDebug() << "Creating widget for thread ID:" << thread.getThreadId();
+
+        // Create the ThreadWidget
+        ThreadWidget *threadWidget = new ThreadWidget(
+            QString::fromStdString(thread.getAuthorName()),
+            QString::fromStdString(thread.getCreatedAt()),
+            QString::fromStdString(thread.getTitle()),
+            QString::fromStdString(thread.getContent()),
+            thread.getCommentCount(),
+            thread.getThreadId(),
+            this // Pass 'this' as the parent widget
+            );
+
+        // Add the ThreadWidget to the threadsArea layout
+        threadsArea->addWidget(threadWidget);
+
+        connect(threadWidget, &ThreadWidget::switchToCommentScreen, this, &Home::onCommentBtnClicked);
+
+    }
+}
+
+
+
 

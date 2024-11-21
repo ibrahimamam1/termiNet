@@ -2,7 +2,7 @@
 #include "../../models/usermodel.h"
 #include "../../models/threadmodel.h"
 #include "../../db/thread_repository.h"
-
+#include "../home/home.h"
 ThreadWidget::ThreadWidget(const QString &userNameText, const QString &postTimeText,
                            const QString &titleText, const QString &contentText,
                            int c_count, int t_id, QWidget *parent)
@@ -23,7 +23,7 @@ ThreadWidget::ThreadWidget(const QString &userNameText, const QString &postTimeT
     content->setText(contentText);
 
     // Configure the comment button
-    commentButton->setIcon(QIcon(":/path/to/comment_icon.png")); // Replace with your icon path
+    commentButton->setIcon(QIcon("../../assets/comment.png"));
     commentButton->setIconSize(QSize(24, 24)); // Adjust icon size
     commentButton->setText(QString::number(c_count)); // Set the number of comments
     commentButton->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
@@ -58,6 +58,7 @@ ThreadWidget::ThreadWidget(const QString &userNameText, const QString &postTimeT
 
     // Set layout for the widget
     setLayout(threadContainer);
+
 }
 
 QString ThreadWidget::getUserName() const{ return userName->text(); }
