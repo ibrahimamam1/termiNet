@@ -6,7 +6,8 @@ Login::Login(QWidget *parent)
 {
     mainContainer = new QHBoxLayout(this);
     loginContainer = new QVBoxLayout();
-    formContainer = new QVBoxLayout();  // Removed parent to avoid multiple parents
+    formContainer = new QVBoxLayout();
+    bottomContainer = new QVBoxLayout();
     logo = new QLabel(this);
     welcomeText = new QLabel(this);
     emailField = new QLineEdit(this);
@@ -51,15 +52,20 @@ Login::Login(QWidget *parent)
     createAccount->setTextInteractionFlags(Qt::TextBrowserInteraction);
     connect(createAccount, &QLabel::linkActivated, this, &Login::onCreateAccountClicked); //link to on click event handler
 
+    //setup bottom Container
+    bottomContainer->addWidget(forgotPassword, 1);
+    bottomContainer->addWidget(createAccount, 1);
+    bottomContainer->addStretch(2);
+
     // Setup Logincontainer
     this->setLayout(loginContainer); //ensures login container takes all available space
     loginContainer->addWidget(logo, 1);
     loginContainer->addWidget(welcomeText, 1, Qt::AlignCenter);
     loginContainer->addLayout(formContainer, 4);
-    loginContainer->addWidget(forgotPassword, 1);
-    loginContainer->addWidget(createAccount, 1);
+    loginContainer->addLayout(bottomContainer, 1);
     loginContainer->addWidget(divider, 1);
     loginContainer->addWidget(socials, 1);
+    loginContainer->addStretch(2);
 
     //Centralise Login Container so that is always is in the center of the window
     mainContainer->addStretch(4);
@@ -150,7 +156,12 @@ void Login::on_login_btn_clicked()
 
     }
     else{
-        qDebug() << "Login Failed";
+        QMessageBox loginFailedBox;
+        loginFailedBox.setIcon(QMessageBox::Critical);
+        loginFailedBox.setWindowTitle("Login Failed");
+        loginFailedBox.setText("Login Failed");
+        loginFailedBox.setInformativeText(QString("Incorrect user name or password. Please try again"));
+        loginFailedBox.exec();
     }
 }
 void Login::onForgotPasswordClicked()

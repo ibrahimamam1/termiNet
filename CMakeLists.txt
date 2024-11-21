@@ -35,6 +35,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         screens/widgets/threadwidget.h screens/widgets/threadwidget.cpp
         login_signup/widgets/divider.h login_signup/widgets/divider.cpp
         login_signup/widgets/socials.h login_signup/widgets/socials.cpp
+        screens/widgets/clickablelabel.h
 
 
 

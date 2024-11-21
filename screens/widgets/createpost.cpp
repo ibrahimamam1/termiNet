@@ -6,8 +6,10 @@ CreatePost::CreatePost(QWidget *parent)
 {
 
     mainContainer = new QVBoxLayout(this);
-    titleArea = new QLineEdit("Enter Title");
+    titleArea = new QLineEdit();
+    titleArea->setPlaceholderText("Enter Title");
     textArea = new QTextEdit();
+    textArea->setPlaceholderText("Your Post Goes here");
     postBtn = new QPushButton("Post");
 
     mainContainer->addWidget(titleArea, 2);
@@ -25,7 +27,7 @@ void CreatePost::on_postBtn_clicked()
     QString text = this->textArea->toPlainText();
 
     UserModel *user = UserModel::getInstance();
-    ThreadModel thread(0, title.toStdString(), text.toStdString(), "", user->getId(), -1, -1);
+    ThreadModel thread(0, title.toStdString(), text.toStdString(), 0, "", user->getId(), -1, -1);
     threadRepo->addThreadtoDb(thread);
 
 

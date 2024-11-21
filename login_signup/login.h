@@ -24,6 +24,7 @@ class Login : public QDialog
     QHBoxLayout *mainContainer;
     QVBoxLayout *loginContainer;
     QVBoxLayout *formContainer;
+    QVBoxLayout *bottomContainer;
     DividerWidget *divider;
     SocialsWidget *socials;
     QLabel *logo;

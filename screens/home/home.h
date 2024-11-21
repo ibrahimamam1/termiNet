@@ -6,6 +6,7 @@
 #include <QVBoxLayout>
 #include <QScrollArea>
 #include<vector>
+#include"../widgets/clickablelabel.h"
 #include "../widgets/createpost.h"
 #include "../widgets/threadwidget.h"
 #include "../../models/usermodel.h"
@@ -17,9 +18,10 @@ class Home : public QMainWindow
     QHBoxLayout *headerContainer;
     QHBoxLayout *bodyContainer;
     QVBoxLayout *leftArea;
-    QVBoxLayout *centerArea;
+    QVBoxLayout *threadsArea;
     QVBoxLayout *rightArea;
-    QWidget* currentRightWidget;
+    QWidget *currentRightWidget;
+    QVBoxLayout *centerArea; //can be threads or can be comments to a thread
 
     CreatePost* createPostWidget;
     //Messages* messageBoxWidget = nullptr;
@@ -27,9 +29,9 @@ class Home : public QMainWindow
 
     QLabel *logo;
     QLineEdit *searchBar; //is there a search bar widget in QT?
-    QLabel *createPostIcon;
-    QLabel *messageIcon;
-    QLabel *profileIcon;
+    ClickableLabel *createPostIcon;
+    ClickableLabel *messageIcon;
+    ClickableLabel *profileIcon;
 
     QVBoxLayout *homeNav;
     QLabel *homeNavHome;
@@ -42,6 +44,7 @@ class Home : public QMainWindow
 public:
     explicit Home(QWidget *parent = nullptr);
     void clearCenterWidget();
+    void addThreadsToCenterWidget();
     void setUser(UserModel *usr);
     void showUserInfo();
     void loadThreads();
@@ -49,14 +52,17 @@ public:
     ~Home();
 
 private slots:
-    void on_create_post_icon_clicked();
+    void onCreatePostIconClicked();
     void on_search_triggered();
     void on_message_icon_clicked();
     void on_profile_icon_clicked();
+    void onCommentBtnClicked(int parentThreadId);
+    void goBackToHomePressed();
 
 private:
     UserModel *user;
     std::vector<ThreadModel>threads;
+    std::vector<ThreadModel>savedThreads;
 };
 
 #endif // HOME_H
