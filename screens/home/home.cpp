@@ -53,8 +53,16 @@ Home::Home(QWidget *parent) : QMainWindow(parent), user(UserModel::getInstance()
 
     // Community navigation
     communityNav = new QVBoxLayout();
-    QLabel* communityLabel = new QLabel("Communities", this);
+    communityLabel = new QLabel("Communities", this);
+    createCommunity = new QLabel(this);
+    createCommunity->setText("<a href='#' style='color: #007bff; text-decoration: underline;'>Create Community?</a>");
+    createCommunity->setTextFormat(Qt::RichText);
+    createCommunity->setTextInteractionFlags(Qt::TextBrowserInteraction);
+    connect(createCommunity, &QLabel::linkActivated, this, &Home::onCreateCommunityBtnClicked);
+
     communityNav->addWidget(communityLabel);
+    communityNav->addWidget(createCommunity);
+    communityNav->addStretch();
 
     QScrollArea* communityScrollArea = new QScrollArea(this);
     QWidget* communityContent = new QWidget(this);
@@ -272,6 +280,10 @@ void Home::addThreadsToCenterWidget(){
         connect(threadWidget, &ThreadWidget::switchToCommentScreen, this, &Home::onCommentBtnClicked);
 
     }
+}
+
+void Home::onCreateCommunityBtnClicked(){
+    qDebug() << "Create Community Button clicked";
 }
 
 
