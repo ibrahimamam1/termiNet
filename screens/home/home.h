@@ -11,6 +11,7 @@
 #include "../widgets/createpost.h"
 #include "../widgets/threadwidget.h"
 #include "../../models/usermodel.h"
+#include "../create_community/createcommunity.h"
 
 class Home : public QMainWindow
 {

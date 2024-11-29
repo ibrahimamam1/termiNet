@@ -37,6 +37,10 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         login_signup/widgets/socials.h login_signup/widgets/socials.cpp
         screens/widgets/clickablelabel.h
 
+        screens/create_community/createcommunity.h
+        screens/create_community/createcommunity.cpp
+
+
 
 
 
