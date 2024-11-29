@@ -10,6 +10,7 @@
 #include <QTextEdit>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QFileDialog>
 
 class CreateCommunity : public QWidget
 {
