@@ -1,4 +1,5 @@
 #include "createcommunity.h"
+#include "../styles/buttonStyles.h"
 
 CreateCommunity::CreateCommunity(QWidget *parent)
     :QWidget{parent}
@@ -35,30 +36,37 @@ CreateCommunity::CreateCommunity(QWidget *parent)
     // Banner selection
     QLabel *bannerText = new QLabel("Banner: ");
     QPushButton *bannerPickerBtn = new QPushButton("Select Banner");
+    bannerPickerBtn->setStyleSheet(circularBtn);
+    bannerPickerBtn->setIcon(QIcon("../../assets/imageIcon"));
+    QLabel *bannerImagePath = new QLabel();
     bannerRow->addWidget(bannerText);
     bannerRow->addWidget(bannerPickerBtn);
+    bannerRow->addWidget(bannerImagePath);
 
     // Icon selection
     QLabel *iconText = new QLabel("Icon: ");
     QPushButton *iconPickerBtn = new QPushButton("Select Icon");
+    iconPickerBtn->setStyleSheet(circularBtn);
+    iconPickerBtn->setIcon(QIcon("../../assets/imageIcon"));
+    QLabel *iconImagePath = new QLabel();
     iconRow->addWidget(iconText);
     iconRow->addWidget(iconPickerBtn);
+    iconRow->addWidget(iconImagePath);
 
     // Connect banner picker button
-    connect(bannerPickerBtn, &QPushButton::clicked, [this]() {
+    connect(bannerPickerBtn, &QPushButton::clicked, [this, bannerImagePath]() {
         QString fileName = QFileDialog::getOpenFileName(this, tr("Select Banner Image"), "", tr("Image Files (*.png *.jpg *.bmp *.jpeg)"));
         if (!fileName.isEmpty()) {
-            // TODO: Handle the selected banner image (e.g., display preview, store path)
+            bannerImagePath->setText(fileName);
             qDebug() << "Selected Banner: " << fileName;
         }
     });
 
     // Connect icon picker button
-    connect(iconPickerBtn, &QPushButton::clicked, [this]() {
+    connect(iconPickerBtn, &QPushButton::clicked, [this, iconImagePath]() {
         QString fileName = QFileDialog::getOpenFileName(this, tr("Select Icon Image"), "", tr("Image Files (*.png *.jpg *.bmp *.jpeg)"));
-
         if (!fileName.isEmpty()) {
-            // TODO: Handle the selected icon image (e.g., display preview, store path)
+            iconImagePath->setText(fileName);
             qDebug() << "Selected Icon: " << fileName;
         }
     });
@@ -73,10 +81,14 @@ CreateCommunity::CreateCommunity(QWidget *parent)
     page2Layout->addStretch(2);
 
     //setup page3
-    QVBoxLayout *page3Layout = new QVBoxLayout(page3);
-    QLabel *topicText = new QLabel("Select Topics");
+    QHBoxLayout *page3Layout = new QHBoxLayout(page3);
+    QVBoxLayout *centerContainer = new QVBoxLayout();
+    QLabel *headerText = new QLabel("Select Categories that match your community");
 
-    page3Layout->addWidget(topicText);
+    centerContainer->addWidget(headerText);
+    page3Layout->addStretch(3);
+    page3Layout->addWidget(centerContainer);
+    page3Layout->addStretch(3);
 
     //add pages to stackedWidget
     views->addWidget(page1);

@@ -39,6 +39,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 
         screens/create_community/createcommunity.h
         screens/create_community/createcommunity.cpp
+        screens/styles/buttonStyles.h
 
 
 
