@@ -32,4 +32,24 @@ create table if not exists auth(
     password_hash text
 );
 
+create table if not exists categories(
+    category_id integer primary key,
+    category_name text
+);
+insert into categories(category_id, category_name) values (1, 'Art');
+insert into categories(category_id, category_name) values (2, 'Science');
+insert into categories(category_id, category_name) values (3, 'Sports');
+insert into categories(category_id, category_name) values (4, 'Politics');
+insert into categories(category_id, category_name) values (5, 'News');
+insert into categories(category_id, category_name) values (6, 'Entertainment');
+insert into categories(category_id, category_name) values (7, 'Technology');
+insert into categories(category_id, category_name) values (8, 'Writing');
+insert into categories(category_id, category_name) values (9, 'Pop culture');
+insert into categories(category_id, category_name) values (10, 'Writing');
+insert into categories(category_id, category_name) values (11, 'Popular Culture');
+insert into categories(category_id, category_name) values (12, 'Anime');
+insert into categories(category_id, category_name) values (13, 'Manga');
+insert into categories(category_id, category_name) values (14, 'Video Games');
+insert into categories(category_id, category_name) values (15, 'Movies');
+
 

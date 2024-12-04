@@ -5,11 +5,13 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QScrollArea>
+#include <QComboBox>
 #include<vector>
 #include"../widgets/clickablelabel.h"
 #include "../widgets/createpost.h"
 #include "../widgets/threadwidget.h"
 #include "../../models/usermodel.h"
+#include "../create_community/createcommunity.h"
 
 class Home : public QMainWindow
 {
@@ -40,6 +42,7 @@ class Home : public QMainWindow
 
     QVBoxLayout *communityNav;
     QLabel* communityLabel;
+    QLabel *createCommunity;
 
 public:
     explicit Home(QWidget *parent = nullptr);
@@ -58,6 +61,7 @@ private slots:
     void on_profile_icon_clicked();
     void onCommentBtnClicked(int parentThreadId);
     void goBackToHomePressed();
+    void onCreateCommunityBtnClicked();
 
 private:
     UserModel *user;
