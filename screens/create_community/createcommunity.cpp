@@ -1,5 +1,6 @@
 #include "createcommunity.h"
 #include "../styles/buttonStyles.h"
+#include "pages/categoryselectionscreen.h"
 
 CreateCommunity::CreateCommunity(QWidget *parent)
     :QWidget{parent}
@@ -81,14 +82,7 @@ CreateCommunity::CreateCommunity(QWidget *parent)
     page2Layout->addStretch(2);
 
     //setup page3
-    QHBoxLayout *page3Layout = new QHBoxLayout(page3);
-    QVBoxLayout *centerContainer = new QVBoxLayout();
-    QLabel *headerText = new QLabel("Select Categories that match your community");
-
-    centerContainer->addWidget(headerText);
-    page3Layout->addStretch(3);
-    page3Layout->addWidget(centerContainer);
-    page3Layout->addStretch(3);
+    CategorySelectionScreen *page3 = new CategorySelectionScreen();
 
     //add pages to stackedWidget
     views->addWidget(page1);

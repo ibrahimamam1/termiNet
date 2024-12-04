@@ -40,6 +40,11 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         screens/create_community/createcommunity.h
         screens/create_community/createcommunity.cpp
         screens/styles/buttonStyles.h
+        screens/create_community/widgets/categorywidget.h screens/create_community/widgets/categorywidget.cpp
+        screens/create_community/pages/categoryselectionscreen.h screens/create_community/pages/categoryselectionscreen.cpp
+        models/categorymodel.h models/categorymodel.cpp
+        db/category_repository.h db/category_repository.cpp
+
 
 
 
