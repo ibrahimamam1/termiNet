@@ -25,3 +25,9 @@ OWNED BY threads.thread_id;
 -- No MAXVALUE
 -- CACHE 0
 -- OWNED BY categories.category_id;
+
+create sequence if not exists CommunitySeq
+As Integer
+MINVALUE 1
+No MAXVALUE
+OWNED BY communities.community_id;

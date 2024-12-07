@@ -1,88 +1,21 @@
 #include "createcommunity.h"
-#include "../styles/buttonStyles.h"
-#include "pages/categoryselectionscreen.h"
+#include "../../db/communityrepository.h"
+#include<QMessageBox>
+
 
 CreateCommunity::CreateCommunity(QWidget *parent)
     :QWidget{parent}
 {
     pageContainer = new QVBoxLayout(this);
     views = new QStackedWidget();
-    page1 = new QWidget();
-    page2 = new QWidget();
-    page3 = new QWidget();
+    page1 = new ComunityDescriptionPage();
+    page2 = new CommunityBannerPage();
+    page3 = new CategorySelectionScreen();
     bottombar = new QHBoxLayout();
     cancelBtn = new QPushButton("Cancel");
     prevBtn = new QPushButton("Previous");
     nextBtn = new QPushButton("Next");
 
-    //setup page1
-    QVBoxLayout *page1Layout = new QVBoxLayout(page1);
-    QLabel *headertext = new QLabel();
-    headertext->setText("Create Your Own Amazing Communities");
-    QLineEdit *communitNameField = new QLineEdit();
-    communitNameField->setPlaceholderText("Community Name *");
-    QTextEdit *communityDescription = new QTextEdit();
-    communityDescription->setPlaceholderText("Description *");
-
-    page1Layout->addWidget(headertext, 1);
-    page1Layout->addWidget(communitNameField, 1);
-    page1Layout->addWidget(communityDescription, 2);
-    page1Layout->addStretch(1);
-
-    //setup page2
-    QVBoxLayout *page2Layout = new QVBoxLayout(page2);
-    QHBoxLayout *bannerRow = new QHBoxLayout();
-    QHBoxLayout *iconRow = new QHBoxLayout();
-
-    // Banner selection
-    QLabel *bannerText = new QLabel("Banner: ");
-    QPushButton *bannerPickerBtn = new QPushButton("Select Banner");
-    bannerPickerBtn->setStyleSheet(circularBtn);
-    bannerPickerBtn->setIcon(QIcon("../../assets/imageIcon"));
-    QLabel *bannerImagePath = new QLabel();
-    bannerRow->addWidget(bannerText);
-    bannerRow->addWidget(bannerPickerBtn);
-    bannerRow->addWidget(bannerImagePath);
-
-    // Icon selection
-    QLabel *iconText = new QLabel("Icon: ");
-    QPushButton *iconPickerBtn = new QPushButton("Select Icon");
-    iconPickerBtn->setStyleSheet(circularBtn);
-    iconPickerBtn->setIcon(QIcon("../../assets/imageIcon"));
-    QLabel *iconImagePath = new QLabel();
-    iconRow->addWidget(iconText);
-    iconRow->addWidget(iconPickerBtn);
-    iconRow->addWidget(iconImagePath);
-
-    // Connect banner picker button
-    connect(bannerPickerBtn, &QPushButton::clicked, [this, bannerImagePath]() {
-        QString fileName = QFileDialog::getOpenFileName(this, tr("Select Banner Image"), "", tr("Image Files (*.png *.jpg *.bmp *.jpeg)"));
-        if (!fileName.isEmpty()) {
-            bannerImagePath->setText(fileName);
-            qDebug() << "Selected Banner: " << fileName;
-        }
-    });
-
-    // Connect icon picker button
-    connect(iconPickerBtn, &QPushButton::clicked, [this, iconImagePath]() {
-        QString fileName = QFileDialog::getOpenFileName(this, tr("Select Icon Image"), "", tr("Image Files (*.png *.jpg *.bmp *.jpeg)"));
-        if (!fileName.isEmpty()) {
-            iconImagePath->setText(fileName);
-            qDebug() << "Selected Icon: " << fileName;
-        }
-    });
-
-    bannerRow->addWidget(bannerText);
-    bannerRow->addWidget(bannerPickerBtn);
-    iconRow->addWidget(iconText);
-    iconRow->addWidget(iconPickerBtn);
-
-    page2Layout->addLayout(bannerRow, 1);
-    page2Layout->addLayout(iconRow, 2);
-    page2Layout->addStretch(2);
-
-    //setup page3
-    CategorySelectionScreen *page3 = new CategorySelectionScreen();
 
     //add pages to stackedWidget
     views->addWidget(page1);
@@ -94,6 +27,22 @@ CreateCommunity::CreateCommunity(QWidget *parent)
         int currentIndex = views->currentIndex();
         if (currentIndex < views->count() - 1) {
             views->setCurrentIndex(currentIndex + 1);
+        }
+        else if(currentIndex == views->count() - 1) {
+            //do db operations
+            QString comm_name = page1->communityNameField->text();
+            QString comm_des = page1->communityDescription->toPlainText();
+            QString comm_icon_path = page2->iconImagePath->text();
+            QString comm_banner_path = page2->bannerImagePath->text();
+            std::vector<CategoryModel> categories_id = page3->getSelectedCategories();
+
+            if(!CommunityRepository::addNewCommunity(CommunityModel(-1 ,comm_name, comm_des, comm_icon_path, comm_banner_path, categories_id))){
+                 QMessageBox *errorBox = new QMessageBox(QMessageBox::Critical, "Cannot Create Community", "Failed to create your community. Please Check your internet Connection and try again");
+            }
+            else{
+                qDebug() << "Let's switch to community page";
+            }
+
         }
     });
     connect(prevBtn,&QPushButton::clicked, [=]() {

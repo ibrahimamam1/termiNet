@@ -44,6 +44,10 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         screens/create_community/pages/categoryselectionscreen.h screens/create_community/pages/categoryselectionscreen.cpp
         models/categorymodel.h models/categorymodel.cpp
         db/category_repository.h db/category_repository.cpp
+        screens/create_community/pages/comunitydescriptionpage.h screens/create_community/pages/comunitydescriptionpage.cpp
+        screens/create_community/pages/communitybannerpage.h screens/create_community/pages/communitybannerpage.cpp
+        models/communitymodel.h models/communitymodel.cpp
+        db/communityrepository.h db/communityrepository.cpp
 
 
 

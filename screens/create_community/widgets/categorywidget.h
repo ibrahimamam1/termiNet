@@ -7,10 +7,11 @@
 class CategoryWidget : public QWidget {
     Q_OBJECT
 public:
-    explicit CategoryWidget(const QString& categoryName, const bool& isSelected = false, QWidget* parent = nullptr);
+    explicit CategoryWidget(const QString& categoryName, const int categoryId, const bool& isSelected = false, QWidget* parent = nullptr);
 
     bool getIsSelected() const;
     QString getCategoryName() const;
+    int getCategoryId() const;
 
 signals:
     void categoryToggled(const QString& category, bool isSelected);
@@ -21,6 +22,7 @@ protected:
 
 private:
     QString m_categoryName;
+    int m_categoryId;
     bool m_isSelected;
     QColor m_baseColor;
     QColor m_selectedColor;
