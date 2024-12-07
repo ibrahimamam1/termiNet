@@ -1,7 +1,7 @@
 #include "categorywidget.h"
 
-CategoryWidget::CategoryWidget(const QString& categoryName, const bool& isSelected, QWidget *parent)
-    : m_categoryName(categoryName), m_isSelected(isSelected), QWidget{parent}
+CategoryWidget::CategoryWidget(const QString& categoryName, const int categoryId, const bool& isSelected, QWidget *parent)
+    : m_categoryName(categoryName), m_categoryId(categoryId), m_isSelected(isSelected), QWidget{parent}
 {
     m_baseColor = QColor(240, 240, 240);  // Light gray
     m_borderColor = QColor(200, 200, 200);  // Slightly darker gray for border
@@ -9,7 +9,15 @@ CategoryWidget::CategoryWidget(const QString& categoryName, const bool& isSelect
     m_selectedTextColor = Qt::white;  // White text for contrast
     m_hoverColor = QColor(230, 230, 230);  // Very light gray
 }
-
+int CategoryWidget::getCategoryId() const{
+    return m_categoryId;
+}
+QString CategoryWidget::getCategoryName() const{
+    return m_categoryName;
+}
+bool CategoryWidget::getIsSelected() const {
+    return m_isSelected;
+}
 void CategoryWidget::paintEvent(QPaintEvent* event) {
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);

@@ -11,6 +11,7 @@ public:
     QString getName() const;
 
 
+
 private:
     int id;
     QString name;

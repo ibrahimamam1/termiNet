@@ -52,4 +52,9 @@ insert into categories(category_id, category_name) values (13, 'Manga');
 insert into categories(category_id, category_name) values (14, 'Video Games');
 insert into categories(category_id, category_name) values (15, 'Movies');
 
+create table if not exists community_categories(
+    community_id integer,
+    category_id integer,
+    primary key (community_id, category_id)
+);
 

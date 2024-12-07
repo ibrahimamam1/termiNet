@@ -12,14 +12,18 @@
 #include <QHBoxLayout>
 #include <QFileDialog>
 
+#include "pages/categoryselectionscreen.h"
+#include "pages/comunitydescriptionpage.h"
+#include "pages/communitybannerpage.h"
+
 class CreateCommunity : public QWidget
 {
     Q_OBJECT
     QVBoxLayout *pageContainer;
     QStackedWidget *views;
-    QWidget *page1;
-    QWidget *page2;
-    QWidget *page3;
+    ComunityDescriptionPage *page1;
+    CommunityBannerPage *page2;
+    CategorySelectionScreen *page3;
     QHBoxLayout *bottombar;
     QPushButton *cancelBtn;
     QPushButton *prevBtn;
