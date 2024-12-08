@@ -128,14 +128,13 @@ void Home::loadThreads()
     addThreadsToCenterWidget();
 
 }
-
-
-void Home::showThreads(){
-    for(int i=0; i<threads.size(); i++){
-        qDebug() << "Id : "<< threads[i].getThreadId() << "Title: "<< threads[i].getTitle();
+void Home::getUserCommunities(){
+    userCommunities = CommunityRepository::getUserCommunities(UserModel::getInstance()->getId());
+    qDebug() << userCommunities.size() << " communities found";
+    for(auto com : userCommunities){
+        qDebug() << com.getName();
     }
 }
-
 void Home::onCreatePostIconClicked(){
     // Hide any currently visible widget and switch to post widget
     qDebug() << "Create Post Btn Clicked";

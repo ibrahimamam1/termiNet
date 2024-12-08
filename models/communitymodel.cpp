@@ -9,7 +9,7 @@ CommunityModel::CommunityModel()
     categories()
 {}
 
-CommunityModel::CommunityModel(int id, const QString& name, const QString& description, const QString& iconImage, const QString& bannerImage, const std::vector<CategoryModel>& categories)
+CommunityModel::CommunityModel(int id, const QString& name, const QString& description, const QString& iconImage, const QString& bannerImage, const std::vector<CategoryModel>& categories, const QString& created_at)
     : id(id),
     name(name),
     description(description),

@@ -48,6 +48,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         screens/create_community/pages/communitybannerpage.h screens/create_community/pages/communitybannerpage.cpp
         models/communitymodel.h models/communitymodel.cpp
         db/communityrepository.h db/communityrepository.cpp
+        screens/community_page/communitypage.h screens/community_page/communitypage.cpp
 
 
 

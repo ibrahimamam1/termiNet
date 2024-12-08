@@ -11,6 +11,8 @@
 #include "../widgets/createpost.h"
 #include "../widgets/threadwidget.h"
 #include "../../models/usermodel.h"
+#include "../../models/communitymodel.h"
+#include "../../db/communityrepository.h"
 #include "../create_community/createcommunity.h"
 
 class Home : public QMainWindow
@@ -51,7 +53,7 @@ public:
     void setUser(UserModel *usr);
     void showUserInfo();
     void loadThreads();
-    void showThreads();
+    void getUserCommunities();
     ~Home();
 
 private slots:
@@ -67,6 +69,7 @@ private:
     UserModel *user;
     std::vector<ThreadModel>threads;
     std::vector<ThreadModel>savedThreads;
+    std::vector<CommunityModel>userCommunities;
 };
 
 #endif // HOME_H

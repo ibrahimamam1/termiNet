@@ -1,3 +1,9 @@
+create table if not exists auth(
+    auth_id integer primary key,
+    user_id integer ,
+    password_hash text
+);
+
 create table if not exists users(
     user_id integer primary key,
     user_name text,
@@ -7,6 +13,21 @@ create table if not exists users(
     user_bio text,
     passwd text,
     created_at date,
+);
+
+create table if not exists communities(
+community_id integer primary key,
+name varchar(50) not null,
+description text,
+icon_image text,
+banner_image text,
+created_at date
+);
+
+create table if not exists users_communities(
+    user_id integer,
+    community_id integer,
+    primary key(user_id, community_id)
 );
 
 create table if not exists threads(
@@ -19,18 +40,8 @@ create table if not exists threads(
     parent_thread_id integer,
 );
 
-create table if not exists communities(
-community_id integer primary key,
-name varchar(50) not null,
-description text,
-created_at date
-);
 
-create table if not exists auth(
-    auth_id integer primary key,
-    user_id integer ,
-    password_hash text
-);
+
 
 create table if not exists categories(
     category_id integer primary key,
