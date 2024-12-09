@@ -62,6 +62,7 @@ Home::Home(QWidget *parent) : QMainWindow(parent), user(UserModel::getInstance()
 
     communityNav->addWidget(communityLabel);
     communityNav->addWidget(createCommunity);
+    getUserCommunities(communityNav);
     communityNav->addStretch();
 
     QScrollArea* communityScrollArea = new QScrollArea(this);
@@ -128,11 +129,20 @@ void Home::loadThreads()
     addThreadsToCenterWidget();
 
 }
-void Home::getUserCommunities(){
+void Home::getUserCommunities(QVBoxLayout* layout){
     userCommunities = CommunityRepository::getUserCommunities(UserModel::getInstance()->getId());
-    qDebug() << userCommunities.size() << " communities found";
-    for(auto com : userCommunities){
-        qDebug() << com.getName();
+
+    //create a label for every community
+    for(auto comm : userCommunities){
+        qDebug() << "Creating widget for " << comm.getName();
+        QLabel *commLabel = new QLabel();
+        QString labelText = "<a href='#'>" + comm.getName() + "</a>";
+        commLabel->setText(labelText);
+        commLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
+        connect(commLabel, &QLabel::linkActivated, this, [this, comm]() {
+            onCommunityLabelClicked(comm);
+        });
+        layout->addWidget(commLabel);
     }
 }
 void Home::onCreatePostIconClicked(){
@@ -284,6 +294,10 @@ void Home::addThreadsToCenterWidget(){
 void Home::onCreateCommunityBtnClicked(){
     CreateCommunity *createCommunityWidget = new CreateCommunity();
     createCommunityWidget->show();
+}
+
+void Home::onCommunityLabelClicked(CommunityModel community){
+    qDebug() << "Okay let's switch to community page for" << community.getName();
 }
 
 

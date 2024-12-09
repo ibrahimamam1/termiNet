@@ -92,22 +92,20 @@ std::vector<CommunityModel> CommunityRepository::getUserCommunities(int user_id)
 
         QSqlQuery getCommName;
         getCommName.prepare("select * from communities where community_id=:c_id");
-        getCommName.bindValue("c_id", comm_id);
+        getCommName.bindValue(":c_id", comm_id);
         if(!getCommName.exec()){
             qDebug() << "Failed to get Community info : " << getCommName.lastError();
             return comms;
         }
-        // if(!getCommName.next()){
-        //     qDebug("Empty Row while getting community Info");
-        //     return comms;
-        // }
-        int id = getCommName.value(0).toInt();
-        QString name = getCommName.value(1).toString();
-        QString description = getCommName.value(2).toString();
-        QString iconPath = getCommName.value(3).toString();
-        QString bannerPath = getCommName.value(4).toString();
-        std::vector<CategoryModel>categories = CategoryRepository::getCategoriesForCommunity(id);
-        comms.push_back(CommunityModel(id, name, description, iconPath, bannerPath, categories));
+        if(getCommName.next()){
+            int id = getCommName.value(0).toInt();
+            QString name = getCommName.value(1).toString();
+            QString description = getCommName.value(2).toString();
+            QString iconPath = getCommName.value(3).toString();
+            QString bannerPath = getCommName.value(4).toString();
+            std::vector<CategoryModel>categories = CategoryRepository::getCategoriesForCommunity(id);
+            comms.push_back(CommunityModel(id, name, description, iconPath, bannerPath, categories));
+        }
     }
     return comms;
 }

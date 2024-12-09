@@ -53,7 +53,7 @@ public:
     void setUser(UserModel *usr);
     void showUserInfo();
     void loadThreads();
-    void getUserCommunities();
+    void getUserCommunities(QVBoxLayout* layout);
     ~Home();
 
 private slots:
@@ -64,6 +64,7 @@ private slots:
     void onCommentBtnClicked(int parentThreadId);
     void goBackToHomePressed();
     void onCreateCommunityBtnClicked();
+    void onCommunityLabelClicked(CommunityModel community);
 
 private:
     UserModel *user;

@@ -50,7 +50,6 @@ int main(int argc, char *argv[])
         auto homePage = new Home();
         homePage->setAttribute(Qt::WA_DeleteOnClose);
         homePage->loadThreads();
-        homePage->getUserCommunities();
         homePage->show();
         loginWindow->deleteLater();
     });
