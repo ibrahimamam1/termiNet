@@ -51,6 +51,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         screens/community_page/communitypage.h screens/community_page/communitypage.cpp
         screens/widgets/topbar/customtopbar.h screens/widgets/topbar/customtopbar.cpp
         screens/widgets/leftNavigation/leftnavigationwidget.h screens/widgets/leftNavigation/leftnavigationwidget.cpp
+        db/storage_repository/storagerepository.h db/storage_repository/storagerepository.cpp
+        utils/constants/appconstants.h utils/constants/appconstants.cpp
 
 
 

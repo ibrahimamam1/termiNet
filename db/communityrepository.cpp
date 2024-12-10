@@ -109,3 +109,15 @@ std::vector<CommunityModel> CommunityRepository::getUserCommunities(int user_id)
     }
     return comms;
 }
+
+int CommunityRepository::getMemberCount(int comm_id){
+    QSqlQuery q;
+    q.prepare("select count(*) from user_communities where community_id = :c_id");
+    q.bindValue(":c_id", comm_id);
+
+    if(!q.exec()){
+        qDebug() << "Failed to get member Count";
+        return 0;
+    }
+    return q.value(0).toInt();
+}

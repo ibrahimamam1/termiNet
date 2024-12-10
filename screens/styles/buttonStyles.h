@@ -3,7 +3,7 @@
 
 #include<QString>
 
-QString circularBtn = R"(
+const QString circularBtn = R"(
     QPushButton {
         border-radius: 15px;
         background-color: #3498db;

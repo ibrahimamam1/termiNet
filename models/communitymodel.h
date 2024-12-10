@@ -20,6 +20,7 @@ public:
     QString getDescription() const;
     QString getIconImage() const;
     QString getBannerImage() const;
+    int getMemberCount() const;
     std::vector<CategoryModel> getCategories() const;
 };
 #endif // COMMUNITYMODEL_H

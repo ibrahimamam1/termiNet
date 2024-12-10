@@ -1,4 +1,5 @@
 #include "communitymodel.h"
+#include "../db/communityrepository.h"
 
 CommunityModel::CommunityModel()
     : id(-1),
@@ -40,4 +41,8 @@ QString CommunityModel::getBannerImage() const {
 
 std::vector<CategoryModel> CommunityModel::getCategories() const {
     return categories;
+}
+
+int CommunityModel::getMemberCount() const {
+    return CommunityRepository::getMemberCount(id);
 }

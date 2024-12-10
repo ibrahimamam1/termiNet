@@ -22,18 +22,10 @@ Home::Home(QWidget *parent) : QMainWindow(parent), user(UserModel::getInstance()
     centerArea->addWidget(homeThreads);
     centerArea->addWidget(communityPage);
 
-
-
-    // Right area layout
-    rightArea = new QVBoxLayout();
-    currentRightWidget = new QLabel("Right Widget Placeholder", this); // Replace dynamically as needed.
-    rightArea->addWidget(currentRightWidget);
-
     // Body layout
     bodyContainer = new QHBoxLayout();
     bodyContainer->addWidget(leftNav, 2);
     bodyContainer->addWidget(centerArea, 6);
-    bodyContainer->addLayout(rightArea, 2);
 
     // Combine header and body into main container
     mainContainer->addWidget(topBar, 1);

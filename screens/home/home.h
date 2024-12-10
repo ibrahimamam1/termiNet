@@ -41,8 +41,6 @@ public:
     QWidget *homeThreads;
     QVBoxLayout *homeThreadsLayout;
     CommunityPage *communityPage;
-    QVBoxLayout *rightArea;
-    QWidget *currentRightWidget;
 
 private slots:
 
