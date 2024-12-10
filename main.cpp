@@ -8,6 +8,8 @@
 #include <QApplication>
 #include <QMessageBox>
 
+Home* Home::instance = nullptr;
+
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
@@ -47,7 +49,7 @@ int main(int argc, char *argv[])
 
     // Connect login success signal
     QObject::connect(loginWindow, &Login::loginSuccessful, [loginWindow]() {
-        auto homePage = new Home();
+        auto homePage = Home::getInstance();
         homePage->setAttribute(Qt::WA_DeleteOnClose);
         homePage->loadThreads();
         homePage->show();

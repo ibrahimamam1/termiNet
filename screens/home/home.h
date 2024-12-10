@@ -7,6 +7,8 @@
 #include <QScrollArea>
 #include <QComboBox>
 #include<vector>
+#include "../widgets/topbar/customtopbar.h"
+#include "../widgets/leftNavigation/leftnavigationwidget.h"
 #include"../widgets/clickablelabel.h"
 #include "../widgets/createpost.h"
 #include "../widgets/threadwidget.h"
@@ -14,37 +16,11 @@
 #include "../../models/communitymodel.h"
 #include "../../db/communityrepository.h"
 #include "../create_community/createcommunity.h"
+#include "../community_page/communitypage.h"
 
 class Home : public QMainWindow
 {
     Q_OBJECT
-    QVBoxLayout *mainContainer;
-    QHBoxLayout *headerContainer;
-    QHBoxLayout *bodyContainer;
-    QVBoxLayout *leftArea;
-    QVBoxLayout *threadsArea;
-    QVBoxLayout *rightArea;
-    QWidget *currentRightWidget;
-    QVBoxLayout *centerArea; //can be threads or can be comments to a thread
-
-    CreatePost* createPostWidget;
-    //Messages* messageBoxWidget = nullptr;
-    //Profile* profileWidget = nullptr;
-
-    QLabel *logo;
-    QLineEdit *searchBar; //is there a search bar widget in QT?
-    ClickableLabel *createPostIcon;
-    ClickableLabel *messageIcon;
-    ClickableLabel *profileIcon;
-
-    QVBoxLayout *homeNav;
-    QLabel *homeNavHome;
-    QLabel *homeNavPopular;
-    QLabel *homeNavDiscover;
-
-    QVBoxLayout *communityNav;
-    QLabel* communityLabel;
-    QLabel *createCommunity;
 
 public:
     explicit Home(QWidget *parent = nullptr);
@@ -53,24 +29,30 @@ public:
     void setUser(UserModel *usr);
     void showUserInfo();
     void loadThreads();
-    void getUserCommunities(QVBoxLayout* layout);
+
+    static Home* getInstance();
     ~Home();
 
+    QVBoxLayout *mainContainer;
+    QHBoxLayout *bodyContainer;
+    CustomTopBar *topBar;
+    LeftNavigationWidget *leftNav;
+    QStackedWidget *centerArea;
+    QWidget *homeThreads;
+    QVBoxLayout *homeThreadsLayout;
+    CommunityPage *communityPage;
+    QVBoxLayout *rightArea;
+    QWidget *currentRightWidget;
+
 private slots:
-    void onCreatePostIconClicked();
-    void on_search_triggered();
-    void on_message_icon_clicked();
-    void on_profile_icon_clicked();
+
     void onCommentBtnClicked(int parentThreadId);
-    void goBackToHomePressed();
-    void onCreateCommunityBtnClicked();
-    void onCommunityLabelClicked(CommunityModel community);
 
 private:
     UserModel *user;
+    static Home *instance;
     std::vector<ThreadModel>threads;
     std::vector<ThreadModel>savedThreads;
-    std::vector<CommunityModel>userCommunities;
 };
 
 #endif // HOME_H

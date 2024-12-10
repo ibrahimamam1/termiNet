@@ -49,6 +49,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         models/communitymodel.h models/communitymodel.cpp
         db/communityrepository.h db/communityrepository.cpp
         screens/community_page/communitypage.h screens/community_page/communitypage.cpp
+        screens/widgets/topbar/customtopbar.h screens/widgets/topbar/customtopbar.cpp
+        screens/widgets/leftNavigation/leftnavigationwidget.h screens/widgets/leftNavigation/leftnavigationwidget.cpp
 
 
 
