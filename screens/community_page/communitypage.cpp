@@ -63,6 +63,7 @@ void CommunityPage::setCommunity(const CommunityModel& comm){
 
     bannerImage->setPixmap(community.getBannerImage());
     iconImage->setPixmap(community.getIconImage());
+
     communityName->setText(community.getName());
     memberCount->setText(QString::number(community.getMemberCount()));
     communityDescription->setText(community.getDescription());

@@ -2,6 +2,8 @@
 #include <QDateTime>
 #include <QSqlError>
 #include <QSqlQuery>
+#include <QImage>
+#include <QBuffer>
 #include "../models/usermodel.h"
 #include "category_repository.h"
 
@@ -12,7 +14,7 @@ bool CommunityRepository::addNewCommunity(CommunityModel community) {
     QSqlDatabase db = QSqlDatabase::database();
     db.transaction(); // Start a transaction
 
-    //get unique community id
+    // Get unique community id
     int id;
     q.prepare("select nextval('CommunitySeq');");
     if(q.exec()){
@@ -22,8 +24,62 @@ bool CommunityRepository::addNewCommunity(CommunityModel community) {
         return false;
     }
 
-    //insert into communities table
-    q.prepare("INSERT INTO communities(community_id, name, description,icon_image, banner_image, created_at) VALUES (:id, :name, :des, :icon, :banner, :date);");
+    //Scale the icon and banner images
+    QImage iconImage;
+    QImage bannerImage;
+
+    if(!iconImage.load(community.getIconImage())){
+        qDebug() << "Failed to load icon from path";
+        return false;
+    }
+
+    if(!bannerImage.load(community.getIconImage())){
+        qDebug() << "Failed to load banner from path";
+        return false;
+    }
+
+    QImage scaledIconImage = iconImage.scaled(50, 50, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    QImage scaledBannerImage = bannerImage.scaled(100, 100, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+
+    //Generate unique filenames for images
+    QString iconFilename = QString("%1_icon_%2.png").arg(community.getName(), id);
+    QString bannerFilename = QString("%1_banner_%2.png").arg(community.getName() ,id);
+
+    // Upload the images to the storage buckets
+    QByteArray iconData;
+    QBuffer iconBuffer(&iconData);
+    iconBuffer.open(QIODevice::WriteOnly);
+    scaledIconImage.save(&iconBuffer, "PNG"); // Save as PNG
+
+    QByteArray bannerData;
+    QBuffer bannerBuffer(&bannerData);
+    bannerBuffer.open(QIODevice::WriteOnly);
+    bannerImage.save(&bannerBuffer, "PNG"); // Save as PNG
+
+    // Insert into iconsBucket
+    q.prepare("INSERT INTO iconsBucket(filename, filedata, uploaded_by) VALUES (:filename, :filedata, :uploaded_by)");
+    q.bindValue(":filename", iconFilename);
+    q.bindValue(":filedata", iconData);
+    q.bindValue(":uploaded_by", UserModel::getInstance()->getId());
+
+    if(!q.exec()){
+        qDebug() << "Failed to insert into iconsBucket: " << q.lastError();
+        return false;
+    }
+
+    // Insert into bannersBucket
+    q.prepare("INSERT INTO bannersBucket(filename, filedata, uploaded_by, uploaded_at) VALUES (:filename, :filedata, :uploaded_by, :uploaded_at)");
+    q.bindValue(":filename", bannerFilename);
+    q.bindValue(":filedata", bannerData);
+    q.bindValue(":uploaded_by", UserModel::getInstance()->getId());
+    q.bindValue(":uploaded_at", QDateTime::currentDateTimeUtc().toString("yyyy-MM-dd HH:mm:ss"));
+    if(!q.exec()){
+        qDebug() << "Failed to insert into bannersBucket: " << q.lastError();
+        return false;
+    }
+
+    // TODO 4: Use the generated filenames as values for icon_image and banner_image in the communities insert query
+    q.prepare("INSERT INTO communities(community_id, name, description, icon_image, banner_image, created_at) VALUES (:id, :name, :des, :icon, :banner, :date);");
 
     // Get current timestamp in UTC and convert to PostgreSQL-compatible format
     QDateTime currentDateTime = QDateTime::currentDateTimeUtc();
@@ -32,8 +88,8 @@ bool CommunityRepository::addNewCommunity(CommunityModel community) {
     q.bindValue(":id", id);
     q.bindValue(":name", community.getName());
     q.bindValue(":des", community.getDescription());
-    q.bindValue(":icon", community.getIconImage());
-    q.bindValue(":banner", community.getBannerImage());
+    q.bindValue(":icon", iconFilename);
+    q.bindValue(":banner", bannerFilename);
     q.bindValue(":date", formattedDate);
 
     if(!q.exec()){
@@ -41,8 +97,7 @@ bool CommunityRepository::addNewCommunity(CommunityModel community) {
         return false;
     }
 
-    //add categories to community_category joining table atomically
-
+    // Add categories to community_category joining table atomically
     try {
         for(auto cat : community.getCategories()){
             q.prepare("INSERT INTO community_categories(community_id, category_id) VALUES (:id, :cat_id)");
@@ -59,7 +114,7 @@ bool CommunityRepository::addNewCommunity(CommunityModel community) {
         return false;
     }
 
-    //add user id to users_communitites table
+    // Add user id to users_communitites table
     q.prepare("insert into users_communities(user_id, community_id) values (:u_id, :c_id);");
     int u_id = UserModel::getInstance()->getId();
     q.bindValue(":u_id", u_id);
@@ -70,7 +125,6 @@ bool CommunityRepository::addNewCommunity(CommunityModel community) {
         return false;
     }
     return true;
-
 }
 
 std::vector<CommunityModel> CommunityRepository::getUserCommunities(int user_id){

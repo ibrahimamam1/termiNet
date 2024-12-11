@@ -69,3 +69,5 @@ create table if not exists community_categories(
     primary key (community_id, category_id)
 );
 
+
+

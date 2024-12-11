@@ -1,6 +1,0 @@
-#include "apphelper.h"
-
-AppHelper::AppHelper() {}
-QString AppHelper::getEnv(QString& target){
-    
-}
