@@ -7,7 +7,7 @@
 #include <QLineEdit>
 #include <QVBoxLayout>
 #include "../clickablelabel.h"
-#include "../createpost.h"
+#include "../createPost//createpost.h"
 
 class CustomTopBar : public QWidget
 {

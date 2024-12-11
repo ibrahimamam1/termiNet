@@ -60,15 +60,21 @@ void CommunityPage::setCommunity(const CommunityModel& comm){
     qDebug() << "Community was set to : " << comm.getName();
     community = comm;
 
+    QPixmap bannerPixMap;
+    bannerPixMap.convertFromImage(community.getBannerImage());
+    bannerImage->setPixmap(bannerPixMap);
 
-    bannerImage->setPixmap(community.getBannerImage());
-    iconImage->setPixmap(community.getIconImage());
+    QPixmap iconPixMap;
+    iconPixMap.convertFromImage(community.getIconImage());
+    iconImage->setPixmap(iconPixMap);
 
     communityName->setText(community.getName());
     memberCount->setText(QString::number(community.getMemberCount()));
     communityDescription->setText(community.getDescription());
 }
-
+CommunityModel CommunityPage::getCommunity() const{
+    return community;
+}
 void CommunityPage::onJoinBtnClicked() {
     qDebug() << "Yaaay time to handle joining logic";
 }

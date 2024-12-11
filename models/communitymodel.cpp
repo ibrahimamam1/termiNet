@@ -10,7 +10,7 @@ CommunityModel::CommunityModel()
     categories()
 {}
 
-CommunityModel::CommunityModel(int id, const QString& name, const QString& description, const QString& iconImage, const QString& bannerImage, const std::vector<CategoryModel>& categories, const QString& created_at)
+CommunityModel::CommunityModel(int id, const QString& name, const QString& description, const QImage& iconImage, const QImage& bannerImage, const std::vector<CategoryModel>& categories, const QString& created_at)
     : id(id),
     name(name),
     description(description),
@@ -31,11 +31,11 @@ QString CommunityModel::getDescription() const {
     return description;
 }
 
-QString CommunityModel::getIconImage() const {
+QImage CommunityModel::getIconImage() const {
     return iconImage;
 }
 
-QString CommunityModel::getBannerImage() const {
+QImage CommunityModel::getBannerImage() const {
     return bannerImage;
 }
 

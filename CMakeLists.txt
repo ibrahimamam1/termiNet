@@ -28,7 +28,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         db/user_repository.h db/user_repository.cpp
         screens/home/home.h screens/home/home.cpp screens/home/home.ui
         screens/home/home.h screens/home/home.cpp screens/home/home.ui
-        screens/widgets/createpost.h screens/widgets/createpost.cpp
+
         models/usermodel.h models/usermodel.cpp
         db/thread_repository.h db/thread_repository.cpp
         models/threadmodel.h models/threadmodel.cpp
@@ -53,6 +53,10 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         screens/widgets/leftNavigation/leftnavigationwidget.h screens/widgets/leftNavigation/leftnavigationwidget.cpp
 
         sql/storage_buckets.sql
+        db/storage/storagerepository.h db/storage/storagerepository.cpp
+        utils/helper/apphelper.h utils/helper/apphelper.cpp
+        screens/widgets/createPost/createpost.cpp
+        screens/widgets/createPost/createpost.h
 
 
 

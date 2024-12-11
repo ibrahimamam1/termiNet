@@ -10,7 +10,6 @@
 #include "../widgets/topbar/customtopbar.h"
 #include "../widgets/leftNavigation/leftnavigationwidget.h"
 #include"../widgets/clickablelabel.h"
-#include "../widgets/createpost.h"
 #include "../widgets/threadwidget.h"
 #include "../../models/usermodel.h"
 #include "../../models/communitymodel.h"

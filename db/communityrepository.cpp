@@ -6,6 +6,8 @@
 #include <QBuffer>
 #include "../models/usermodel.h"
 #include "category_repository.h"
+#include "storage/storagerepository.h"
+#include "../utils/helper/apphelper.h"
 
 CommunityRepository::CommunityRepository() {}
 
@@ -25,21 +27,8 @@ bool CommunityRepository::addNewCommunity(CommunityModel community) {
     }
 
     //Scale the icon and banner images
-    QImage iconImage;
-    QImage bannerImage;
-
-    if(!iconImage.load(community.getIconImage())){
-        qDebug() << "Failed to load icon from path";
-        return false;
-    }
-
-    if(!bannerImage.load(community.getIconImage())){
-        qDebug() << "Failed to load banner from path";
-        return false;
-    }
-
-    QImage scaledIconImage = iconImage.scaled(50, 50, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-    QImage scaledBannerImage = bannerImage.scaled(100, 100, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    QImage scaledIconImage = AppHelper::createRoundedIcon(community.getIconImage(), 50);
+    QImage scaledBannerImage = community.getBannerImage().scaled(100, 100, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
     //Generate unique filenames for images
     QString iconFilename = QString("%1_icon_%2.png").arg(community.getName(), id);
@@ -54,7 +43,7 @@ bool CommunityRepository::addNewCommunity(CommunityModel community) {
     QByteArray bannerData;
     QBuffer bannerBuffer(&bannerData);
     bannerBuffer.open(QIODevice::WriteOnly);
-    bannerImage.save(&bannerBuffer, "PNG"); // Save as PNG
+    scaledBannerImage.save(&bannerBuffer, "PNG"); // Save as PNG
 
     // Insert into iconsBucket
     q.prepare("INSERT INTO iconsBucket(filename, filedata, uploaded_by) VALUES (:filename, :filedata, :uploaded_by)");
@@ -68,11 +57,11 @@ bool CommunityRepository::addNewCommunity(CommunityModel community) {
     }
 
     // Insert into bannersBucket
-    q.prepare("INSERT INTO bannersBucket(filename, filedata, uploaded_by, uploaded_at) VALUES (:filename, :filedata, :uploaded_by, :uploaded_at)");
+    q.prepare("INSERT INTO bannersBucket(filename, filedata, uploaded_by) VALUES (:filename, :filedata, :uploaded_by)");
     q.bindValue(":filename", bannerFilename);
     q.bindValue(":filedata", bannerData);
     q.bindValue(":uploaded_by", UserModel::getInstance()->getId());
-    q.bindValue(":uploaded_at", QDateTime::currentDateTimeUtc().toString("yyyy-MM-dd HH:mm:ss"));
+
     if(!q.exec()){
         qDebug() << "Failed to insert into bannersBucket: " << q.lastError();
         return false;
@@ -157,8 +146,10 @@ std::vector<CommunityModel> CommunityRepository::getUserCommunities(int user_id)
             QString description = getCommName.value(2).toString();
             QString iconPath = getCommName.value(3).toString();
             QString bannerPath = getCommName.value(4).toString();
+            QImage iconImage = StorageRepository::getIconImage(iconPath);
+            QImage bannerImage = StorageRepository::getBannerImage(bannerPath);
             std::vector<CategoryModel>categories = CategoryRepository::getCategoriesForCommunity(id);
-            comms.push_back(CommunityModel(id, name, description, iconPath, bannerPath, categories));
+            comms.push_back(CommunityModel(id, name, description, iconImage, bannerImage, categories));
         }
     }
     return comms;
@@ -166,11 +157,15 @@ std::vector<CommunityModel> CommunityRepository::getUserCommunities(int user_id)
 
 int CommunityRepository::getMemberCount(int comm_id){
     QSqlQuery q;
-    q.prepare("select count(*) from user_communities where community_id = :c_id");
+    q.prepare("select count(*) from users_communities where community_id = :c_id");
     q.bindValue(":c_id", comm_id);
 
     if(!q.exec()){
-        qDebug() << "Failed to get member Count";
+        qDebug() << "Failed to get member Count" << q.lastError();
+        return 0;
+    }
+    if(!q.next()){
+        qDebug() << "Empty row, community has no member";
         return 0;
     }
     return q.value(0).toInt();

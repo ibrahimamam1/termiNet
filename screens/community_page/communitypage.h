@@ -31,6 +31,7 @@ class CommunityPage : public QWidget
 public:
     explicit CommunityPage(QWidget *parent = nullptr);
     void setCommunity(const CommunityModel& comm);
+    CommunityModel getCommunity() const;
 
 signals:
 

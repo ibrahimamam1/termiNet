@@ -11,8 +11,8 @@
 #include <QFrame>
 #include <QPushButton>
 #include <QSqlQuery>
-#include "../../models/threadmodel.h"
-#include "../../db/thread_repository.h"
+#include "../../../models/threadmodel.h"
+#include "../../../db/thread_repository.h"
 
 class CreatePost : public QWidget
 {

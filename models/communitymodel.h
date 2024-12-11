@@ -1,5 +1,6 @@
 #ifndef COMMUNITYMODEL_H
 #define COMMUNITYMODEL_H
+#include <QImage>
 #include <vector>
 #include "categorymodel.h"
 
@@ -8,18 +9,18 @@ class CommunityModel
     int id;
     QString name;
     QString description;
-    QString iconImage;
-    QString bannerImage;
+    QImage iconImage;
+    QImage bannerImage;
     std::vector<CategoryModel> categories;
 public:
     CommunityModel();
-    CommunityModel(int id, const QString& name, const QString& description, const QString& iconImage, const QString& bannerImage, const std::vector<CategoryModel>& categories, const QString& created_at = "");
+    CommunityModel(int id, const QString& name, const QString& description, const QImage& iconImage, const QImage& bannerImage, const std::vector<CategoryModel>& categories, const QString& created_at = "");
 
     int getId() const;
     QString getName() const;
     QString getDescription() const;
-    QString getIconImage() const;
-    QString getBannerImage() const;
+    QImage getIconImage() const;
+    QImage getBannerImage() const;
     int getMemberCount() const;
     std::vector<CategoryModel> getCategories() const;
 };
