@@ -34,9 +34,11 @@ CreateCommunity::CreateCommunity(QWidget *parent)
             QString comm_des = page1->communityDescription->toPlainText();
             QString comm_icon_path = page2->iconImagePath->text();
             QString comm_banner_path = page2->bannerImagePath->text();
+            QImage iconImage(comm_icon_path);
+            QImage bannerImage(comm_banner_path);
             std::vector<CategoryModel> categories_id = page3->getSelectedCategories();
 
-            if(!CommunityRepository::addNewCommunity(CommunityModel(-1 ,comm_name, comm_des, comm_icon_path, comm_banner_path, categories_id))){
+            if(!CommunityRepository::addNewCommunity(CommunityModel(-1 ,comm_name, comm_des, iconImage, bannerImage, categories_id))){
                  QMessageBox *errorBox = new QMessageBox(QMessageBox::Critical, "Cannot Create Community", "Failed to create your community. Please Check your internet Connection and try again");
             }
             else{

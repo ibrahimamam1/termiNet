@@ -3,10 +3,12 @@
 #include "login_signup/login.h"
 #include "db/databasemanager.h"
 #include "screens/home/home.h"
-#include "models/usermodel.h"
+#include "models/user/usermodel.h"
 
 #include <QApplication>
 #include <QMessageBox>
+
+Home* Home::instance = nullptr;
 
 int main(int argc, char *argv[])
 {
@@ -47,9 +49,8 @@ int main(int argc, char *argv[])
 
     // Connect login success signal
     QObject::connect(loginWindow, &Login::loginSuccessful, [loginWindow]() {
-        auto homePage = new Home();
+        auto homePage = Home::getInstance();
         homePage->setAttribute(Qt::WA_DeleteOnClose);
-        homePage->loadThreads();
         homePage->show();
         loginWindow->deleteLater();
     });

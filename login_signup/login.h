@@ -15,7 +15,7 @@
 #include<QPushButton>
 #include"widgets/divider.h"
 #include "widgets/socials.h"
-#include "../models/usermodel.h"
+#include "../models/user/usermodel.h"
 
 
 class Login : public QDialog

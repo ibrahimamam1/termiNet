@@ -7,6 +7,7 @@ class CategoryRepository
 public:
     CategoryRepository();
     static QList<CategoryModel> getCategories();
+    static std::vector<CategoryModel> getCategoriesForCommunity(int community_id);
     static CategoryModel getCategory(int id);
 };
 
