@@ -6,6 +6,7 @@
 #include<QLabel>
 #include<QTextEdit>
 #include<QPushButton>
+#include"../../../models/thread/threadmodel.h"
 
 class ThreadWidget : public QWidget
 {
@@ -20,8 +21,7 @@ class ThreadWidget : public QWidget
     int thread_id;
 
 public:
-    explicit ThreadWidget(const QString &userNameText, const QString &postTimeText,
-                          const QString &titleText, const QString &contentText, int comment_count, int t_id, QWidget *parent = nullptr);
+    explicit ThreadWidget(const ThreadModel& thread, QWidget *parent = nullptr );
 
     QString getUserName() const;
     QString getPostTime() const;

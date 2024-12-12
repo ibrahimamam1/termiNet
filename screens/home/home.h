@@ -10,12 +10,14 @@
 #include "../widgets/topbar/customtopbar.h"
 #include "../widgets/leftNavigation/leftnavigationwidget.h"
 #include"../widgets/clickablelabel.h"
-#include "../widgets/threadwidget.h"
-#include "../../models/usermodel.h"
+#include "../widgets/thread//threadwidget.h"
+#include "../../models/user/usermodel.h"
 #include "../../models/communitymodel.h"
 #include "../../db/communityrepository.h"
 #include "../create_community/createcommunity.h"
 #include "../community_page/communitypage.h"
+#include "../widgets/threadView/threadview.h"
+#include "../../models/user/authenticateduser.h"
 
 class Home : public QMainWindow
 {
@@ -23,7 +25,6 @@ class Home : public QMainWindow
 
 public:
     explicit Home(QWidget *parent = nullptr);
-    void clearCenterWidget();
     void addThreadsToCenterWidget();
     void setUser(UserModel *usr);
     void showUserInfo();
@@ -37,8 +38,7 @@ public:
     CustomTopBar *topBar;
     LeftNavigationWidget *leftNav;
     QStackedWidget *centerArea;
-    QWidget *homeThreads;
-    QVBoxLayout *homeThreadsLayout;
+    ThreadView *threadView;
     CommunityPage *communityPage;
 
 private slots:

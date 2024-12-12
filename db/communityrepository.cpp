@@ -4,7 +4,8 @@
 #include <QSqlQuery>
 #include <QImage>
 #include <QBuffer>
-#include "../models/usermodel.h"
+#include "../models/user/usermodel.h"
+#include "../models/user/authenticateduser.h"
 #include "category_repository.h"
 #include "storage/storagerepository.h"
 #include "../utils/helper/apphelper.h"
@@ -49,7 +50,7 @@ bool CommunityRepository::addNewCommunity(CommunityModel community) {
     q.prepare("INSERT INTO iconsBucket(filename, filedata, uploaded_by) VALUES (:filename, :filedata, :uploaded_by)");
     q.bindValue(":filename", iconFilename);
     q.bindValue(":filedata", iconData);
-    q.bindValue(":uploaded_by", UserModel::getInstance()->getId());
+    q.bindValue(":uploaded_by", AuthenticatedUser::getInstance()->getId());
 
     if(!q.exec()){
         qDebug() << "Failed to insert into iconsBucket: " << q.lastError();
@@ -60,7 +61,7 @@ bool CommunityRepository::addNewCommunity(CommunityModel community) {
     q.prepare("INSERT INTO bannersBucket(filename, filedata, uploaded_by) VALUES (:filename, :filedata, :uploaded_by)");
     q.bindValue(":filename", bannerFilename);
     q.bindValue(":filedata", bannerData);
-    q.bindValue(":uploaded_by", UserModel::getInstance()->getId());
+    q.bindValue(":uploaded_by", AuthenticatedUser::getInstance()->getId());
 
     if(!q.exec()){
         qDebug() << "Failed to insert into bannersBucket: " << q.lastError();
@@ -105,7 +106,7 @@ bool CommunityRepository::addNewCommunity(CommunityModel community) {
 
     // Add user id to users_communitites table
     q.prepare("insert into users_communities(user_id, community_id) values (:u_id, :c_id);");
-    int u_id = UserModel::getInstance()->getId();
+    int u_id = AuthenticatedUser::getInstance()->getId();
     q.bindValue(":u_id", u_id);
     q.bindValue(":c_id", id);
 

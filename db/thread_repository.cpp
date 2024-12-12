@@ -1,5 +1,6 @@
 #include "thread_repository.h"
 #include <QSqlQuery>
+#include "user/user_repository.h"
 
 ThreadRepository::ThreadRepository() {}
 
@@ -31,9 +32,9 @@ void ThreadRepository::addThreadtoDb(ThreadModel& thread){
     strftime(created_at, sizeof(created_at), "%Y-%m-%d", ltm);
 
     q.bindValue(":thread_id", id);
-    q.bindValue(":title",  QString::fromStdString(thread.getTitle()));
-    q.bindValue(":content", QString::fromStdString(thread.getContent()));
-    q.bindValue(":created_at",   QString::fromStdString(created_at));
+    q.bindValue(":title",  thread.getTitle());
+    q.bindValue(":content", thread.getContent());
+    q.bindValue(":created_at",   QString(created_at));
     q.bindValue(":author_id",   QString::number(thread.getAuthorId()));
     q.bindValue(":community_id",   QString::number(thread.getCommunityId()));
     q.bindValue(":parent_thread_id",   QString::number(thread.getParentThreadId()));
@@ -45,32 +46,39 @@ void ThreadRepository::addThreadtoDb(ThreadModel& thread){
     }
 
 }
-std::vector<ThreadModel> ThreadRepository::loadAllThreadsFromDb() {
+std::vector<ThreadModel> ThreadRepository::loadAllThreadsFromCommunity(int community_id) {
     std::vector<ThreadModel> threads;
     QSqlQuery q;
 
-    if (q.exec("SELECT * FROM threads;")) {
-        while (q.next()) {
-            int commentCount = getCommentCountForThread(q.value(0).toInt());
-
-            // Create ThreadModel object
-            ThreadModel t(
-                q.value(0).toInt(),
-                q.value(1).toString().toStdString(),
-                q.value(2).toString().toStdString(),
-                commentCount,
-                q.value(3).toString().toStdString(),
-                q.value(4).toInt(),
-                q.value(5).toInt(),
-                q.value(6).toInt()
-                );
-
-            threads.push_back(t);
-        }
-    } else {
-        qDebug() << "Failed to execute get threads query:" << q.lastError().text();
+    if(community_id == -1)
+        q.prepare("SELECT * FROM threads;");
+    else{
+        q.prepare("SELECT * FROM threads where community_id = :c_id");
+        q.bindValue(":c_id", community_id);
     }
 
+    if (!q.exec()) {
+        qDebug() << "Failed to get threads";
+        return threads;
+    }
+    while (q.next()) {
+        int commentCount = getCommentCountForThread(q.value(0).toInt());
+        UserModel author = UserRepository::getUserFromId(q.value(4).toInt());
+
+        // Create ThreadModel object
+        ThreadModel t(
+            q.value(0).toInt(),
+            q.value(1).toString(),
+            q.value(2).toString(),
+            commentCount,
+            q.value(3).toString(),
+            author,
+            q.value(5).toInt(),
+            q.value(6).toInt()
+            );
+
+        threads.push_back(t);
+    }
     return threads;
 }
 
@@ -83,15 +91,15 @@ std::vector<ThreadModel> ThreadRepository::loadAllCommentsFromDb(int thread_id) 
     if (q.exec()) {
         while (q.next()) {
             int commentCount = getCommentCountForThread(q.value(0).toInt());
-
+            UserModel author = UserRepository::getUserFromId(q.value(4).toInt());
             // Create ThreadModel object
             ThreadModel t(
                 q.value(0).toInt(),
-                q.value(1).toString().toStdString(),
-                q.value(2).toString().toStdString(),
+                q.value(1).toString(),
+                q.value(2).toString(),
                 commentCount,
-                q.value(3).toString().toStdString(),
-                q.value(4).toInt(),
+                q.value(3).toString(),
+                author,
                 q.value(5).toInt(),
                 q.value(6).toInt()
                 );
@@ -129,34 +137,38 @@ ThreadModel ThreadRepository::getSingleThread(int thread_id){
     q.prepare("SELECT * from threads where thread_id = :thread_id");
     q.bindValue(":thread_id", thread_id);
 
-    if(q.exec()){
-        if(q.next()){
-            ThreadModel thread(
-                q.value(0).toInt(),
-                q.value(1).toString().toStdString(),
-                q.value(2).toString().toStdString(),
-                getCommentCountForThread(q.value(0).toInt()),
-                q.value(3).toString().toStdString(),
-                q.value(4).toInt(),
-                q.value(5).toInt(),
-                q.value(6).toInt()
-                );
-            return thread;
-        }
-
+    if(!q.exec()){
+        qDebug() << "Failed to load thread " << q.lastError();
+        return ThreadModel();
     }
-    qDebug() << "Failed to load thread";
-    return ThreadModel();
+    if(!q.next()){
+        qDebug() << "Empty Row : Thread doers not exist";
+        return ThreadModel();
+    }
+
+    UserModel author = UserRepository::getUserFromId(q.value(4).toInt());
+    ThreadModel thread(
+        q.value(0).toInt(),
+        q.value(1).toString(),
+        q.value(2).toString(),
+        getCommentCountForThread(q.value(0).toInt()),
+        q.value(3).toString(),
+        author,
+        q.value(5).toInt(),
+        q.value(6).toInt()
+        );
+    return thread;
+
 }
 
-std::string ThreadRepository::getAuthorName(int auth_id){
+QString ThreadRepository::getAuthorName(int auth_id){
     QSqlQuery q;
     q.prepare("Select user_name from users where user_id=:author_id");
     q.bindValue(":author_id", auth_id);
 
     if(q.exec()){
         if(q.next()){
-            return q.value(0).toString().toStdString();
+            return q.value(0).toString();
         }
     }
 

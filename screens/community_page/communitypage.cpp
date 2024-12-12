@@ -1,4 +1,5 @@
 #include "communitypage.h"
+#include "../widgets/thread/threadwidget.h"
 #include "../styles/buttonStyles.h"
 
 CommunityPage::CommunityPage(QWidget *parent)
@@ -71,6 +72,16 @@ void CommunityPage::setCommunity(const CommunityModel& comm){
     communityName->setText(community.getName());
     memberCount->setText(QString::number(community.getMemberCount()));
     communityDescription->setText(community.getDescription());
+
+    threads = ThreadRepository::loadAllThreadsFromCommunity(comm.getId());
+    for(auto thread : threads){
+        ThreadWidget *threadWidget = new ThreadWidget(thread, this);
+
+        // Add the ThreadWidget to the threadsArea layout
+        threadLayout->addWidget(threadWidget);
+        //connect(threadWidget, &ThreadWidget::switchToCommentScreen, this, &Home::onCommentBtnClicked);
+    }
+    threadLayout->addStretch(1);
 }
 CommunityModel CommunityPage::getCommunity() const{
     return community;

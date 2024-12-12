@@ -6,7 +6,7 @@
 #include <QVBoxLayout>
 #include <QScrollArea>
 #include "../../../models/communitymodel.h"
-#include "../../../models/usermodel.h"
+#include "../../../models/user/usermodel.h"
 #include "../../../db/communityrepository.h"
 
 class LeftNavigationWidget : public QWidget

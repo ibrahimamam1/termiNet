@@ -67,3 +67,19 @@ void UserRepository::readUserFromDb(){
         qDebug() << "Failed to execute query:" << query.lastError().text();
     }
 }
+
+UserModel UserRepository::getUserFromId(int id){
+    QSqlQuery q;
+    q.prepare("select * from users where user_id = :uid");
+    q.bindValue(":uid", id);
+
+    if(!q.exec()){
+        qDebug() << "Failed to retreive User";
+        return UserModel();
+    }
+    if(!q.next()){
+        qDebug() << "empty Row. User do not exist";
+        return UserModel();
+    }
+    return UserModel();
+}

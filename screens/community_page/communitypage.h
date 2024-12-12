@@ -17,9 +17,10 @@ class CommunityPage : public QWidget
     Q_OBJECT
     QHBoxLayout *mainContainer;
     QScrollArea *scrollableArea;
-    QVBoxLayout *communityInfoContainer;
     QWidget *threadContainer;
     QVBoxLayout *threadLayout;
+    QVBoxLayout *communityInfoContainer;
+
     QLabel *communityName;
     QPushButton *joinBtn;
     QTextEdit *communityDescription;
@@ -27,6 +28,7 @@ class CommunityPage : public QWidget
     QLabel *iconImage;
     QLabel *memberCount;
     CommunityModel community;
+    std::vector<ThreadModel> threads;
 
 public:
     explicit CommunityPage(QWidget *parent = nullptr);

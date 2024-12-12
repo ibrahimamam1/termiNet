@@ -25,14 +25,14 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(termiNet
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
-        db/user_repository.h db/user_repository.cpp
+
         screens/home/home.h screens/home/home.cpp screens/home/home.ui
         screens/home/home.h screens/home/home.cpp screens/home/home.ui
 
-        models/usermodel.h models/usermodel.cpp
+
         db/thread_repository.h db/thread_repository.cpp
-        models/threadmodel.h models/threadmodel.cpp
-        screens/widgets/threadwidget.h screens/widgets/threadwidget.cpp
+
+
         login_signup/widgets/divider.h login_signup/widgets/divider.cpp
         login_signup/widgets/socials.h login_signup/widgets/socials.cpp
         screens/widgets/clickablelabel.h
@@ -57,6 +57,14 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         utils/helper/apphelper.h utils/helper/apphelper.cpp
         screens/widgets/createPost/createpost.cpp
         screens/widgets/createPost/createpost.h
+        screens/widgets/thread/threadwidget.h screens/widgets/thread/threadwidget.cpp
+        screens/widgets/threadView/threadview.h screens/widgets/threadView/threadview.cpp
+        models/user/usermodel.cpp
+        models/user/usermodel.h
+        db/user/user_repository.h db/user/user_repository.cpp
+        models/user/authenticateduser.h models/user/authenticateduser.cpp
+        models/thread/threadmodel.h models/thread/threadmodel.cpp
+
 
 
 

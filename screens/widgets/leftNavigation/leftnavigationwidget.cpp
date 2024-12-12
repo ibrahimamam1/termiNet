@@ -44,7 +44,7 @@ LeftNavigationWidget::LeftNavigationWidget(QWidget *parent)
 }
 
 void LeftNavigationWidget::getUserCommunities(QVBoxLayout* layout){
-    userCommunities = CommunityRepository::getUserCommunities(UserModel::getInstance()->getId());
+    userCommunities = CommunityRepository::getUserCommunities(AuthenticatedUser::getInstance()->getId());
 
     //create a label for every community
     for(auto comm : userCommunities){

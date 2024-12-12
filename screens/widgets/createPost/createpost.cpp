@@ -1,5 +1,5 @@
 #include "createpost.h"
-#include "../../../models/usermodel.h"
+#include "../../../models/user/usermodel.h"
 #include "../../home/home.h"
 
 CreatePost::CreatePost(QWidget *parent)
@@ -26,13 +26,13 @@ void CreatePost::on_postBtn_clicked()
     QString title = this->titleArea->text();
     QString text = this->textArea->toPlainText();
 
-    UserModel *user = UserModel::getInstance();
+    UserModel *user = AuthenticatedUser::getInstance();
     int community_id = -1;;
 
     if(Home::getInstance()->centerArea->currentIndex() == 1){
         community_id = Home::getInstance()->communityPage->getCommunity().getId();
     }
-    ThreadModel thread(0, title.toStdString(), text.toStdString(), 0, "", user->getId(), community_id, -1);
+    ThreadModel thread(0, title, text, 0, "", *user, community_id, -1);
     threadRepo->addThreadtoDb(thread);
 
 

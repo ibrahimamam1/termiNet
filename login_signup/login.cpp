@@ -122,7 +122,7 @@ void Login::on_login_btn_clicked()
 
     if(login){
 
-        UserModel *user = UserModel::getInstance();
+        UserModel *user = new  UserModel();
 
         //get all user data and convert to user model
         q.prepare("SELECT * FROM users WHERE user_email=:email");
@@ -135,22 +135,14 @@ void Login::on_login_btn_clicked()
 
         if(q.next()){
             user->setId(q.value(0).toInt());
-            user->setName(q.value(1).toString().toStdString());
-            user->setEmail(q.value(2).toString().toStdString());
-            user->setSex(q.value(3).toString().toStdString());
-            user->setDob(q.value(4).toString().toStdString());
-            user->setBio(q.value(5).toString().toStdString());
-            user->setCreatedAt(q.value(7).toString().toStdString());
+            user->setName(q.value(1).toString());
+            user->setEmail(q.value(2).toString());
+            user->setSex(q.value(3).toString());
+            user->setDob(q.value(4).toString());
+            user->setBio(q.value(5).toString());
+            user->setCreatedAt(q.value(7).toString());
 
-            //debug test
-            // qDebug()<<"Id : "<<user->getId();
-            // qDebug()<<"Name : "<<user->getName();
-            // qDebug()<<"Email : "<<user->getEmail();
-            // qDebug()<<"DOB : "<<user->getDob();
-            // qDebug()<<"Bio : "<<user->getBio();
-            // qDebug()<<"Created At : "<<user->getCreatedAt();
-
-            //Go to next screen here
+            AuthenticatedUser::setInstance(*user);
             emit loginSuccessful();
         }
 

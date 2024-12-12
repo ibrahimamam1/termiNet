@@ -1,22 +1,19 @@
 #include "threadwidget.h"
-#include "../../models/usermodel.h"
-#include "../../models/threadmodel.h"
-#include "../../db/thread_repository.h"
-#include "../home/home.h"
-ThreadWidget::ThreadWidget(const QString &userNameText, const QString &postTimeText,
-                           const QString &titleText, const QString &contentText,
-                           int c_count, int t_id, QWidget *parent)
-    : QWidget(parent),
+#include "../../../models/user/usermodel.h"
+#include "../../../models/thread/threadmodel.h"
+#include "../../../db/thread_repository.h"
+#include "../../home/home.h"
+
+ThreadWidget::ThreadWidget(const ThreadModel& thread, QWidget *parent) : QWidget(parent),
     threadContainer(new QVBoxLayout(this)),
-    userName(new QLabel(userNameText, this)),
-    postTime(new QLabel(postTimeText, this)),
-    title(new QLabel(titleText, this)),
+    userName(new QLabel(thread.getAuthorName(), this)),
+    postTime(new QLabel(thread.getCreatedAt(), this)),
+    title(new QLabel(thread.getTitle(), this)),
     content(new QTextEdit(this)),
     commentButton(new QPushButton(this)),
     line(new QFrame()),
-    thread_id(t_id)
+    thread_id(thread.getThreadId())
 {
-    // Set up styles
     QFont userNameFont;
     userNameFont.setWeight(QFont::DemiBold);
     userNameFont.setUnderline(true);
@@ -25,13 +22,13 @@ ThreadWidget::ThreadWidget(const QString &userNameText, const QString &postTimeT
     postTime->setStyleSheet("font-size: 12px; color: gray;");
     title->setStyleSheet("font-size: 16px; font-weight: bold;");
     content->setReadOnly(true);
-    content->setText(contentText);
+    content->setText(content->toPlainText());
     content->setStyleSheet("background-color: transparent;");
 
     // Configure the comment button
     commentButton->setIcon(QIcon("../../assets/comment.png"));
     commentButton->setIconSize(QSize(24, 24)); // Adjust icon size
-    commentButton->setText(QString::number(c_count)); // Set the number of comments
+    commentButton->setText(QString::number(thread.getCommentCount())); // Set the number of comments
     commentButton->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     connect(commentButton, &QPushButton::clicked, this, &ThreadWidget::onCommentButtonClicked);
 
