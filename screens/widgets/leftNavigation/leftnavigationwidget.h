@@ -5,7 +5,7 @@
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QScrollArea>
-#include "../../../models/communitymodel.h"
+#include "../../../models/community/communitymodel.h"
 #include "../../../models/user/usermodel.h"
 #include "../../../db/communityrepository.h"
 

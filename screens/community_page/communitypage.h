@@ -2,43 +2,28 @@
 #define COMMUNITYPAGE_H
 
 #include <QWidget>
-#include <QHBoxLayout>
-#include <QVBoxLayout>
-#include <QImageReader>
-#include <QLabel>
-#include <QTextEdit>
-#include <QScrollArea>
-#include <QPushButton>
+
 #include "../widgets/topbar/customtopbar.h"
-#include "../../models/communitymodel.h"
+#include "../widgets/threadView/threadview.h"
+#include "widgets/communitydescriptionwidget.h"
 
 class CommunityPage : public QWidget
 {
     Q_OBJECT
     QHBoxLayout *mainContainer;
-    QScrollArea *scrollableArea;
-    QWidget *threadContainer;
-    QVBoxLayout *threadLayout;
-    QVBoxLayout *communityInfoContainer;
-
-    QLabel *communityName;
-    QPushButton *joinBtn;
-    QTextEdit *communityDescription;
-    QLabel *bannerImage;
-    QLabel *iconImage;
-    QLabel *memberCount;
+    ThreadView *threadView;
+    CommunityDescriptionWidget *communityDescriptionWidget;
     CommunityModel community;
     std::vector<ThreadModel> threads;
 
 public:
-    explicit CommunityPage(QWidget *parent = nullptr);
-    void setCommunity(const CommunityModel& comm);
+    explicit CommunityPage(CommunityModel& comm, QWidget *parent = nullptr);
     CommunityModel getCommunity() const;
 
 signals:
 
 private slots:
-    void onJoinBtnClicked();
+
 };
 
 #endif // COMMUNITYPAGE_H

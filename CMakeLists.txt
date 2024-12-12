@@ -30,7 +30,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         screens/home/home.h screens/home/home.cpp screens/home/home.ui
 
 
-        db/thread_repository.h db/thread_repository.cpp
+
 
 
         login_signup/widgets/divider.h login_signup/widgets/divider.cpp
@@ -46,7 +46,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         db/category_repository.h db/category_repository.cpp
         screens/create_community/pages/comunitydescriptionpage.h screens/create_community/pages/comunitydescriptionpage.cpp
         screens/create_community/pages/communitybannerpage.h screens/create_community/pages/communitybannerpage.cpp
-        models/communitymodel.h models/communitymodel.cpp
+
         db/communityrepository.h db/communityrepository.cpp
         screens/community_page/communitypage.h screens/community_page/communitypage.cpp
         screens/widgets/topbar/customtopbar.h screens/widgets/topbar/customtopbar.cpp
@@ -64,6 +64,10 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         db/user/user_repository.h db/user/user_repository.cpp
         models/user/authenticateduser.h models/user/authenticateduser.cpp
         models/thread/threadmodel.h models/thread/threadmodel.cpp
+        db/thread/thread_repository.h db/thread/thread_repository.cpp
+        screens/community_page/widgets/communitydescriptionwidget.h screens/community_page/widgets/communitydescriptionwidget.cpp
+        models/community/communitymodel.h models/community/communitymodel.cpp
+        screens/widgets/replyBox/replybox.h screens/widgets/replyBox/replybox.cpp
 
 
 

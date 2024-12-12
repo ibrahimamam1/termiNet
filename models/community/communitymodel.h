@@ -2,7 +2,8 @@
 #define COMMUNITYMODEL_H
 #include <QImage>
 #include <vector>
-#include "categorymodel.h"
+#include "../categorymodel.h"
+#include "../thread/threadmodel.h"
 
 class CommunityModel
 {
@@ -12,6 +13,7 @@ class CommunityModel
     QImage iconImage;
     QImage bannerImage;
     std::vector<CategoryModel> categories;
+    std::vector<ThreadModel> threads;
 public:
     CommunityModel();
     CommunityModel(int id, const QString& name, const QString& description, const QImage& iconImage, const QImage& bannerImage, const std::vector<CategoryModel>& categories, const QString& created_at = "");
@@ -23,5 +25,6 @@ public:
     QImage getBannerImage() const;
     int getMemberCount() const;
     std::vector<CategoryModel> getCategories() const;
+    std::vector<ThreadModel> getThreads() const;
 };
 #endif // COMMUNITYMODEL_H

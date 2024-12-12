@@ -12,7 +12,7 @@
 #include"../widgets/clickablelabel.h"
 #include "../widgets/thread//threadwidget.h"
 #include "../../models/user/usermodel.h"
-#include "../../models/communitymodel.h"
+#include "../../models/community/communitymodel.h"
 #include "../../db/communityrepository.h"
 #include "../create_community/createcommunity.h"
 #include "../community_page/communitypage.h"

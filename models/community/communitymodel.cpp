@@ -1,5 +1,6 @@
 #include "communitymodel.h"
-#include "../db/communityrepository.h"
+#include "../../db/communityrepository.h"
+#include "../../db/thread/thread_repository.h"
 
 CommunityModel::CommunityModel()
     : id(-1),
@@ -17,7 +18,9 @@ CommunityModel::CommunityModel(int id, const QString& name, const QString& descr
     iconImage(iconImage),
     bannerImage(bannerImage),
     categories(categories)
-{}
+{
+    threads = ThreadRepository::loadAllThreadsFromCommunity(id);
+}
 
 int CommunityModel::getId() const {
     return id;
@@ -45,4 +48,8 @@ std::vector<CategoryModel> CommunityModel::getCategories() const {
 
 int CommunityModel::getMemberCount() const {
     return CommunityRepository::getMemberCount(id);
+}
+
+std::vector<ThreadModel> CommunityModel::getThreads() const{
+    return threads;
 }

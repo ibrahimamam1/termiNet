@@ -1,6 +1,6 @@
 #ifndef COMMUNITYREPOSITORY_H
 #define COMMUNITYREPOSITORY_H
-#include "../models/communitymodel.h"
+#include "../models/community/communitymodel.h"
 class CommunityRepository
 {
 public:

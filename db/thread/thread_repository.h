@@ -1,6 +1,6 @@
 #ifndef THREAD_REPOSITORY_H
 #define THREAD_REPOSITORY_H
-#include "../models/thread/threadmodel.h"
+#include "../../models/thread/threadmodel.h"
 
 class ThreadRepository
 {

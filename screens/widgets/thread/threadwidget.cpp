@@ -1,7 +1,7 @@
 #include "threadwidget.h"
 #include "../../../models/user/usermodel.h"
 #include "../../../models/thread/threadmodel.h"
-#include "../../../db/thread_repository.h"
+#include "../../../db/thread/thread_repository.h"
 #include "../../home/home.h"
 
 ThreadWidget::ThreadWidget(const ThreadModel& thread, QWidget *parent) : QWidget(parent),
@@ -82,5 +82,5 @@ ThreadWidget::~ThreadWidget()
 void ThreadWidget::onCommentButtonClicked()
 {
     qDebug() << "Yup, you clicked on Comments for thread ID:" << thread_id;
-    emit switchToCommentScreen(thread_id);
+    emit commentIconClicked();
 }

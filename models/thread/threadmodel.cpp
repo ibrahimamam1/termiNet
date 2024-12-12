@@ -1,5 +1,5 @@
 #include "threadmodel.h"
-#include"../../db/thread_repository.h"
+#include"../../db/thread/thread_repository.h"
 
 // Default constructor
 ThreadModel::ThreadModel()

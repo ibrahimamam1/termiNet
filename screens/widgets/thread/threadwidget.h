@@ -33,7 +33,7 @@ public:
     ~ThreadWidget();
 
 signals:
-    void switchToCommentScreen(int parentThreadId);
+    void commentIconClicked();
 
 private:
 

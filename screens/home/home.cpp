@@ -18,10 +18,8 @@ Home::Home(QWidget *parent) : QMainWindow(parent), user(AuthenticatedUser::getIn
     // Center area layout
     centerArea = new QStackedWidget();
     threadView = new ThreadView(threads);
-    communityPage = new CommunityPage();
 
     centerArea->addWidget(threadView);
-    centerArea->addWidget(communityPage);
 
     // Body layout
     bodyContainer = new QHBoxLayout();
@@ -56,10 +54,6 @@ Home::~Home()
 
 
 void Home::onCommentBtnClicked(int parentThreadID){
-            qDebug() << "Inside Home: Switching to comment screen for thread ID:" << parentThreadID;
-            savedThreads = threads;
-
-            qDebug() << "Okay cleared center widget";
 
             // Create layouts for comment screen
             QVBoxLayout *commentSection = new QVBoxLayout();
@@ -86,31 +80,7 @@ void Home::onCommentBtnClicked(int parentThreadID){
             }
             commentsContainer->addStretch(1);
 
-            //setup reply box
-            QTextEdit *reply = new QTextEdit(this);
-            reply->setPlaceholderText("Your Reply...");
 
-            QHBoxLayout *replyButtonContainer = new QHBoxLayout();
-            QPushButton *replyButton = new QPushButton("Post", this);
-
-            connect(replyButton, &QPushButton::clicked, this, [this, reply, parentThreadID]() {
-                qDebug() << "Yup you want to comment a thread huh";
-                QString title = "";
-                QString text = reply->toPlainText();
-
-                UserModel *user = AuthenticatedUser::getInstance();
-                ThreadModel thread(0, title, text,0, "", *user, -1, parentThreadID);
-                ThreadRepository::addThreadtoDb(thread);
-
-                reply->clear();
-            });
-
-            replyButtonContainer->addStretch(2);
-            replyButtonContainer->addWidget(replyButton, 1);
-            replyButtonContainer->addStretch(2);
-
-            replyContainer->addWidget(reply, 3);
-            replyContainer->addLayout(replyButtonContainer, 2);
 
             // // // Assemble the comment section layout
             commentSection->addWidget(goBack, 1);

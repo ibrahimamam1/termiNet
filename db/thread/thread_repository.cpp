@@ -1,6 +1,6 @@
 #include "thread_repository.h"
 #include <QSqlQuery>
-#include "user/user_repository.h"
+#include "../user/user_repository.h"
 
 ThreadRepository::ThreadRepository() {}
 
