@@ -1,4 +1,5 @@
 #include "customtopbar.h"
+#include "../../message/messagepage.h"
 
 CustomTopBar::CustomTopBar(QWidget *parent)
     : QWidget{parent}
@@ -20,7 +21,7 @@ CustomTopBar::CustomTopBar(QWidget *parent)
     messageIcon->setPixmap(QPixmap("../../assets/messageIcon.png"));
     messageIcon->setCursor(Qt::PointingHandCursor);
     messageIcon->setTextInteractionFlags(Qt::TextBrowserInteraction);
-    connect(messageIcon, &QLabel::linkActivated, this, &CustomTopBar::onMessageIconClicked);
+    connect(messageIcon, &ClickableLabel::clicked, this, &CustomTopBar::onMessageIconClicked);
 
     profileIcon = new ClickableLabel(this);
     profileIcon->setPixmap(QPixmap("../../assets/profileIcon.png"));
@@ -45,6 +46,8 @@ void CustomTopBar::onSearchTriggered(){
 }
 void CustomTopBar::onMessageIconClicked(){
     qDebug() << "Message Btn Clicked";
+    MessagePage *msgPage = new MessagePage();
+    msgPage->show();
 }
 void CustomTopBar::onProfileIconClicked(){
     qDebug() << "Profiles Btn Clicked";

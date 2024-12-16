@@ -69,5 +69,13 @@ create table if not exists community_categories(
     primary key (community_id, category_id)
 );
 
+create table if not exists messages(
+    message_id serial primary key,
+    sender_id integer,
+    receiver_id integer,
+    content text,
+    media text
+);
+
 
 

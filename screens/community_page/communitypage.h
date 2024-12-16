@@ -17,8 +17,10 @@ class CommunityPage : public QWidget
     std::vector<ThreadModel> threads;
 
 public:
-    explicit CommunityPage(CommunityModel& comm, QWidget *parent = nullptr);
+    explicit CommunityPage(QWidget *parent = nullptr);
     CommunityModel getCommunity() const;
+    void setCommunityPage(const CommunityModel& comm);
+    void clearCommunityPage();
 
 signals:
 

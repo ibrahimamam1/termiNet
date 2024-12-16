@@ -1,9 +1,20 @@
 #include "communitypage.h"
 #include "../widgets/thread/threadwidget.h"
 
-CommunityPage::CommunityPage(CommunityModel& comm , QWidget *parent)
-    :community(comm), threads(comm.getThreads()) , QWidget{parent}
+CommunityPage::CommunityPage(QWidget *parent)
+    :QWidget{parent}
 {
+
+}
+
+
+CommunityModel CommunityPage::getCommunity() const{
+    return community;
+}
+void CommunityPage::setCommunityPage(const CommunityModel& comm){
+    community = comm;
+    threads = comm.getThreads();
+
     //setup scrollable area for threads
     threadView = new ThreadView(threads);
     communityDescriptionWidget = new CommunityDescriptionWidget(community);
@@ -13,9 +24,7 @@ CommunityPage::CommunityPage(CommunityModel& comm , QWidget *parent)
     mainContainer->addWidget(threadView, 4);
     mainContainer->addWidget(communityDescriptionWidget,1);
 }
+void CommunityPage::clearCommunityPage(){
 
-
-CommunityModel CommunityPage::getCommunity() const{
-    return community;
 }
 
