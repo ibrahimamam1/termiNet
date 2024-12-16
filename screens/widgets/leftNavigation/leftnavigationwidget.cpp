@@ -69,8 +69,8 @@ void LeftNavigationWidget::onCommunityLabelClicked(CommunityModel community){
     qDebug() << "Okay let's switch to community page for" << community.getName();
     Home* home = Home::getInstance();
 
-    home->communityPage = new CommunityPage(community);
-    home->centerArea->addWidget(home->communityPage);
+    home->communityPage->clearCommunityPage();
+    home->communityPage->setCommunityPage(community);
     home->centerArea->setCurrentIndex(1);
 
 }

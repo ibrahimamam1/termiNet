@@ -18,8 +18,10 @@ Home::Home(QWidget *parent) : QMainWindow(parent), user(AuthenticatedUser::getIn
     // Center area layout
     centerArea = new QStackedWidget();
     threadView = new ThreadView(threads);
+    communityPage = new CommunityPage();
 
     centerArea->addWidget(threadView);
+    centerArea->addWidget(communityPage);
 
     // Body layout
     bodyContainer = new QHBoxLayout();

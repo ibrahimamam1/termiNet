@@ -68,6 +68,14 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         screens/community_page/widgets/communitydescriptionwidget.h screens/community_page/widgets/communitydescriptionwidget.cpp
         models/community/communitymodel.h models/community/communitymodel.cpp
         screens/widgets/replyBox/replybox.h screens/widgets/replyBox/replybox.cpp
+        screens/message/messagepage.h screens/message/messagepage.cpp
+        screens/message/widgets/message_list_view/messagelistview.h screens/message/widgets/message_list_view/messagelistview.cpp
+        models/message/messagemodel.h models/message/messagemodel.cpp
+        screens/message/widgets/message/messagewidget.h screens/message/widgets/message/messagewidget.cpp
+        db/message/messagerepository.h db/message/messagerepository.cpp
+        screens/message/widgets/create_message/createmessage.h screens/message/widgets/create_message/createmessage.cpp
+        screens/message/widgets/chat_page/chatpage.h screens/message/widgets/chat_page/chatpage.cpp
+
 
 
 
