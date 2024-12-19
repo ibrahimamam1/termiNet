@@ -1,5 +1,8 @@
 #include "login.h"
 #include "signup.h"
+#include "../helpers/api_client/apiclient.h"
+#include <QJsonDocument>
+#include <QJsonObject>
 
 Login::Login(QWidget *parent)
     : QDialog(parent)
@@ -95,66 +98,77 @@ Login::~Login()
 
 void Login::on_login_btn_clicked()
 {
-    std::string email = emailField->text().toStdString();
-    std::string pass = passwordField->text().toStdString();
+    QString email = emailField->text();
+    QString pass = passwordField->text();
     bool login = false;
 
-    qDebug() << "email: "<< email << " pass: "<< pass;
+    ApiClient *apiclient = ApiClient::getInstance();
+    QString uri = apiclient->getLoginUrl()+email+"/"+pass;
+    qDebug() << "URI = "<<uri;
 
-    QSqlQuery q;
-    q.prepare("SELECT login_check(:email, :password)");
+    QNetworkReply *reply = apiclient->makeGetRequest(uri);
+    connect(reply, &QNetworkReply::finished, [&](){
+        if(reply->error() == QNetworkReply::NoError){
+            QByteArray data = reply->readAll();
+            QJsonDocument jsonDoc = QJsonDocument::fromJson(data);
 
-    q.bindValue(":email", QString::fromStdString(email));
-    q.bindValue(":password", QString::fromStdString(pass));
+            if(!jsonDoc.isNull() && jsonDoc.isObject()){
+                QJsonObject jsonObject = jsonDoc.object();
+                qDebug() << jsonObject;
+                if(jsonObject.contains("grant_access")){
+                    login = jsonObject["grant_access"].toBool();
+                    qDebug() << "value of login inside lambda : " << login;
+                }else {
+                    qDebug() << "Invalid response format, missing grant_access key";
+                }
 
-    // Execute the query
-    if (!q.exec()) {
-        qDebug() << "Error executing login_check:" << q.lastError().text();
-        return ;
-    }
+            }else{
+                qDebug() << "Invalid response format, not a json object";
+            }
 
-    // Retrieve and check the result
-    if (q.next()) {
-        login = q.value(0).toBool();
-    } else {
-        qDebug() << "No result returned from login_check function.";
-    }
-
-    if(login){
-
-        UserModel *user = new  UserModel();
-
-        //get all user data and convert to user model
-        q.prepare("SELECT * FROM users WHERE user_email=:email");
-        q.bindValue(":email", QString::fromStdString(email));
-
-        if(!q.exec()){
-            qDebug() << "Failed to get Login Data\n";
-            return ;
+        }else{
+            qDebug() << "Error:" << reply->errorString();
+            //Handle network errors (e.g display error to user)
         }
+        reply->deleteLater();
+        if(login){
 
-        if(q.next()){
-            user->setId(q.value(0).toInt());
-            user->setName(q.value(1).toString());
-            user->setEmail(q.value(2).toString());
-            user->setSex(q.value(3).toString());
-            user->setDob(q.value(4).toString());
-            user->setBio(q.value(5).toString());
-            user->setCreatedAt(q.value(7).toString());
+            UserModel *user = new  UserModel();
 
-            AuthenticatedUser::setInstance(*user);
-            emit loginSuccessful();
+            //get all user data and convert to user model
+            QSqlQuery q;
+            q.prepare("SELECT * FROM users WHERE user_email=:email");
+            q.bindValue(":email", email);
+
+            if(!q.exec()){
+                qDebug() << "Failed to get Login Data\n";
+                return ;
+            }
+
+            if(q.next()){
+                user->setId(q.value(0).toInt());
+                user->setName(q.value(1).toString());
+                user->setEmail(q.value(2).toString());
+                user->setSex(q.value(3).toString());
+                user->setDob(q.value(4).toString());
+                user->setBio(q.value(5).toString());
+                user->setCreatedAt(q.value(7).toString());
+
+                AuthenticatedUser::setInstance(*user);
+                emit loginSuccessful();
+            }
+
         }
+        else{
+            QMessageBox loginFailedBox;
+            loginFailedBox.setIcon(QMessageBox::Critical);
+            loginFailedBox.setWindowTitle("Login Failed");
+            loginFailedBox.setText("Login Failed");
+            loginFailedBox.setInformativeText(QString("Incorrect user name or password. Please try again"));
+            loginFailedBox.exec();
+        }
+    });
 
-    }
-    else{
-        QMessageBox loginFailedBox;
-        loginFailedBox.setIcon(QMessageBox::Critical);
-        loginFailedBox.setWindowTitle("Login Failed");
-        loginFailedBox.setText("Login Failed");
-        loginFailedBox.setInformativeText(QString("Incorrect user name or password. Please try again"));
-        loginFailedBox.exec();
-    }
 }
 void Login::onForgotPasswordClicked()
 {
