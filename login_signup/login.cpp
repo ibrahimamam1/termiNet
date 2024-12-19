@@ -1,6 +1,7 @@
 #include "login.h"
 #include "signup.h"
 #include "../helpers/api_client/apiclient.h"
+#include "../helpers/hash_helper/hashhelper.h"
 #include <QJsonDocument>
 #include <QJsonObject>
 
@@ -98,9 +99,10 @@ Login::~Login()
 
 void Login::on_login_btn_clicked()
 {
-    QString email = emailField->text();
-    QString pass = passwordField->text();
+    QString email = HashHelper::hashString(emailField->text());
+    QString pass = HashHelper::hashString(passwordField->text());
     bool login = false;
+
 
     ApiClient *apiclient = ApiClient::getInstance();
     QString uri = apiclient->getLoginUrl()+email+"/"+pass;
@@ -108,6 +110,7 @@ void Login::on_login_btn_clicked()
 
     QNetworkReply *reply = apiclient->makeGetRequest(uri);
     connect(reply, &QNetworkReply::finished, [&](){
+        qDebug() << "Netwrok Request finished";
         if(reply->error() == QNetworkReply::NoError){
             QByteArray data = reply->readAll();
             QJsonDocument jsonDoc = QJsonDocument::fromJson(data);

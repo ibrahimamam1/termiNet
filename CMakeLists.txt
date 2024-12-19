@@ -76,6 +76,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         screens/message/widgets/create_message/createmessage.h screens/message/widgets/create_message/createmessage.cpp
         screens/message/widgets/chat_page/chatpage.h screens/message/widgets/chat_page/chatpage.cpp
         helpers/api_client/apiclient.h helpers/api_client/apiclient.cpp
+        helpers/hash_helper/hashhelper.h helpers/hash_helper/hashhelper.cpp
 
 
 
