@@ -15,6 +15,7 @@ public:
 
     const QString& getLoginUrl() const;
     const QString& getSignupUrl() const;
+    const QString& getUserDataUrl() const;
     static ApiClient* getInstance();
 
 private:
@@ -24,6 +25,7 @@ private:
     const QString baseUrl = "http://127.0.0.1:8080/";
     const QString loginUrl = baseUrl + "login/";
     const QString signupUrl = baseUrl + "signup/";
+    const QString userDataUrl = baseUrl + "users/";
 
 signals:
 };
