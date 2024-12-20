@@ -96,73 +96,92 @@ Login::~Login()
     delete loginContainer;
     delete mainContainer;
 }
-
 void Login::on_login_btn_clicked()
 {
     QString email = HashHelper::hashString(emailField->text());
     QString pass = HashHelper::hashString(passwordField->text());
-    bool login = false;
-
-
     ApiClient *apiclient = ApiClient::getInstance();
-    QString uri = apiclient->getLoginUrl()+email+"/"+pass;
-    qDebug() << "URI = "<<uri;
 
-    QNetworkReply *reply = apiclient->makeGetRequest(uri);
-    connect(reply, &QNetworkReply::finished, [&](){
-        qDebug() << "Netwrok Request finished";
-        if(reply->error() == QNetworkReply::NoError){
-            QByteArray data = reply->readAll();
+    // First request - Login
+    QString loginUri = apiclient->getLoginUrl() + email + "/" + pass;
+    QNetworkReply *loginReply = apiclient->makeGetRequest(loginUri);
+
+    QPointer<QNetworkReply> safeLoginReply(loginReply);
+
+    // Connect login request
+    connect(loginReply, &QNetworkReply::finished, this, [this, email, safeLoginReply]() {
+        if (!safeLoginReply) {
+            return;
+        }
+
+        bool loginSuccessful = false;
+
+        if (safeLoginReply->error() == QNetworkReply::NoError) {
+            QByteArray data = safeLoginReply->readAll();
             QJsonDocument jsonDoc = QJsonDocument::fromJson(data);
 
-            if(!jsonDoc.isNull() && jsonDoc.isObject()){
+            if (!jsonDoc.isNull() && jsonDoc.isObject()) {
                 QJsonObject jsonObject = jsonDoc.object();
-                qDebug() << jsonObject;
-                if(jsonObject.contains("grant_access")){
-                    login = jsonObject["grant_access"].toBool();
-                    qDebug() << "value of login inside lambda : " << login;
-                }else {
-                    qDebug() << "Invalid response format, missing grant_access key";
+                if (jsonObject.contains("body")) {
+                    QJsonObject body = jsonObject["body"].toObject();
+                    loginSuccessful = body["grant_access"].toBool();
                 }
-
-            }else{
+            } else {
                 qDebug() << "Invalid response format, not a json object";
             }
-
-        }else{
-            qDebug() << "Error:" << reply->errorString();
-            //Handle network errors (e.g display error to user)
+        } else {
+            qDebug() << "Login Error:" << safeLoginReply->errorString();
         }
-        reply->deleteLater();
-        if(login){
 
-            UserModel *user = new  UserModel();
+        safeLoginReply->deleteLater();
 
-            //get all user data and convert to user model
-            QSqlQuery q;
-            q.prepare("SELECT * FROM users WHERE user_email=:email");
-            q.bindValue(":email", email);
+        if (loginSuccessful) {
+            // Second request - Get User Data
+            QString userUri = ApiClient::getInstance()->getUserDataUrl() + email;
+            QNetworkReply *userDataReply = ApiClient::getInstance()->makeGetRequest(userUri);
+            QPointer<QNetworkReply> safeUserDataReply(userDataReply);
 
-            if(!q.exec()){
-                qDebug() << "Failed to get Login Data\n";
-                return ;
-            }
+            connect(userDataReply, &QNetworkReply::finished, this, [this, safeUserDataReply]() {
+                if (!safeUserDataReply) {
+                    return;
+                }
 
-            if(q.next()){
-                user->setId(q.value(0).toInt());
-                user->setName(q.value(1).toString());
-                user->setEmail(q.value(2).toString());
-                user->setSex(q.value(3).toString());
-                user->setDob(q.value(4).toString());
-                user->setBio(q.value(5).toString());
-                user->setCreatedAt(q.value(7).toString());
+                if (safeUserDataReply->error() == QNetworkReply::NoError) {
+                    qDebug() << "No Error whatsoever";
+                    QByteArray data = safeUserDataReply->readAll();
+                    QJsonDocument jsonDoc = QJsonDocument::fromJson(data);
 
-                AuthenticatedUser::setInstance(*user);
-                emit loginSuccessful();
-            }
+                    if (!jsonDoc.isNull() && jsonDoc.isObject()) {
+                        qDebug() << "Response is not null";
+                        QJsonObject jsonObject = jsonDoc.object();
+                        if (jsonObject.contains("body")) {
+                            qDebug() << "Yup found body";
+                            QJsonObject body = jsonObject["body"].toObject();
 
-        }
-        else{
+                            UserModel *user = new UserModel();
+                            user->setId(body["user_id"].toInt());
+                            user->setName(body["user_name"].toString());
+                            user->setEmail(body["user_email"].toString());
+                            user->setSex(body["user_sex"].toString());
+                            user->setDob(body["user_dob"].toString());
+                            user->setCreatedAt(body["created_at"].toString());
+
+                            AuthenticatedUser::setInstance(*user);
+                            emit this->loginSuccessful();
+
+                            delete user; // Clean up if not using setInstance
+                        }
+                    } else {
+                        qDebug() << "Invalid response format, not a json object";
+                    }
+                } else {
+                    qDebug() << "User Data Error:" << safeUserDataReply->errorString();
+                }
+
+                safeUserDataReply->deleteLater();
+            });
+
+        } else {
             QMessageBox loginFailedBox;
             loginFailedBox.setIcon(QMessageBox::Critical);
             loginFailedBox.setWindowTitle("Login Failed");
@@ -171,7 +190,6 @@ void Login::on_login_btn_clicked()
             loginFailedBox.exec();
         }
     });
-
 }
 void Login::onForgotPasswordClicked()
 {
