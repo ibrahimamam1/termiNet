@@ -1,5 +1,8 @@
 #include "apiclient.h"
 #include <QJsonDocument>
+#include <QJsonObject>
+#include <QNetworkRequest>
+#include <QNetworkReply>
 
 ApiClient* ApiClient::instance = nullptr;
 
@@ -18,11 +21,14 @@ QNetworkReply* ApiClient::makeGetRequest(const QString &url){
 
 }
 QNetworkReply* ApiClient::makePostRequest(const QString &url, const QJsonObject& data){
-    QNetworkRequest request;
-    request.setUrl(QUrl(url));
-
+    QNetworkRequest request(url);
     QJsonDocument doc(data);
     QByteArray jsonData = doc.toJson();
+    qDebug() << "Sending JSON:" << QString(jsonData);
+
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    request.setHeader(QNetworkRequest::ContentLengthHeader, QByteArray::number(jsonData.size()));
+    request.setRawHeader("X-Custom-Client-Header", "Qt-Client");
 
     QNetworkReply *reply = manager->post(request, jsonData);
     return reply;

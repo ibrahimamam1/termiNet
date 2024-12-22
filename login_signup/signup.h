@@ -45,7 +45,7 @@ class Signup : public QDialog
 
 public:
    explicit Signup(QWidget *parent = nullptr);
-    bool validate_signup_form(std::string name ,std::string email ,std::string sex ,std::string dob ,std::string pass,std::string pass2, std::string& errorMsg);
+    bool validate_signup_form(QString& name, QString& email, QString& sex, QString& dob, QString& pass, QString& pass2, QString& errorMsg);
    void readUserTable();
    ~Signup();
    signals:
