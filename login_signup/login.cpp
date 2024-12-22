@@ -98,7 +98,7 @@ Login::~Login()
 }
 void Login::on_login_btn_clicked()
 {
-    QString email = HashHelper::hashString(emailField->text());
+    QString email = emailField->text();
     QString pass = HashHelper::hashString(passwordField->text());
     ApiClient *apiclient = ApiClient::getInstance();
 
@@ -124,7 +124,7 @@ void Login::on_login_btn_clicked()
                 QJsonObject jsonObject = jsonDoc.object();
                 if (jsonObject.contains("body")) {
                     QJsonObject body = jsonObject["body"].toObject();
-                    loginSuccessful = body["grant_access"].toBool();
+                    loginSuccessful = body["Grant Access"].toBool();
                 }
             } else {
                 qDebug() << "Invalid response format, not a json object";

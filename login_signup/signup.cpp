@@ -1,9 +1,17 @@
 #include "signup.h"
 #include "../db/user/user_repository.h"
+#include "../helpers/api_client/apiclient.h"
+#include "../helpers/hash_helper/hashhelper.h"
 #include<iostream>
 #include<iomanip>
 #include<string>
 #include<cctype>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QNetworkRequest>
+#include <QNetworkReply>
+#include <QUrl>
+#include <QDateTime>
 
 Signup::Signup(QWidget *parent)
     : QDialog(parent)
@@ -135,7 +143,7 @@ Signup::~Signup()
 #include <regex>
 #include <iostream>
 
-bool Signup::validate_signup_form(std::string name, std::string email, std::string sex, std::string dob, std::string pass, std::string pass2, std::string& errorMsg) {
+bool Signup::validate_signup_form(QString& name, QString& email, QString& sex, QString& dob, QString& pass, QString& pass2, QString& errorMsg) {
     // Validate Username
     if(name.length() == 0 || email.length()==0 || sex.length()==0 || dob.length()==0 || pass.length()==0 || pass2.length()==0){
         errorMsg = "Fields cannot be left empty\n";
@@ -145,24 +153,24 @@ bool Signup::validate_signup_form(std::string name, std::string email, std::stri
         errorMsg = "User Name must be at least 3 characters\n";
         return false;
     }
-    if (!isalpha(name[0])) {
-        errorMsg = "User Name cannot start with a number\n";
+    if (!name[0].isLetter()) {
+        errorMsg = "User Name must start with a letter\n";
         return false;
     }
 
     // Validate Email
     std::regex email_pattern(R"((\w+)(\.{0,1})(\w*)@(\w+)\.(\w+))");
-    if (!std::regex_match(email, email_pattern)) {
+    if (!std::regex_match(email.toStdString(), email_pattern)) {
         errorMsg = "Invalid Email address\n";
         return false;
     }
 
     // Validate Date of Birth (dd/mm/yyyy)
     std::regex dob_pattern(R"((\d{2})\/(\d{2})\/(\d{4}))");
-    if (std::regex_match(dob, dob_pattern)) {
-        int day = std::stoi(dob.substr(0, 2));
-        int month = std::stoi(dob.substr(3, 2));
-        int year = std::stoi(dob.substr(6, 4));
+    if (std::regex_match(dob.toStdString(), dob_pattern)) {
+        int day = std::stoi(dob.toStdString().substr(0, 2));
+        int month = std::stoi(dob.toStdString().substr(3, 2));
+        int year = std::stoi(dob.toStdString().substr(6, 4));
         if (day < 1 || day > 31 || month < 1 || month > 12) {
             errorMsg =  "Invalid date in Date of Birth\n";
             return false;
@@ -178,9 +186,9 @@ bool Signup::validate_signup_form(std::string name, std::string email, std::stri
         errorMsg = "Password must be at least 6 characters long\n";
         return false;
     }
-    for (char c : pass) {
-        if (isalpha(c)) is_alpha = true;
-        else if (isdigit(c)) is_number = true;
+    for (auto c : pass) {
+        if (c.isLetter()) is_alpha = true;
+        else if (c.isDigit()) is_number = true;
         else is_char = true;
         if (is_char && is_number && is_alpha) break;
     }
@@ -199,73 +207,62 @@ bool Signup::validate_signup_form(std::string name, std::string email, std::stri
 
 void Signup::on_create_account_btn_clicked()
 {
-    //get data from form
-    std::string name = userNameField->text().toStdString();
-    std::string email = emailField->text().toStdString();
-    std::string sex = "M";
-    std::string dob = dobField->text().toStdString();
-    std::string pass = passwordField->text().toStdString();
-    std::string pass2 = comfirmPasswordField->text().toStdString();
-    time_t created_at = std::time(nullptr);
+    // Get data from form
+    QString name = userNameField->text();
+    QString email = emailField->text();
+    QString sex = "M";
+    QString dob = dobField->text();
+    QString pass = passwordField->text();
+    QString pass2 = comfirmPasswordField->text();
 
-    std::string errorMsg;
+    QString errorMsg;
 
-    if(!validate_signup_form(name , email , sex , dob , pass, pass2, errorMsg)){
-        //show appropriate error Message
-        QMessageBox errorBox;
-        errorBox.setIcon(QMessageBox::Critical);
-        errorBox.setWindowTitle("Invalid Data Failed");
-        errorBox.setText(QString::fromStdString(errorMsg));
-        errorBox.setInformativeText("Please Try Again");
-        errorBox.exec();
+    if(!validate_signup_form(name, email, sex, dob, pass, pass2, errorMsg)){
+        QMessageBox::critical(this, errorMsg, errorMsg, QMessageBox::Ok);
+        return;
     }
-    else
-    {
 
-        // convert dob and created_at to a postgres compatible type
-        std::tm tm = {};
-        std::istringstream ss(dob);
+    // Create JSON payload
+    QJsonObject jsonData;
+    jsonData["user_name"] = name;
+    jsonData["user_email"] = email;
+    jsonData["user_sex"] = sex;
+    jsonData["user_dob"] = dob;
+    jsonData["user_bio"] = "";
+    jsonData["password"] = HashHelper::hashString(pass);
+    jsonData["created_at"] = QDateTime::currentDateTimeUtc().toString(Qt::ISODate);
 
-        // Parse the date in "dd/mm/yyyy" format
-        ss >> std::get_time(&tm, "%d/%m/%Y");
+    QJsonDocument jsonDoc(jsonData);
+    QByteArray jsonDataBytes = jsonDoc.toJson();
 
+    // Create and make Network Request
+    ApiClient* apiClient = ApiClient::getInstance();
+    QString url = ApiClient::getInstance()->getUserDataUrl();
+    QNetworkReply *reply = apiClient->makePostRequest(url, jsonData);
 
-        // Convert std::tm to time_t
-        time_t date_of_birth =  std::mktime(&tm);
+    // Connect to the finished signal to handle the response
+    connect(reply, &QNetworkReply::finished, this, [=]() {
+        qDebug() << "Received Reply";
+        if (reply->error() == QNetworkReply::NoError) {
+            qDebug() << "Received Has no error";
+            // Request was successful
+            QByteArray responseData = reply->readAll();
+            QJsonDocument responseDoc = QJsonDocument::fromJson(responseData);
+            QJsonObject responseJson = responseDoc.object();
 
-        //convert dob to postgre compatible type
-        std::tm *ptm = std::localtime(&date_of_birth);
-        char dob_string[11];
-        strftime(dob_string, sizeof(dob_string), "%Y-%m-%d", ptm);
-
-        //convert created_at to postgre compatible type
-        ptm = std::localtime(&created_at);
-        char created_at_string[11];
-        strftime(created_at_string, sizeof(created_at_string), "%Y-%m-%d", ptm);
-
-        //add user entry to DB, static void addUserToDb(std::string name, std::string email, std::string sex, char* dob, char* created_at);
-       bool addedUser = UserRepository::addUserToDb(name, email, sex, dob_string, pass, created_at_string);
-        if(addedUser){
-            //show success message
-            QMessageBox errorBox;
-            errorBox.setIcon(QMessageBox::Information);
-            errorBox.setWindowTitle("Account Created");
-            errorBox.setText("Account Created Successfully");
-            errorBox.setInformativeText("Enjoy Sharing Your Ideas");
-
-           emit signupSuccessful();
-
-        }else{
-            //show error message and retry
-            QMessageBox errorBox;
-            errorBox.setIcon(QMessageBox::Critical);
-            errorBox.setWindowTitle("Signup Failed");
-            errorBox.setText("Creating Your Account Failed");
-            errorBox.setInformativeText("Please Check Your Internet Connection");
-            errorBox.exec();
+            // Handle the server's response
+            if (responseJson.contains("Status") && responseJson["Status"].toString() == "Created") {
+                QMessageBox::information(this, "Account Created", "Account Created Successfully\nEnjoy Sharing Your Ideas", QMessageBox::Ok);
+                emit signupSuccessful();
+            } else {
+                QString errorMessage = responseJson.contains("message") ? responseJson["message"].toString() : "Unknown error from server.";
+                QMessageBox::critical(this, "Signup Failed", "Creating Your Account Failed\n" + errorMessage, QMessageBox::Ok);
+            }
+        } else {
+            // Request failed
+            QMessageBox::critical(this, "Signup Failed", "Creating Your Account Failed\n" + reply->errorString(), QMessageBox::Ok);
         }
-    }
 
-
+        reply->deleteLater();
+    });
 }
-
