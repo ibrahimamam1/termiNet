@@ -1,10 +1,32 @@
 #ifndef CHATPAGE_H
 #define CHATPAGE_H
 
-class ChatPage
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QScrollArea>
+#include <QTextEdit>
+#include <QPushButton>
+#include "singleMessage/singlemessage.h"
+
+
+class ChatPage : public QWidget
 {
+    Q_OBJECT
+    QVBoxLayout *mainContainer;
+    QScrollArea *chatScrollArea;
+    QVBoxLayout *chatContainer;
+    QWidget *chatWidget;
+    QHBoxLayout *replyLayout;
+    QTextEdit *replyTextZone;
+    QPushButton *sendBtn;
+
 public:
-    ChatPage();
+    explicit ChatPage(QWidget *parent = nullptr);
+
+signals:
+
+private slots:
+    void onSendButtonClicked();
 };
 
 #endif // CHATPAGE_H

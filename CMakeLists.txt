@@ -74,11 +74,13 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         screens/message/widgets/message/messagewidget.h screens/message/widgets/message/messagewidget.cpp
         db/message/messagerepository.h db/message/messagerepository.cpp
         screens/message/widgets/create_message/createmessage.h screens/message/widgets/create_message/createmessage.cpp
-        screens/message/widgets/chat_page/chatpage.h screens/message/widgets/chat_page/chatpage.cpp
+
         helpers/api_client/apiclient.h helpers/api_client/apiclient.cpp
         helpers/hash_helper/hashhelper.h helpers/hash_helper/hashhelper.cpp
         helpers/message_client/messageclient.h helpers/message_client/messageclient.cpp
         db/login/loginrepository.h db/login/loginrepository.cpp
+        screens/message/widgets/chat_page/singleMessage/singlemessage.h screens/message/widgets/chat_page/singleMessage/singlemessage.cpp
+        screens/message/widgets/chat_page/chatpage.h screens/message/widgets/chat_page/chatpage.cpp
 
 
 

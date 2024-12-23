@@ -1,5 +1,6 @@
 #include "createmessage.h"
 #include "../../../../db/user/user_repository.h"
+#include "../../messagepage.h"
 #include <QDebug>
 #include <QSqlError>
 
@@ -37,5 +38,7 @@ void CreateMessage::onSearchReturnPressed()
 
 void CreateMessage::onUserLinkClicked()
 {
-    emit userSelected(receiver);
+    emit this->userSelected();
 }
+
+UserModel CreateMessage::getReceiver() const{ return receiver; }
