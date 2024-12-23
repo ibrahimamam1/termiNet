@@ -13,8 +13,9 @@ public:
     static bool addUserToDb(std::string name, std::string email, std::string sex, char* dob, std::string passwd, char* created_at);
     static void readUserFromDb();
     static UserModel getUserFromId(int id);
-    static UserModel getUserFromEmail(QString email);
-    static UserModel getUserFromName(QString name);
+    static UserModel getUser(const QString& uri);
+    static UserModel getUserFromEmail(const QString& email);
+    static UserModel getUserFromName(const QString& name);
 };
 
 #endif // USER_REPOSITORY_H

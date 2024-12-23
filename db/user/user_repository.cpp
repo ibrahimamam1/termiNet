@@ -89,9 +89,8 @@ UserModel UserRepository::getUserFromId(int id){
     return UserModel();
 }
 
-UserModel UserRepository::getUserFromEmail(QString email){
+UserModel UserRepository::getUser(const QString& userUri){
 
-    QString userUri = ApiClient::getInstance()->getUserDataUrl() + email;
     QNetworkReply *userDataReply = ApiClient::getInstance()->makeGetRequest(userUri);
     QPointer<QNetworkReply> safeUserDataReply(userDataReply);
 
@@ -128,10 +127,11 @@ UserModel UserRepository::getUserFromEmail(QString email){
     return user;
 }
 
-UserModel UserRepository::getUserFromName(QString name){
-    ApiClient* apiClient = ApiClient::getInstance();
-    QString url = apiClient->getUserDataUrl() + name + "/";
-
-    QNetworkReply *reply = apiClient->makeGetRequest(url);
-    //connect(reply, &QNetworkReply::finished, [](){});
+UserModel UserRepository::getUserFromEmail(const QString& email){
+    QString uri = ApiClient::getInstance()->getUserDataUrl() + "1/" + email;
+    return getUser(uri);
+}
+UserModel UserRepository::getUserFromName(const QString& name){
+    QString uri = ApiClient::getInstance()->getUserDataUrl() + "2/" + name;
+    return getUser(uri);
 }
