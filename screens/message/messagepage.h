@@ -8,6 +8,7 @@
 #include <QSplitter>
 #include "widgets/message_list_view/messagelistview.h"
 #include "widgets/create_message/createmessage.h"
+#include "widgets/chat_page/chatpage.h"
 
 class MessagePage : public QWidget
 {
@@ -16,15 +17,14 @@ class MessagePage : public QWidget
     QStackedWidget *pages;
     MessageListView *messageListView;
     CreateMessage *createNewMessageWidget;
-    QWidget *chatContainer;
-    QSplitter *chatLayout;
-    QScrollArea *scrollableAreaForChats;
+    ChatPage *chatPage;
     //NewMessageWidget *newMessageWidget;
 
 
 public:
     explicit MessagePage(QWidget *parent = nullptr);
     void switchToCreateNewMessage();
+    void switchToChatScreen();
 
 signals:
 };

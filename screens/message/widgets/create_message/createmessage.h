@@ -17,13 +17,15 @@ class CreateMessage : public QWidget
 
 public:
     explicit CreateMessage(QWidget *parent = nullptr);
+    UserModel getReceiver() const;
 
 signals:
-    void userSelected(UserModel receiver);
+    void userSelected();
 
 private slots:
     void onSearchReturnPressed();
     void onUserLinkClicked();
+
 
 private:
     void searchUser();
