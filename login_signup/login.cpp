@@ -2,6 +2,8 @@
 #include "signup.h"
 #include "../helpers/api_client/apiclient.h"
 #include "../helpers/hash_helper/hashhelper.h"
+#include "../db/login/loginrepository.h"
+#include "../db/user/user_repository.h"
 #include <QJsonDocument>
 #include <QJsonObject>
 
@@ -100,86 +102,12 @@ void Login::on_login_btn_clicked()
 {
     QString email = emailField->text();
     QString pass = HashHelper::hashString(passwordField->text());
-    ApiClient *apiclient = ApiClient::getInstance();
-
-    // First request - Login
-    QString loginUri = apiclient->getLoginUrl() + email + "/" + pass;
-    QNetworkReply *loginReply = apiclient->makeGetRequest(loginUri);
-
-    QPointer<QNetworkReply> safeLoginReply(loginReply);
-
-    // Connect login request
-    connect(loginReply, &QNetworkReply::finished, this, [this, email, safeLoginReply]() {
-        if (!safeLoginReply) {
-            return;
-        }
-
-        bool loginSuccessful = false;
-
-        if (safeLoginReply->error() == QNetworkReply::NoError) {
-            QByteArray data = safeLoginReply->readAll();
-            QJsonDocument jsonDoc = QJsonDocument::fromJson(data);
-
-            if (!jsonDoc.isNull() && jsonDoc.isObject()) {
-                QJsonObject jsonObject = jsonDoc.object();
-                if (jsonObject.contains("body")) {
-                    QJsonObject body = jsonObject["body"].toObject();
-                    loginSuccessful = body["Grant Access"].toBool();
-                }
-            } else {
-                qDebug() << "Invalid response format, not a json object";
-            }
-        } else {
-            qDebug() << "Login Error:" << safeLoginReply->errorString();
-        }
-
-        safeLoginReply->deleteLater();
+    bool loginSuccessful = LoginRepository::login(email, pass);
 
         if (loginSuccessful) {
-            // Second request - Get User Data
-            QString userUri = ApiClient::getInstance()->getUserDataUrl() + email;
-            QNetworkReply *userDataReply = ApiClient::getInstance()->makeGetRequest(userUri);
-            QPointer<QNetworkReply> safeUserDataReply(userDataReply);
-
-            connect(userDataReply, &QNetworkReply::finished, this, [this, safeUserDataReply]() {
-                if (!safeUserDataReply) {
-                    return;
-                }
-
-                if (safeUserDataReply->error() == QNetworkReply::NoError) {
-                    qDebug() << "No Error whatsoever";
-                    QByteArray data = safeUserDataReply->readAll();
-                    QJsonDocument jsonDoc = QJsonDocument::fromJson(data);
-
-                    if (!jsonDoc.isNull() && jsonDoc.isObject()) {
-                        qDebug() << "Response is not null";
-                        QJsonObject jsonObject = jsonDoc.object();
-                        if (jsonObject.contains("body")) {
-                            qDebug() << "Yup found body";
-                            QJsonObject body = jsonObject["body"].toObject();
-
-                            UserModel *user = new UserModel();
-                            user->setId(body["user_id"].toInt());
-                            user->setName(body["user_name"].toString());
-                            user->setEmail(body["user_email"].toString());
-                            user->setSex(body["user_sex"].toString());
-                            user->setDob(body["user_dob"].toString());
-                            user->setCreatedAt(body["created_at"].toString());
-
-                            AuthenticatedUser::setInstance(*user);
-                            emit this->loginSuccessful();
-
-                            delete user; // Clean up if not using setInstance
-                        }
-                    } else {
-                        qDebug() << "Invalid response format, not a json object";
-                    }
-                } else {
-                    qDebug() << "User Data Error:" << safeUserDataReply->errorString();
-                }
-
-                safeUserDataReply->deleteLater();
-            });
+            UserModel user = UserRepository::getUserFromEmail(email);
+            AuthenticatedUser::setInstance(user);
+            emit this->loginSuccessful();
 
         } else {
             QMessageBox loginFailedBox;
@@ -189,7 +117,6 @@ void Login::on_login_btn_clicked()
             loginFailedBox.setInformativeText(QString("Incorrect user name or password. Please try again"));
             loginFailedBox.exec();
         }
-    });
 }
 void Login::onForgotPasswordClicked()
 {

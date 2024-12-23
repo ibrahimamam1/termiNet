@@ -1,4 +1,5 @@
 #include "createmessage.h"
+#include "../../../../db/user/user_repository.h"
 #include <QDebug>
 #include <QSqlError>
 
@@ -26,19 +27,7 @@ void CreateMessage::onSearchReturnPressed()
     if (!username.isEmpty()) {
         userStatusLabel->setText("Searching...");
 
-        QSqlQuery q;
-        q.prepare("Select * from users where user_name = :name");
-        q.bindValue(":name", username);
-
-        if(!q.exec()){
-            qDebug() << "Failed to retreive user information" << q.lastError();
-            return;
-        }
-        if(!q.next()){
-            userStatusLabel->setText("User Not found");
-            return;
-        }
-        receiver = UserModel(q.value(0).toInt(),q.value(1).toString(),q.value(2).toString(),q.value(3).toString(),q.value(4).toString(),q.value(5).toString(),q.value(7).toString());
+        receiver = UserRepository::getUserFromName(username);
         QString labelText = "<a href='#'>"+receiver.getName()+"</a>";
         userStatusLabel->setText(labelText);
         connect(userStatusLabel, &QLabel::linkActivated, this, &CreateMessage::onUserLinkClicked);

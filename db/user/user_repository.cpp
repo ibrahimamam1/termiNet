@@ -1,4 +1,9 @@
 #include "user_repository.h"
+#include "../../helpers/api_client/apiclient.h"
+#include <QEventLoop>
+#include <QPointer>
+#include <QJsonDocument>
+#include <QJsonObject>
 
 UserRepository::UserRepository() {}
 bool UserRepository::addUserToDb(std::string name, std::string email, std::string sex, char* dob, std::string passwd, char* created_at){
@@ -82,4 +87,51 @@ UserModel UserRepository::getUserFromId(int id){
         return UserModel();
     }
     return UserModel();
+}
+
+UserModel UserRepository::getUserFromEmail(QString email){
+
+    QString userUri = ApiClient::getInstance()->getUserDataUrl() + email;
+    QNetworkReply *userDataReply = ApiClient::getInstance()->makeGetRequest(userUri);
+    QPointer<QNetworkReply> safeUserDataReply(userDataReply);
+
+    UserModel user = UserModel();
+    QEventLoop loop;
+    QObject::connect(userDataReply, &QNetworkReply::finished, [&]() {
+        if (safeUserDataReply && safeUserDataReply->error() == QNetworkReply::NoError) {
+            QByteArray data = safeUserDataReply->readAll();
+            QJsonDocument jsonDoc = QJsonDocument::fromJson(data);
+
+            if (!jsonDoc.isNull() && jsonDoc.isObject()) {
+                QJsonObject jsonObject = jsonDoc.object();
+                if (jsonObject.contains("body")) {
+                    QJsonObject body = jsonObject["body"].toObject();
+
+                    user.setId(body["user_id"].toInt());
+                    user.setName(body["user_name"].toString());
+                    user.setEmail(body["user_email"].toString());
+                    user.setSex(body["user_sex"].toString());
+                    user.setDob(body["user_dob"].toString());
+                    user.setCreatedAt(body["created_at"].toString());
+                }
+            } else {
+                qDebug() << "Invalid response format, not a json object";
+            }
+        } else {
+            qDebug() << "User Data Error:" << safeUserDataReply->errorString();
+        }
+
+        safeUserDataReply->deleteLater();
+        loop.quit();
+    });
+    loop.exec();
+    return user;
+}
+
+UserModel UserRepository::getUserFromName(QString name){
+    ApiClient* apiClient = ApiClient::getInstance();
+    QString url = apiClient->getUserDataUrl() + name + "/";
+
+    QNetworkReply *reply = apiClient->makeGetRequest(url);
+    //connect(reply, &QNetworkReply::finished, [](){});
 }
