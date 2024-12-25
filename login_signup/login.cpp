@@ -4,6 +4,7 @@
 #include "../helpers/hash_helper/hashhelper.h"
 #include "../db/login/loginrepository.h"
 #include "../db/user/user_repository.h"
+#include "../helpers/apphelper.h"
 #include <QJsonDocument>
 #include <QJsonObject>
 
@@ -104,19 +105,20 @@ void Login::on_login_btn_clicked()
     QString pass = HashHelper::hashString(passwordField->text());
     bool loginSuccessful = LoginRepository::login(email, pass);
 
-        if (loginSuccessful) {
-            UserModel user = UserRepository::getUserFromEmail(email);
-            AuthenticatedUser::setInstance(user);
-            emit this->loginSuccessful();
+    if (loginSuccessful) {
+        UserModel user = UserRepository::getUserFromEmail(email);
+        AuthenticatedUser::setInstance(user);
+        AppHelper::saveUserForPersistentLogin(user.getId());
+        emit this->loginSuccessful();
 
-        } else {
-            QMessageBox loginFailedBox;
-            loginFailedBox.setIcon(QMessageBox::Critical);
-            loginFailedBox.setWindowTitle("Login Failed");
-            loginFailedBox.setText("Login Failed");
-            loginFailedBox.setInformativeText(QString("Incorrect user name or password. Please try again"));
-            loginFailedBox.exec();
-        }
+    } else {
+        QMessageBox loginFailedBox;
+        loginFailedBox.setIcon(QMessageBox::Critical);
+        loginFailedBox.setWindowTitle("Login Failed");
+        loginFailedBox.setText("Login Failed");
+        loginFailedBox.setInformativeText(QString("Incorrect user name or password. Please try again"));
+        loginFailedBox.exec();
+    }
 }
 void Login::onForgotPasswordClicked()
 {
