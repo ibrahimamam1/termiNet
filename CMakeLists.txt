@@ -81,6 +81,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         db/login/loginrepository.h db/login/loginrepository.cpp
         screens/message/widgets/chat_page/singleMessage/singlemessage.h screens/message/widgets/chat_page/singleMessage/singlemessage.cpp
         screens/message/widgets/chat_page/chatpage.h screens/message/widgets/chat_page/chatpage.cpp
+        helpers/apphelper.h helpers/apphelper.cpp
 
 
 

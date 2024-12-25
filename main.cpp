@@ -4,58 +4,44 @@
 #include "db/databasemanager.h"
 #include "screens/home/home.h"
 #include "models/user/usermodel.h"
+#include "db/user/user_repository.h"
 
 #include <QApplication>
 #include <QMessageBox>
+#include "helpers/apphelper.h"
 
 Home* Home::instance = nullptr;
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+    QEventLoop loop;
+    bool initializationComplete = false;
 
-    // Create database manager
-    DatabaseManager* db = DatabaseManager::getInstance();
-
-    // Create and show login window
-    auto loginWindow = new Login();
-    loginWindow->setAttribute(Qt::WA_DeleteOnClose); // Auto-delete when closed
-    loginWindow->show();
-
-    //try to connect to database
-    int retry = 0;
-    while (!db->connect()) {
-        //show error message
-        QMessageBox retryBox;
-        retryBox.setIcon(QMessageBox::Warning);
-        retryBox.setWindowTitle("Connection Error");
-        retryBox.setText("Failed to connect to Server");
-        retryBox.setInformativeText(QString("Retrying..."));
-        retryBox.exec();
-
-        if(retry == 3){
-            // all retries failed
-            QMessageBox errorBox;
-            errorBox.setIcon(QMessageBox::Critical);
-            errorBox.setWindowTitle("Connection Error");
-            errorBox.setText("Failed to connect to Server");
-            errorBox.setInformativeText("Please check your internet connection and try again later.");
-            errorBox.exec();
-            return 1;
-        }
-        retry++;
+    int userId = AppHelper::checkPersitentLogin();
+    if(userId == -1){
+        // Create and show login window
+        auto loginWindow = new Login();
+        loginWindow->setAttribute(Qt::WA_DeleteOnClose); // Auto-delete when closed
+        QObject::connect(loginWindow, &Login::loginSuccessful, [&]() {
+            initializationComplete = true;
+            loginWindow->deleteLater();
+            loop.quit();
+        });
+        loginWindow->show();
+    }else{
+        UserModel user = UserRepository::getUserFromId(userId);
+        AuthenticatedUser::setInstance(user);
+        initializationComplete = true;
+        loop.quit();
     }
 
+    if(!initializationComplete)
+        loop.exec();
 
-    // Connect login success signal
-    QObject::connect(loginWindow, &Login::loginSuccessful, [loginWindow]() {
-        auto homePage = Home::getInstance();
-        homePage->setAttribute(Qt::WA_DeleteOnClose);
-        homePage->show();
-        loginWindow->deleteLater();
-    });
+    auto homePage = Home::getInstance();
+    homePage->setAttribute(Qt::WA_DeleteOnClose);
+    homePage->show();
 
     return a.exec();
-
-
 }
