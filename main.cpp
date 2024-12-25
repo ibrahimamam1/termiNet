@@ -9,6 +9,7 @@
 #include <QApplication>
 #include <QMessageBox>
 #include "helpers/apphelper.h"
+#include "helpers/websocket_client/websocketclient.h"
 
 Home* Home::instance = nullptr;
 
@@ -39,6 +40,12 @@ int main(int argc, char *argv[])
     if(!initializationComplete)
         loop.exec();
 
+    //open websocket with server
+    WebSocketClient& webSocket = WebSocketClient::getInstance();
+    webSocket.connectToServer();
+
+
+    //show homepage
     auto homePage = Home::getInstance();
     homePage->setAttribute(Qt::WA_DeleteOnClose);
     homePage->show();

@@ -16,6 +16,7 @@ public:
     const QString& getLoginUrl() const;
     const QString& getSignupUrl() const;
     const QString& getUserDataUrl() const;
+    const QString& getWebSocketUrl() const;
     static ApiClient* getInstance();
 
 private:
@@ -26,6 +27,7 @@ private:
     const QString loginUrl = baseUrl + "login/";
     const QString signupUrl = baseUrl + "signup/";
     const QString userDataUrl = baseUrl + "users/";
+    const QString webSocketUrl ="ws://127.0.0.1:8080/ws";
 
 signals:
 };
