@@ -1,5 +1,5 @@
 #include "customtopbar.h"
-#include "../../message/messagepage.h"
+
 
 CustomTopBar::CustomTopBar(QWidget *parent)
     : QWidget{parent}
@@ -46,8 +46,7 @@ void CustomTopBar::onSearchTriggered(){
 }
 void CustomTopBar::onMessageIconClicked(){
     qDebug() << "Message Btn Clicked";
-    MessagePage *msgPage = new MessagePage();
-    msgPage->show();
+    emit messageIconClicked();
 }
 void CustomTopBar::onProfileIconClicked(){
     qDebug() << "Profiles Btn Clicked";

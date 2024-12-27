@@ -10,6 +10,7 @@
 #include "widgets/create_message/createmessage.h"
 #include "widgets/chat_page/chatpage.h"
 
+
 class MessagePage : public QWidget
 {
     Q_OBJECT
@@ -27,6 +28,11 @@ public:
     void switchToChatScreen();
 
 signals:
+
+public slots:
+    void onMessageReceived(const QString& msg);
+
+private:
 };
 
 #endif // MESSAGEPAGE_H

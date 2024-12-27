@@ -6,7 +6,7 @@
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QSqlQuery>
-#include "../../../../models/user/usermodel.h"
+#include "../../../../src/models/user/usermodel.h"
 
 class CreateMessage : public QWidget
 {

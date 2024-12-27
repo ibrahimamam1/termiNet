@@ -1,5 +1,5 @@
 #include "threadwidget.h"
-#include "../../../models/user/usermodel.h"
+#include "../../../src/models/user/usermodel.h"
 #include "../../../models/thread/threadmodel.h"
 #include "../../../db/thread/thread_repository.h"
 #include "../../home/home.h"

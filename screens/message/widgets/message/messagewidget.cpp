@@ -1,5 +1,5 @@
 #include "messagewidget.h"
-#include "../../../../models/user/authenticateduser.h"
+#include "../../../../src/models/user/authenticateduser.h"
 
 MessageWidget::MessageWidget(const MessageModel& msg, QWidget *parent) : QWidget{parent}
 {

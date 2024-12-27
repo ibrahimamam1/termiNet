@@ -1,7 +1,7 @@
 #ifndef THREADMODEL_H
 #define THREADMODEL_H
 
-#include "../user/usermodel.h"
+#include "../../src/models/user/usermodel.h"
 
 
 class ThreadModel

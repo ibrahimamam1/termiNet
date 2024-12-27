@@ -1,7 +1,7 @@
 #ifndef MESSAGEMODEL_H
 #define MESSAGEMODEL_H
 
-#include "../../../models/user/usermodel.h"
+#include "../../../src/models/user/usermodel.h"
 #include <QDateTime>
 
 class MessageModel

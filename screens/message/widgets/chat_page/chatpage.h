@@ -7,7 +7,7 @@
 #include <QTextEdit>
 #include <QPushButton>
 #include "singleMessage/singlemessage.h"
-#include "../../../../models/user/usermodel.h"
+#include "../../../../src/models/user/usermodel.h"
 
 
 class ChatPage : public QWidget
@@ -26,6 +26,7 @@ public:
     void setOtherUser(const UserModel& u);
     UserModel getOtherUser() const;
     void setMessages(std::vector<MessageModel>msgs);
+    void addMessage(MessageModel m);
     void updateUi();
 
 signals:
