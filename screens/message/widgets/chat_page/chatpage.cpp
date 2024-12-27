@@ -1,7 +1,7 @@
 #include "chatpage.h"
 #include "../../../../helpers/websocket_client/websocketclient.h"
 #include "../../../../src/db/manager/databasemanager.h"
-#include "../../../../models/user/authenticateduser.h"
+#include "../../../../src/models/user/authenticateduser.h"
 #include <QScrollBar>
 #include <QMessageBox> // For displaying error messages
 
@@ -87,6 +87,12 @@ void ChatPage::setMessages(std::vector<MessageModel> msgs){
     }
      qDebug() << "You should see " << messages.size() << " messages";
     updateUi();
+}
+
+void ChatPage::addMessage(MessageModel m){
+    messages.push_back(m);
+    SingleMessage *messageWidget = new SingleMessage(m, 1, this); //direction is set to 1 because this function is only called when a message is received
+    chatContainer->addWidget(messageWidget);
 }
 
 void ChatPage::updateUi(){

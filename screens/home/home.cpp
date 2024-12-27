@@ -1,4 +1,5 @@
 #include "home.h"
+#include "../../helpers/websocket_client/websocketclient.h"
 #include<QTextBrowser>
 
 Home::Home(QWidget *parent) : QMainWindow(parent), user(AuthenticatedUser::getInstance())
@@ -13,6 +14,7 @@ Home::Home(QWidget *parent) : QMainWindow(parent), user(AuthenticatedUser::getIn
     mainContainer = new QVBoxLayout(centralWidget);
 
     topBar = new CustomTopBar();
+    connect(topBar, &CustomTopBar::messageIconClicked, this, &Home::onMessageIconClicked);
     leftNav = new LeftNavigationWidget();
 
     // Center area layout
@@ -31,6 +33,11 @@ Home::Home(QWidget *parent) : QMainWindow(parent), user(AuthenticatedUser::getIn
     // Combine header and body into main container
     mainContainer->addWidget(topBar, 1);
     mainContainer->addLayout(bodyContainer, 9);
+
+
+    //setup message page
+    msgPage = new MessagePage();
+    connect(&WebSocketClient::getInstance(), &WebSocketClient::messageReceived,msgPage, &MessagePage::onMessageReceived);
 
     // Set window properties
     setWindowTitle("Home");
@@ -96,7 +103,9 @@ void Home::onCommentBtnClicked(int parentThreadID){
 }
 
 
-
+void Home::onMessageIconClicked(){
+    msgPage->show();
+}
 
 
 

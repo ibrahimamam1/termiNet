@@ -24,14 +24,14 @@ public:
 signals:
     void connected();
     //void disconnected();
-    //void messageReceived(const QString& message);
+    void messageReceived(const QString& message);
     void errorOccurred(const QString& error);
 
 private slots:
     void onConnected();
     //void onDisconnected();
     void onError(QAbstractSocket::SocketError error);
-    //void onTextMessageReceived(const QString& message);
+    void onTextMessageReceived(const QString& message);
 };
 
 #endif // WEBSOCKETCLIENT_H

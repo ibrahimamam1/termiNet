@@ -59,10 +59,10 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         screens/widgets/createPost/createpost.h
         screens/widgets/thread/threadwidget.h screens/widgets/thread/threadwidget.cpp
         screens/widgets/threadView/threadview.h screens/widgets/threadView/threadview.cpp
-        models/user/usermodel.cpp
-        models/user/usermodel.h
 
-        models/user/authenticateduser.h models/user/authenticateduser.cpp
+
+
+
         models/thread/threadmodel.h models/thread/threadmodel.cpp
         db/thread/thread_repository.h db/thread/thread_repository.cpp
         screens/community_page/widgets/communitydescriptionwidget.h screens/community_page/widgets/communitydescriptionwidget.cpp
@@ -90,6 +90,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 
         src/models/message/messagemodel.h src/models/message/messagemodel.cpp
         src/network/user/user_repository.h src/network/user/user_repository.cpp
+        src/models/user/usermodel.h src/models/user/usermodel.cpp
+        src/models/user/authenticateduser.h src/models/user/authenticateduser.cpp
 
 
 

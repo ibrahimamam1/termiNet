@@ -1,6 +1,7 @@
 #include "databasemanager.h"
 #include "../../models/message/messagemodel.h"
 #include "../../network/user/user_repository.h"
+#include "../../models/user/authenticateduser.h"
 #include <QStandardPaths>
 #include <QDir>
 
@@ -112,6 +113,26 @@ bool DatabaseManager::addOutgoingMessage(const MessageModel& msg){
     return true;
 }
 
+bool DatabaseManager::addIncomingMessage(const MessageModel& msg){
+    if(!db.open()){
+        qDebug() << "Failed to conenct to database\n";
+        return false;
+    }
+
+    QSqlQuery q(db);
+    q.prepare("INSERT INTO received_messages(timestamp, message_text, sender_id) values (:time_s, :content, :id);");
+    q.bindValue(":time_s", msg.getTimestamp());
+    q.bindValue(":content", msg.getMessageContent());
+    q.bindValue(":id", msg.getReceiver().getId());
+
+    if(!q.exec()){
+        qDebug() << "Failed to execute Query\nError : "<< q.lastError().text();
+        return false;
+    }
+    return true;
+}
+
+
 std::vector<MessageModel> DatabaseManager::getSentMessagesTo(int id){
     std::vector<MessageModel>msgs;
 
@@ -155,11 +176,11 @@ std::vector<MessageModel> DatabaseManager::getReceivedMessagesFrom(int id){
         qDebug() << "Failed to retreived messages\nError: "<<q.lastError().text();
         return msgs;
     }
+    UserModel user = *AuthenticatedUser::getInstance();
     while(q.next()){
-        UserModel receiver = UserRepository::getUserFromId(q.value(3).toInt());
         QString content = q.value(2).toString();
         QDateTime time = q.value(3).toDateTime();
-        msgs.push_back(MessageModel(receiver , content, time));
+        msgs.push_back(MessageModel(user, content, time));
     }
     return msgs;
 }

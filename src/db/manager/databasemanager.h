@@ -21,6 +21,7 @@ public:
     void disconnect();
     bool executeSqlFile(const QString& path);
     bool addOutgoingMessage(const MessageModel& msg);
+     bool addIncomingMessage(const MessageModel& msg);
     bool createSchema();
 
     std::vector<MessageModel>getSentMessagesTo(int id);

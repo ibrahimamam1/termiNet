@@ -1,7 +1,7 @@
 #include "login_signup/signup.h"
 #include "login_signup/login.h"
 #include "screens/home/home.h"
-#include "models/user/usermodel.h"
+#include "src/models/user/usermodel.h"
 #include "src/network/user/user_repository.h"
 
 #include <QApplication>

@@ -11,13 +11,14 @@
 #include "../widgets/leftNavigation/leftnavigationwidget.h"
 #include"../widgets/clickablelabel.h"
 #include "../widgets/thread//threadwidget.h"
-#include "../../models/user/usermodel.h"
+#include "../../src/models/user/usermodel.h"
 #include "../../models/community/communitymodel.h"
 #include "../../db/communityrepository.h"
 #include "../create_community/createcommunity.h"
 #include "../community_page/communitypage.h"
 #include "../widgets/threadView/threadview.h"
-#include "../../models/user/authenticateduser.h"
+#include "../../src/models/user/authenticateduser.h"
+#include "../message/messagepage.h"
 
 class Home : public QMainWindow
 {
@@ -40,10 +41,12 @@ public:
     QStackedWidget *centerArea;
     ThreadView *threadView;
     CommunityPage *communityPage;
+    MessagePage *msgPage;
 
 private slots:
 
     void onCommentBtnClicked(int parentThreadId);
+    void onMessageIconClicked();
 
 private:
     UserModel *user;

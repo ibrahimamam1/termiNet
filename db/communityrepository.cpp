@@ -4,8 +4,8 @@
 #include <QSqlQuery>
 #include <QImage>
 #include <QBuffer>
-#include "../models/user/usermodel.h"
-#include "../models/user/authenticateduser.h"
+#include "../src/models/user/usermodel.h"
+#include "../src/models/user/authenticateduser.h"
 #include "category_repository.h"
 #include "storage/storagerepository.h"
 #include "../utils/helper/apphelper.h"

@@ -1,9 +1,12 @@
 #include "messagepage.h"
 #include "../../db/message/messagerepository.h"
-#include "../../models/user/authenticateduser.h"
+#include "../../src/models/user/authenticateduser.h"
+#include "../../src/network/user/user_repository.h"
 #include "../../screens/home/home.h"
 #include "../../src/db/manager/databasemanager.h"
 #include <algorithm>
+#include <QJsonDocument>
+#include <QJsonObject>
 
 MessagePage::MessagePage(QWidget *parent)
     : QWidget{parent}
@@ -57,4 +60,38 @@ void MessagePage::switchToChatScreen(){
     chatPage->setMessages(allMessages);
 
     pages->setCurrentIndex(2);
+}
+
+void MessagePage::onMessageReceived(const QString& msg) {
+    qDebug() << "Inside message page, received message:" << msg;
+
+    // Parse the JSON string
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(msg.toUtf8());
+    if (jsonDoc.isNull()) {
+        qDebug() << "Failed to parse JSON message";
+        return;
+    }
+
+    // Convert to a JSON object
+    QJsonObject jsonObj = jsonDoc.object();
+
+    // Extract the sender id and message string
+    if (jsonObj.contains("sender_id") && jsonObj.contains("message")) {
+        int sender_id = jsonObj["sender_id"].toInt();
+        QString message = jsonObj["message"].toString();
+
+        qDebug() << "Received message from :" << sender_id;
+        qDebug() << "message:" << message;
+
+        UserModel sender = UserRepository::getUserFromId(sender_id);
+        QDateTime now = QDateTime::currentDateTime();
+        MessageModel m(sender, message, now);
+        chatPage->addMessage(m);
+
+        DatabaseManager db = DatabaseManager::getInstance();
+        db.addIncomingMessage(m);
+
+    } else {
+        qDebug() << "JSON message is missing required fields";
+    }
 }

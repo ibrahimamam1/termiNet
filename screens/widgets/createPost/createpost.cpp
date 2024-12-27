@@ -1,5 +1,5 @@
 #include "createpost.h"
-#include "../../../models/user/usermodel.h"
+#include "../../../src/models/user/usermodel.h"
 #include "../../home/home.h"
 
 CreatePost::CreatePost(QWidget *parent)

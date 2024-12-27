@@ -1,5 +1,5 @@
 #include "replybox.h"
-#include "../../../models/user/authenticateduser.h"
+#include "../../../src/models/user/authenticateduser.h"
 #include "../../../models/thread/threadmodel.h"
 #include "../../../db/thread/thread_repository.h"
 

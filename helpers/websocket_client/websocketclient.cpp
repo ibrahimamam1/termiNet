@@ -10,8 +10,8 @@ WebSocketClient::WebSocketClient(QObject *parent)
     //connect(&webSocket, &QWebSocket::disconnected, this, &WebSocketClient::onDisconnected);
     connect(&webSocket, &QWebSocket::errorOccurred,
             this, &WebSocketClient::onError);
-    //connect(&webSocket, &QWebSocket::textMessageReceived,
-           // this, &WebSocketClient::onTextMessageReceived);
+    connect(&webSocket, &QWebSocket::textMessageReceived,
+           this, &WebSocketClient::onTextMessageReceived);
 }
 
 WebSocketClient& WebSocketClient::getInstance() {
@@ -49,4 +49,10 @@ void WebSocketClient::sendMessage(const QString& message){
     } else {
         emit errorOccurred("Not connected to server");
     }
+}
+
+void WebSocketClient::onTextMessageReceived(const QString& message)
+{
+    qDebug() << "Message received:" << message;
+    emit messageReceived(message);
 }
