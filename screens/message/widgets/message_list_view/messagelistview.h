@@ -7,7 +7,7 @@
 #include <QHBoxLayout>
 #include <QLineEdit>
 #include "../../../widgets/clickablelabel.h"
-#include "../../../../models/message/messagemodel.h"
+#include "../../../../src/models/message/messagemodel.h"
 
 class MessageListView : public QWidget
 {

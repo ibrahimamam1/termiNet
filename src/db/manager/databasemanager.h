@@ -7,6 +7,7 @@
 #include <QDebug>
 #include <QFile>
 #include <QTextStream>
+#include "../../models/message/messagemodel.h"
 
 class DatabaseManager
 {
@@ -14,10 +15,13 @@ class DatabaseManager
     static std::unique_ptr<DatabaseManager> instance;
 public:
     DatabaseManager();
-    static DatabaseManager* getInstance();
+    static DatabaseManager& getInstance();
+    static bool init();
     bool connect();
     void disconnect();
-    bool executeSqlFile(const QString path);
+    bool executeSqlFile(const QString& path);
+    bool addOutgoingMessage(const MessageModel& msg);
+    bool createSchema();
 
     ~DatabaseManager();
 };

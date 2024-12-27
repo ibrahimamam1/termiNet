@@ -38,7 +38,7 @@ void CreateMessage::onSearchReturnPressed()
 
 void CreateMessage::onUserLinkClicked()
 {
-    emit this->userSelected();
+    emit this->userSelected(receiver);
 }
 
 UserModel CreateMessage::getReceiver() const{ return receiver; }

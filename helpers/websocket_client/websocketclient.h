@@ -10,14 +10,14 @@ class WebSocketClient : public QObject
     Q_OBJECT
     QWebSocket webSocket;
     bool m_isConnected;
-    const QString url = ApiClient::getInstance()->getWebSocketUrl();
     static std::unique_ptr<WebSocketClient> instance;
+    const QString url ="ws://127.0.0.1:8080/ws/";
 
 public:
     explicit WebSocketClient(QObject *parent = nullptr);
     static WebSocketClient& getInstance();
     void connectToServer();
-    //void sendMessage(const QString& message);
+    void sendMessage(const QString& message);
     bool isConnected() const;
     //void disconnect();
 

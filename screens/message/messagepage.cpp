@@ -12,7 +12,7 @@ MessagePage::MessagePage(QWidget *parent)
 
     pages = new QStackedWidget();
 
-    messageListView = new MessageListView(MessageRepository::getMessagesForUser(AuthenticatedUser::getInstance()->getId()), this);
+    messageListView = new MessageListView(MessageRepository::getSentMessagesForUser(AuthenticatedUser::getInstance()->getId()), this);
     connect(messageListView, &MessageListView::newMessageClicked, this, &MessagePage::switchToCreateNewMessage);
 
     createNewMessageWidget = new CreateMessage();
@@ -36,6 +36,7 @@ void MessagePage::switchToCreateNewMessage(){
 
 void MessagePage::switchToChatScreen(){
     qDebug() << "Switching to chat Screen for receiver" << createNewMessageWidget->getReceiver().getName();
+    chatPage->setOtherUser(createNewMessageWidget->getReceiver());
     pages->setCurrentIndex(2);
 
 }

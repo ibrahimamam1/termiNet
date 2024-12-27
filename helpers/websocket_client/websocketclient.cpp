@@ -15,7 +15,8 @@ WebSocketClient::WebSocketClient(QObject *parent)
 }
 
 WebSocketClient& WebSocketClient::getInstance() {
-    static std::unique_ptr<WebSocketClient> instance = std::make_unique<WebSocketClient>();
+    if(instance == nullptr)
+        instance = std::make_unique<WebSocketClient>();
     return *instance;
 }
 
@@ -39,4 +40,13 @@ void WebSocketClient::onError(QAbstractSocket::SocketError error)
     QString errorString = webSocket.errorString();
     qDebug() << "WebSocket error:" << errorString;
     emit errorOccurred(errorString);
+}
+
+void WebSocketClient::sendMessage(const QString& message){
+    if (m_isConnected) {
+        webSocket.sendTextMessage(message);
+        qDebug() << "Sent Message";
+    } else {
+        emit errorOccurred("Not connected to server");
+    }
 }

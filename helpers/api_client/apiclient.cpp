@@ -43,4 +43,3 @@ ApiClient* ApiClient::getInstance() {
 const QString& ApiClient::getLoginUrl() const{ return loginUrl;}
 const QString& ApiClient::getSignupUrl() const{ return signupUrl;}
 const QString& ApiClient::getUserDataUrl() const{ return userDataUrl;}
-const QString& ApiClient::getWebSocketUrl() const { return webSocketUrl;}

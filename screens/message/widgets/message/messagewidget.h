@@ -3,7 +3,7 @@
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QLineEdit>
-#include "../../../../models/message/messagemodel.h"
+#include "../../../../src/models/message/messagemodel.h"
 
 class MessageWidget : public QWidget
 {

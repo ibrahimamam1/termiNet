@@ -13,9 +13,7 @@
 #include <QUrl>
 #include <QDateTime>
 
-Signup::Signup(QWidget *parent)
-    : QDialog(parent)
-    , db(DatabaseManager::getInstance())
+Signup::Signup(QWidget *parent) : QDialog(parent)
 {
     mainContainer = new QHBoxLayout(this);
     signUpContainer = new QVBoxLayout();

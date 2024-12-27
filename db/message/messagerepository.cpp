@@ -4,9 +4,10 @@
 #include "../user/user_repository.h"
 
 MessageRepository::MessageRepository() {}
-std::vector<MessageModel> MessageRepository::getMessagesForUser(int id){
+std::vector<MessageModel> MessageRepository::getMessagesForUser(const QString& field ,const int& id){
     QSqlQuery q;
-    q.prepare("select * from messages where sender_id = :id or receiver_id = :id");
+    QString statement = "select * from messages where" + field + " = :id";
+    q.prepare(statement);
     q.bindValue(":id", id);
 
     std::vector<MessageModel>msgs;
@@ -16,14 +17,18 @@ std::vector<MessageModel> MessageRepository::getMessagesForUser(int id){
     }
 
     while(q.next()){
-        UserModel sender = UserRepository::getUserFromId(q.value(1).toInt());
-        UserModel receiver = UserRepository::getUserFromId(q.value(2).toInt());
-        QString content = q.value(3).toString();
-        QString preview = content;
-        preview.chop(10);
+        QDateTime timestamp = q.value(1).toDateTime();
+        QString content = q.value(2).toString();
+        UserModel receiver = UserRepository::getUserFromId(q.value(3).toInt());
 
-        msgs.push_back(MessageModel(sender, receiver, preview, content));
+        msgs.push_back(MessageModel(receiver, content, timestamp));
     }
 
     return msgs;
+}
+std::vector<MessageModel> MessageRepository::getSentMessagesForUser(const int& id){
+    return getMessagesForUser("sender_id", id);
+}
+std::vector<MessageModel> MessageRepository::getReceivedMessagesForUser(const int& id){
+    return getMessagesForUser("receiver_id", id);
 }

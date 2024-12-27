@@ -17,7 +17,7 @@ set(PROJECT_SOURCES
         mainwindow.ui
         login_signup/login.h login_signup/login.cpp
         login_signup/signup.h login_signup/signup.cpp
-        db/databasemanager.h db/databasemanager.cpp
+
 
 )
 
@@ -70,7 +70,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         screens/widgets/replyBox/replybox.h screens/widgets/replyBox/replybox.cpp
         screens/message/messagepage.h screens/message/messagepage.cpp
         screens/message/widgets/message_list_view/messagelistview.h screens/message/widgets/message_list_view/messagelistview.cpp
-        models/message/messagemodel.h models/message/messagemodel.cpp
+
         screens/message/widgets/message/messagewidget.h screens/message/widgets/message/messagewidget.cpp
         db/message/messagerepository.h db/message/messagerepository.cpp
         screens/message/widgets/create_message/createmessage.h screens/message/widgets/create_message/createmessage.cpp
@@ -84,6 +84,12 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         helpers/apphelper.h helpers/apphelper.cpp
 
         helpers/websocket_client/websocketclient.h helpers/websocket_client/websocketclient.cpp
+
+
+        src/db/manager/databasemanager.h src/db/manager/databasemanager.cpp
+
+        src/models/message/messagemodel.h src/models/message/messagemodel.cpp
+
 
 
 

@@ -1,4 +1,6 @@
 #include "chatpage.h"
+#include "../../../../helpers/websocket_client/websocketclient.h"
+#include "../../../../src/db/manager/databasemanager.h"
 
 ChatPage::ChatPage(QWidget *parent)
     : QWidget{parent}
@@ -27,5 +29,27 @@ ChatPage::ChatPage(QWidget *parent)
 }
 
 void ChatPage::onSendButtonClicked(){
-    qDebug() << "Sending a message baby";
+    qDebug() << "Going to send message";
+    QString text = replyTextZone->toPlainText();
+    QDateTime timestamp = QDateTime::currentDateTime();
+    MessageModel msg(otherUser, text, timestamp);
+
+    WebSocketClient& websocket = WebSocketClient::getInstance();
+    try{
+        websocket.sendMessage(text);
+        DatabaseManager& db = DatabaseManager::getInstance();
+        db.addOutgoingMessage(msg);
+
+    }catch(std::exception e){
+        qDebug() << "Failed to send message : " << e.what();
+
+    }
+
+}
+
+void ChatPage::setOtherUser(const UserModel& u){
+    otherUser = u;
+}
+UserModel ChatPage::getOtherUser() const{
+    return otherUser;
 }

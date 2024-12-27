@@ -20,7 +20,7 @@ public:
     UserModel getReceiver() const;
 
 signals:
-    void userSelected();
+    void userSelected(UserModel& rcv);
 
 private slots:
     void onSearchReturnPressed();

@@ -10,7 +10,7 @@
 void AppHelper::saveUserForPersistentLogin(const int& user_id){
 
     //Get standart config location
-    QString configLocation = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation);
+    QString configLocation = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     if (configLocation.isEmpty()) {
         qWarning() << "Could not determine writable config location.";
         return;
@@ -85,6 +85,5 @@ const int AppHelper::checkPersitentLogin(){
     }
 
     file.close();
-    qDebug() << "User ID found in persistent login file:" << userId;
     return userId;
 }
