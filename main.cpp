@@ -1,7 +1,6 @@
 #include "mainwindow.h"
 #include "login_signup/signup.h"
 #include "login_signup/login.h"
-#include "db/databasemanager.h"
 #include "screens/home/home.h"
 #include "models/user/usermodel.h"
 #include "db/user/user_repository.h"
@@ -10,6 +9,7 @@
 #include <QMessageBox>
 #include "helpers/apphelper.h"
 #include "helpers/websocket_client/websocketclient.h"
+#include "src/db/manager/databasemanager.h"
 
 Home* Home::instance = nullptr;
 
@@ -39,6 +39,10 @@ int main(int argc, char *argv[])
 
     if(!initializationComplete)
         loop.exec();
+
+    //initialise database
+    if(!DatabaseManager::init())
+        qDebug() << "Failed to initialise database";
 
     //open websocket with server
     WebSocketClient& webSocket = WebSocketClient::getInstance();

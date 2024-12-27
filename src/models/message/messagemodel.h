@@ -1,21 +1,21 @@
 #ifndef MESSAGEMODEL_H
 #define MESSAGEMODEL_H
 
-#include "../user/usermodel.h"
+#include "../../../models/user/usermodel.h"
+#include <QDateTime>
 
 class MessageModel
 {
-    UserModel sender;
     UserModel receiver;
-    QString preview;
     QString content;
+    QDateTime timestamp;
 public:
     MessageModel();
-    MessageModel(const UserModel& sen, UserModel& rcv, QString& prev, QString& text);
-    UserModel getSender() const;
+    MessageModel(UserModel& rcv, QString& text, QDateTime& time_s);
     UserModel getReceiver() const;
-    QString getMessagePreview() const;
     QString getMessageContent() const;
+    QDateTime getTimestamp() const;
+
 };
 
 #endif // MESSAGEMODEL_H

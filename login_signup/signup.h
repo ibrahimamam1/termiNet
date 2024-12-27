@@ -12,13 +12,11 @@
 #include <QFont>
 #include "widgets/divider.h"
 #include "widgets/socials.h"
-#include "../db/databasemanager.h"
 #include "../screens/home/home.h"
 
 class Signup : public QDialog
 {
     Q_OBJECT
-    DatabaseManager *db;
     QHBoxLayout *mainContainer;
     QVBoxLayout *signUpContainer;
     QVBoxLayout *signUpFormContainer;

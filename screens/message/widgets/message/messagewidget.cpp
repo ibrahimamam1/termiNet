@@ -5,11 +5,11 @@ MessageWidget::MessageWidget(const MessageModel& msg, QWidget *parent) : QWidget
 {
     mainLayout = new QVBoxLayout(this);
 
-    QString otherUserName = AuthenticatedUser::getInstance()->getId() == msg.getSender().getId() ? msg.getReceiver().getName() : msg.getSender().getName();
+    QString otherUserName = "yolo";
     userName = new QLabel(otherUserName);
     preview = new QLineEdit();
     preview->setReadOnly(true);
-    preview->setPlaceholderText(msg.getMessagePreview());
+    preview->setPlaceholderText(msg.getMessageContent().chopped(10));
 
     mainLayout->addWidget(userName);
     mainLayout->addWidget(preview);

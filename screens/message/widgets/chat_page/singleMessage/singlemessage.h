@@ -4,7 +4,7 @@
 #include <QWidget>
 #include <QHBoxLayout>
 #include <QLineEdit>
-#include "../../../../models/message/messagemodel.h"
+#include "../../../../src/models/message/messagemodel.h"
 
 class SingleMessage : public QWidget
 {

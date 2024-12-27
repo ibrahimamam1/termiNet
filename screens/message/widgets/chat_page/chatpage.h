@@ -7,6 +7,7 @@
 #include <QTextEdit>
 #include <QPushButton>
 #include "singleMessage/singlemessage.h"
+#include "../../../../models/user/usermodel.h"
 
 
 class ChatPage : public QWidget
@@ -22,11 +23,16 @@ class ChatPage : public QWidget
 
 public:
     explicit ChatPage(QWidget *parent = nullptr);
+    void setOtherUser(const UserModel& u);
+    UserModel getOtherUser() const;
 
 signals:
 
 private slots:
     void onSendButtonClicked();
+
+private:
+    UserModel otherUser;
 };
 
 #endif // CHATPAGE_H
