@@ -12,9 +12,9 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Sql Network WebSo
 
 set(PROJECT_SOURCES
         main.cpp
-        mainwindow.cpp
-        mainwindow.h
-        mainwindow.ui
+
+
+
         login_signup/login.h login_signup/login.cpp
         login_signup/signup.h login_signup/signup.cpp
 
@@ -61,7 +61,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         screens/widgets/threadView/threadview.h screens/widgets/threadView/threadview.cpp
         models/user/usermodel.cpp
         models/user/usermodel.h
-        db/user/user_repository.h db/user/user_repository.cpp
+
         models/user/authenticateduser.h models/user/authenticateduser.cpp
         models/thread/threadmodel.h models/thread/threadmodel.cpp
         db/thread/thread_repository.h db/thread/thread_repository.cpp
@@ -89,6 +89,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         src/db/manager/databasemanager.h src/db/manager/databasemanager.cpp
 
         src/models/message/messagemodel.h src/models/message/messagemodel.cpp
+        src/network/user/user_repository.h src/network/user/user_repository.cpp
 
 
 

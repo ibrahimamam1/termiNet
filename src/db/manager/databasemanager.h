@@ -23,6 +23,9 @@ public:
     bool addOutgoingMessage(const MessageModel& msg);
     bool createSchema();
 
+    std::vector<MessageModel>getSentMessagesTo(int id);
+    std::vector<MessageModel>getReceivedMessagesFrom(int id) ;
+
     ~DatabaseManager();
 };
 

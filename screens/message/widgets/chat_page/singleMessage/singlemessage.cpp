@@ -3,7 +3,7 @@
 SingleMessage::SingleMessage(const MessageModel& msg,int direction, QWidget *parent)
     : m_msg(msg), m_direction(direction), QWidget{parent}
 {
-    mainContainer = new QHBoxLayout();
+    mainContainer = new QHBoxLayout(this);
     messageText = new QLineEdit(m_msg.getMessageContent());
     messageText->setReadOnly(true);
 
