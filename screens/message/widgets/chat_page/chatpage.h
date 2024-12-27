@@ -25,6 +25,8 @@ public:
     explicit ChatPage(QWidget *parent = nullptr);
     void setOtherUser(const UserModel& u);
     UserModel getOtherUser() const;
+    void setMessages(std::vector<MessageModel>msgs);
+    void updateUi();
 
 signals:
 
@@ -33,6 +35,7 @@ private slots:
 
 private:
     UserModel otherUser;
+    std::vector<MessageModel> messages;
 };
 
 #endif // CHATPAGE_H

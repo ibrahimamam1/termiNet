@@ -4,7 +4,7 @@
 #include<QtSql/QSqlDatabase>
 #include<QtSql/QSqlQuery>
 #include<QtSql/QSqlError>
-#include "../../models/user/usermodel.h"
+#include "../../../models/user/usermodel.h"
 
 class UserRepository
 {

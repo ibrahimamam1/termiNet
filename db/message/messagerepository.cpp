@@ -1,7 +1,7 @@
 #include "messagerepository.h"
 #include <QSqlQuery>
 #include <QSqlError>
-#include "../user/user_repository.h"
+#include "../../src/network/user/user_repository.h"
 
 MessageRepository::MessageRepository() {}
 std::vector<MessageModel> MessageRepository::getMessagesForUser(const QString& field ,const int& id){
