@@ -3,6 +3,8 @@
 #include "../../../../src/db/manager/databasemanager.h"
 #include "../../../../src/models/user/authenticateduser.h"
 #include <QScrollBar>
+#include <QJsonObject>
+#include <QJsonDocument>
 #include <QMessageBox> // For displaying error messages
 
 ChatPage::ChatPage(QWidget *parent)
@@ -46,7 +48,16 @@ void ChatPage::onSendButtonClicked(){
     DatabaseManager& db = DatabaseManager::getInstance();
 
     try{
-        websocket.sendMessage(text);
+        QJsonObject messageJson;
+        messageJson["type"] = 2;
+        messageJson["source"] = QString::number(AuthenticatedUser::getInstance()->getId());
+        messageJson["destination"] = QString::number(otherUser.getId());
+        messageJson["content"] = text;
+
+        QJsonDocument jsonDoc(messageJson);
+        QString payload = jsonDoc.toJson(QJsonDocument::Compact);
+
+        websocket.sendMessage(payload);
         db.addOutgoingMessage(msg);
         SingleMessage *messageWidget = new SingleMessage(msg, 2, this);
         chatContainer->addWidget(messageWidget);
