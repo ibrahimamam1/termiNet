@@ -1,4 +1,7 @@
 #include "websocketclient.h"
+#include "../../src/models/user/authenticateduser.h"
+#include <QJsonObject>
+#include <QJsonDocument>
 
 std::unique_ptr<WebSocketClient> WebSocketClient::instance = nullptr;
 
@@ -29,10 +32,24 @@ void WebSocketClient::connectToServer()
 bool WebSocketClient::isConnected() const{ return m_isConnected;}
 
 
-//private slots
-void WebSocketClient::onConnected(){
-    qDebug() << "Yaaaay we connected to out web socket";
+void WebSocketClient::onConnected() {
+    qDebug() << "Yaaaay we connected to our web socket";
     m_isConnected = true;
+
+    //Send an init message to the sever
+    QJsonObject json;
+    json["type"] = 1;
+    json["key"] = QString::number(AuthenticatedUser::getInstance()->getId());
+
+    QJsonDocument doc(json);
+
+    // Convert the JSON document to a string
+    QString text = doc.toJson(QJsonDocument::Compact);
+
+    // Send the JSON message through the WebSocket
+    webSocket.sendTextMessage(text);
+
+    // Emit the connected signal
     emit connected();
 }
 void WebSocketClient::onError(QAbstractSocket::SocketError error)
