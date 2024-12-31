@@ -6,13 +6,13 @@
 
 class MessageModel
 {
-    UserModel receiver;
+    UserModel otherUser;
     QString content;
     QDateTime timestamp;
 public:
     MessageModel();
-    MessageModel(UserModel& rcv, QString& text, QDateTime& time_s);
-    UserModel getReceiver() const;
+    MessageModel(UserModel& _otherUser, QString& text, QDateTime& time_s);
+    UserModel getOtherUser() const;
     QString getMessageContent() const;
     QDateTime getTimestamp() const;
 

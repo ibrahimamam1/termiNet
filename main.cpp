@@ -18,8 +18,8 @@ int main(int argc, char *argv[])
     QEventLoop loop;
     bool initializationComplete = false;
 
-    //int userId = AppHelper::checkPersitentLogin();
-    int userId = -1;
+    int userId = AppHelper::checkPersitentLogin();
+
     if(userId == -1){
         // Create and show login window
         auto loginWindow = new Login();

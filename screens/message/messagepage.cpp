@@ -17,8 +17,10 @@ MessagePage::MessagePage(QWidget *parent)
 
     pages = new QStackedWidget();
 
-    messageListView = new MessageListView(MessageRepository::getSentMessagesForUser(AuthenticatedUser::getInstance()->getId()), this);
+    messageListView = new MessageListView(this);
+    qDebug() << "Init Message List View";
     connect(messageListView, &MessageListView::newMessageClicked, this, &MessagePage::switchToCreateNewMessage);
+    connect(messageListView, &MessageListView::conversationClicked, this, &MessagePage::switchToChatScreen);
 
     createNewMessageWidget = new CreateMessage();
     connect(createNewMessageWidget, &CreateMessage::userSelected, this, &MessagePage::switchToChatScreen);
@@ -39,13 +41,13 @@ void MessagePage::switchToCreateNewMessage(){
     pages->setCurrentIndex(1);
 }
 
-void MessagePage::switchToChatScreen(){
-    qDebug() << "Switching to chat Screen for receiver" << createNewMessageWidget->getReceiver().getName();
+void MessagePage::switchToChatScreen(const UserModel& otherUser){
+    qDebug() << "Switching to chat Screen for receiver" << otherUser.getId();
 
     //get all messages exchange with other user
     DatabaseManager& db = DatabaseManager::getInstance();
-    std::vector<MessageModel>sentMessages = db.getSentMessagesTo(createNewMessageWidget->getReceiver().getId());
-    std::vector<MessageModel>receivedMessages = db.getReceivedMessagesFrom(createNewMessageWidget->getReceiver().getId());
+    std::vector<MessageModel>sentMessages = db.getSentMessagesTo(otherUser.getId());
+    std::vector<MessageModel>receivedMessages = db.getReceivedMessagesFrom(otherUser.getId());
     //todo: merge two vectors
     std::vector<MessageModel> allMessages;
     allMessages.insert(allMessages.end(), sentMessages.begin(), sentMessages.end());
@@ -56,7 +58,7 @@ void MessagePage::switchToChatScreen(){
         return a.getTimestamp() < b.getTimestamp();
     });
 
-    chatPage->setOtherUser(createNewMessageWidget->getReceiver());
+    chatPage->setOtherUser(otherUser);
     chatPage->setMessages(allMessages);
 
     pages->setCurrentIndex(2);
@@ -95,3 +97,4 @@ void MessagePage::onMessageReceived(const QString& msg) {
         qDebug() << "JSON message is missing required fields";
     }
 }
+

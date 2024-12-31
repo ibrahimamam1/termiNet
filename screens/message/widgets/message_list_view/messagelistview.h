@@ -16,20 +16,22 @@ class MessageListView : public QWidget
     QWidget *messageListContainer;
     QVBoxLayout *mainLayout; // Main layout for search bar and new message
     QVBoxLayout *messageListLayout;
-    std::vector<MessageModel> messages;
     QLineEdit *searchBar;
     ClickableLabel *newMessageButton;
 
 public:
-    explicit MessageListView(std::vector<MessageModel> msgs, QWidget *parent = nullptr);
+    explicit MessageListView(QWidget *parent = nullptr);
+    void setConverstaion(std::vector<MessageModel> messages);
     void updateMessages(const std::vector<MessageModel>& newMessages);
 
 private slots:
     void onNewMessageButtonClicked();
     void onSearchReturnPressed();
+    void onConversationClicked(const UserModel& otherUser);
 
 signals:
     void newMessageClicked();
+    void conversationClicked(const UserModel& otherUser);
 };
 
 #endif // MESSAGELISTVIEW_H

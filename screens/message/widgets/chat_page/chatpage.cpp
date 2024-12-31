@@ -92,7 +92,7 @@ void ChatPage::setMessages(std::vector<MessageModel> msgs){
     messages = msgs;
 
     for(const auto& message : messages){
-        int direction = message.getReceiver().getId() == AuthenticatedUser::getInstance()->getId() ? 1 : 2;
+        int direction = message.getOtherUser().getId() == AuthenticatedUser::getInstance()->getId() ? 1 : 2;
         SingleMessage *messageWidget = new SingleMessage(message, direction, this);
         chatContainer->addWidget(messageWidget);
     }

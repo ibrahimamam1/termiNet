@@ -16,21 +16,22 @@ class MessagePage : public QWidget
     Q_OBJECT
     QHBoxLayout *mainContainer;
     QStackedWidget *pages;
-    MessageListView *messageListView;
+
     CreateMessage *createNewMessageWidget;
     ChatPage *chatPage;
     //NewMessageWidget *newMessageWidget;
 
-
 public:
+    MessageListView *messageListView;
     explicit MessagePage(QWidget *parent = nullptr);
     void switchToCreateNewMessage();
-    void switchToChatScreen();
+
 
 signals:
 
 public slots:
     void onMessageReceived(const QString& msg);
+    void switchToChatScreen(const UserModel& otherUser);
 
 private:
 };
