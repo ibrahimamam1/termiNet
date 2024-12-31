@@ -1,5 +1,6 @@
 #include "home.h"
 #include "../../helpers/websocket_client/websocketclient.h"
+#include "../../src/db/manager/databasemanager.h"
 #include<QTextBrowser>
 
 Home::Home(QWidget *parent) : QMainWindow(parent), user(AuthenticatedUser::getInstance())
@@ -104,6 +105,9 @@ void Home::onCommentBtnClicked(int parentThreadID){
 
 
 void Home::onMessageIconClicked(){
+    DatabaseManager& db = DatabaseManager::getInstance();
+    std::vector convos = db.getAllConversations();
+    msgPage->messageListView->setConverstaion(convos);
     msgPage->show();
 }
 

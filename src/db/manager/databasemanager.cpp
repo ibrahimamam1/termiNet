@@ -104,7 +104,7 @@ bool DatabaseManager::addOutgoingMessage(const MessageModel& msg){
     q.prepare("INSERT INTO sent_messages(timestamp, message_text, recipient_id) values (:time_s, :content, :id);");
     q.bindValue(":time_s", msg.getTimestamp());
     q.bindValue(":content", msg.getMessageContent());
-    q.bindValue(":id", msg.getReceiver().getId());
+    q.bindValue(":id", msg.getOtherUser().getId());
 
     if(!q.exec()){
         qDebug() << "Failed to execute Query\nError : "<< q.lastError().text();
@@ -123,7 +123,7 @@ bool DatabaseManager::addIncomingMessage(const MessageModel& msg){
     q.prepare("INSERT INTO received_messages(timestamp, message_text, sender_id) values (:time_s, :content, :id);");
     q.bindValue(":time_s", msg.getTimestamp());
     q.bindValue(":content", msg.getMessageContent());
-    q.bindValue(":id", msg.getReceiver().getId());
+    q.bindValue(":id", msg.getOtherUser().getId());
 
     if(!q.exec()){
         qDebug() << "Failed to execute Query\nError : "<< q.lastError().text();
@@ -181,6 +181,78 @@ std::vector<MessageModel> DatabaseManager::getReceivedMessagesFrom(int id){
         QString content = q.value(2).toString();
         QDateTime time = q.value(3).toDateTime();
         msgs.push_back(MessageModel(user, content, time));
+    }
+    return msgs;
+}
+
+std::vector<MessageModel>DatabaseManager::getAllConversations(){
+    std::vector<MessageModel>msgs;
+
+    if(!db.open()){
+        qDebug() << "Failed to connect to database\n";
+        return msgs;
+    }
+
+    QSqlQuery q(db);
+    QString getConvoQuery = R"(
+        WITH conversation_messages AS (
+            -- Messages sent by user
+            SELECT
+                message_id,
+                timestamp,
+                message_text,
+                recipient_id as other_user_id,
+                'sent' as direction
+            FROM sent_messages
+
+            UNION ALL
+
+            -- Messages received by user
+            SELECT
+                message_id,
+                timestamp,
+                message_text,
+                sender_id as other_user_id,
+                'received' as direction
+            FROM received_messages
+        ),
+        latest_messages AS (
+            SELECT
+                other_user_id,
+                timestamp,
+                message_text,
+                direction,
+                ROW_NUMBER() OVER (
+                    PARTITION BY other_user_id
+                    ORDER BY timestamp DESC
+                ) as rn
+            FROM conversation_messages
+        )
+        SELECT
+            other_user_id,
+            timestamp,
+            message_text,
+            direction
+        FROM latest_messages
+        WHERE rn = 1
+        ORDER BY timestamp DESC;
+
+    )";
+
+    if(!q.exec(getConvoQuery)){
+        qDebug() << "Failed to execute getConvoQuery : " << q.lastError().text();
+        return msgs;
+    }
+
+    while(q.next()){
+        int userId = q.value(0).toInt();
+        QDateTime timestamp = q.value(1).toDateTime();
+        QString messageText = q.value(2).toString();
+        QString direction = q.value(3).toString();
+
+        UserModel otherUser = UserRepository::getUserFromId(userId);
+        msgs.push_back(MessageModel(otherUser, messageText, timestamp));
+
     }
     return msgs;
 }

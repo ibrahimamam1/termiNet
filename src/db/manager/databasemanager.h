@@ -26,6 +26,7 @@ public:
 
     std::vector<MessageModel>getSentMessagesTo(int id);
     std::vector<MessageModel>getReceivedMessagesFrom(int id) ;
+    std::vector<MessageModel>getAllConversations();
 
     ~DatabaseManager();
 };

@@ -4,8 +4,8 @@
 #include <QPixmap>
 
 
-MessageListView::MessageListView(std::vector<MessageModel> msgs, QWidget *parent)
-    : messages(msgs), QWidget{parent}
+MessageListView::MessageListView(QWidget *parent)
+    : QWidget{parent}
 {
     mainLayout = new QVBoxLayout(this);
 
@@ -36,20 +36,46 @@ MessageListView::MessageListView(std::vector<MessageModel> msgs, QWidget *parent
 
     messageListContainer = new QWidget();
     messageListLayout = new QVBoxLayout(messageListContainer);
-    messageListLayout->setSpacing(5);
-    messageListLayout->setContentsMargins(10, 10, 10, 10);
+    // messageListLayout->setSpacing(5);
+    // messageListLayout->setContentsMargins(10, 10, 10, 10);
 
-    for (const auto& message : messages) {
-        MessageWidget *msgWidget = new MessageWidget(message, messageListContainer);
-        messageListLayout->addWidget(msgWidget);
-    }
-    messageListLayout->addStretch();
+
 
     scrollableAreaForMessages->setWidget(messageListContainer);
     mainLayout->addWidget(scrollableAreaForMessages);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 }
 
+void MessageListView::setConverstaion(std::vector<MessageModel> messages) {
+    // Clear existing messages first
+    QLayoutItem* item;
+    while ((item = messageListLayout->takeAt(0)) != nullptr) {
+        if (QWidget* widget = item->widget()) {
+            widget->deleteLater();
+        }
+        delete item;
+    }
+
+    qDebug() << "Setting convos : " << messages.size() << "convos found\n";
+
+    // Add new messages
+    for (const auto& message : messages) {
+        MessageWidget* msgWidget = new MessageWidget(message, messageListContainer);
+        connect(msgWidget, &MessageWidget::conversationClicked,
+                this, &MessageListView::onConversationClicked);
+
+        messageListLayout->addWidget(msgWidget);
+    }
+
+    // Add stretch at the end
+    messageListLayout->addStretch();
+
+    qDebug() << "finished Setting convos : " << messages.size() << "convos set\n";
+
+    // Force layout update
+    messageListContainer->updateGeometry();
+    scrollableAreaForMessages->updateGeometry();
+}
 void MessageListView::onNewMessageButtonClicked()
 {
     emit newMessageClicked();
@@ -57,3 +83,8 @@ void MessageListView::onNewMessageButtonClicked()
 void MessageListView::onSearchReturnPressed(){
     qDebug() << "search pressed";
 }
+
+void MessageListView::onConversationClicked(const UserModel& otherUser) {
+    emit conversationClicked(otherUser);
+}
+
