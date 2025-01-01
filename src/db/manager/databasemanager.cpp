@@ -27,7 +27,7 @@ bool DatabaseManager::init(){
 }
 
 bool DatabaseManager::connect() {
-    QString dbLocation = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/terminet/";
+    QString dbLocation = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     if (dbLocation.isEmpty()) {
         qWarning() << "Could not determine writable application data location.";
         return false;

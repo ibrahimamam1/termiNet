@@ -6,6 +6,7 @@
 #include <QStandardPaths>
 #include <QCryptographicHash>
 #include <QDebug>
+#include <QApplication>
 
 void AppHelper::saveUserForPersistentLogin(const int& user_id){
 
@@ -17,7 +18,7 @@ void AppHelper::saveUserForPersistentLogin(const int& user_id){
     }
 
     // Create the application-specific directory if it doesn't exist
-    QDir appConfigDir(configLocation + "/terminet");
+    QDir appConfigDir(configLocation);
     if (!appConfigDir.exists()) {
         if (!appConfigDir.mkpath(".")) { // "." creates the current directory
             qWarning() << "Failed to create application config directory.";
@@ -86,4 +87,30 @@ const int AppHelper::checkPersitentLogin(){
 
     file.close();
     return userId;
+}
+
+const QString AppHelper::getDefaultProfilePicturePath() {
+
+    QString appDataPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    QString profilePicPath = appDataPath + "/default_profile.png";
+
+    QFileInfo fileInfo(profilePicPath);
+    if (!fileInfo.exists()) {
+        // Create directory if it doesn't exist
+        QDir dir(appDataPath);
+        if (!dir.exists()) {
+            dir.mkpath(".");
+        }
+
+        // Copy default profile picture from resources
+        QString path = QApplication::applicationDirPath() + "/assets/default_profile.png";
+        qDebug() << "File does not exist, will copy file from " << path;
+        QFile::copy(path, profilePicPath);
+
+        // Make sure the copied file is writable
+        QFile file(profilePicPath);
+        file.setPermissions(file.permissions() | QFileDevice::WriteOwner);
+    }
+
+    return profilePicPath;
 }

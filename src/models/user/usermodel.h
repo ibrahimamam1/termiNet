@@ -1,6 +1,7 @@
 #ifndef USERMODEL_H
 #define USERMODEL_H
 #include <QString>
+#include <QIcon>
 
 class UserModel
 {
@@ -12,11 +13,12 @@ private:
     QString dob;
     QString bio;
     QString created_at;
+    QIcon profilePic;
 
 
 public:
     UserModel();
-    UserModel(int u_id, QString u_name, QString u_email, QString u_sex, QString u_dob, QString u_bio, QString u_created_at);
+    UserModel(int u_id, QString u_name, QString u_email, QString u_sex, QString u_dob, QString u_bio, QString u_created_at, const QIcon& u_profilePic);
     UserModel(const UserModel& user);
 
     // Getters
@@ -27,6 +29,7 @@ public:
     QString getDob() const;
     QString getBio() const;
     QString getCreatedAt() const;
+    QIcon getProfilePic() const;
 
     // Setters
     void setId(unsigned int id);
@@ -36,6 +39,7 @@ public:
     void setDob(const QString &dob);
     void setBio(const QString &bio);
     void setCreatedAt(const QString &created_at);
+    void setProfilePic(const QIcon& pic);
 };
 
 #endif // USERMODEL_H

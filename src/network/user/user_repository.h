@@ -16,6 +16,14 @@ public:
     static UserModel getUser(const QString& uri);
     static UserModel getUserFromEmail(const QString& email);
     static UserModel getUserFromName(const QString& name);
+
+    //update functions
+    static void updateUser(const QString& field, const QString& key);
+    static void updateUserName(const QString &newName);
+    static void updateUserEmail(const QString &newEmail);
+    static void updateUserDob(const QString &newDob);
+    static void updateUserBio(const QString &newBio);
+    static void updateUserProfilePic(const QIcon &newProfilePic);
 };
 
 #endif // USER_REPOSITORY_H

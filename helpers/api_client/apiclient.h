@@ -16,6 +16,7 @@ public:
     const QString& getLoginUrl() const;
     const QString& getSignupUrl() const;
     const QString& getUserDataUrl() const;
+    const QString& getUpdateUserDataUrl() const;
     static ApiClient* getInstance();
 
 private:
@@ -26,6 +27,7 @@ private:
     const QString loginUrl = baseUrl + "login/";
     const QString signupUrl = baseUrl + "signup/";
     const QString userDataUrl = baseUrl + "users/";
+    const QString updateUserDataUrl = baseUrl + "update/users/";
 
 signals:
 };
