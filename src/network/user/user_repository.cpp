@@ -6,6 +6,7 @@
 #include <QPointer>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QBuffer>
 
 UserRepository::UserRepository() {}
 
@@ -38,15 +39,9 @@ UserModel UserRepository::getUser(const QString& userUri){
                         QByteArray imageData = QByteArray::fromBase64(base64Data.toUtf8());
                         QPixmap pixmap;
                         if (pixmap.loadFromData(imageData)) {
+                            qDebug("Set User Profile Pic \n");
                             user.setProfilePic(QIcon(pixmap));
                         }
-                    }
-                    else{
-                        qDebug() << "Got naught from sever";
-                        QString defaultImagePath = AppHelper::getDefaultProfilePicturePath();
-                        qDebug() << "Gotta use default iamge at : " << defaultImagePath;
-                        QPixmap pixmap(defaultImagePath);
-                        user.setProfilePic(QIcon(pixmap));
                     }
 
                 }
@@ -81,12 +76,14 @@ UserModel UserRepository::getUserFromId(int id){
 
 bool UserRepository::updateUser(const QString& field, const QString& new_data){
     QJsonObject jsonObject;
-    jsonObject["id"] = AuthenticatedUser::getInstance()->getId();
+    QString key = QString::number(AuthenticatedUser::getInstance()->getId());
+    jsonObject["id"] = key;
     jsonObject["field"] = field;
     jsonObject["new_data"] = new_data;
 
-    QString url = ApiClient::getUpdateUserDataUrl();
-    QNetworkReply *reply =  ApiClient::getInstance()->makePostRequest(url, jsonObject);
+    ApiClient* api_client = ApiClient::getInstance();
+    QString url = api_client->getUpdateUserDataUrl();
+    QNetworkReply *reply =  api_client->makePostRequest(url, jsonObject, key);
 
     // Wait for the reply to finish
     QEventLoop loop;
@@ -125,5 +122,16 @@ bool UserRepository::updateUserBio(const QString &newBio) {
 }
 
 bool UserRepository::updateUserProfilePic(const QIcon &newProfilePic) {
-    return updateUser("profile_image", newProfilePic);
+    QPixmap pixmap = newProfilePic.pixmap(newProfilePic.availableSizes().first());
+    QImage image = pixmap.toImage();
+
+    // Convert QImage to QByteArray in PNG format
+    QByteArray byteArray;
+    QBuffer buffer(&byteArray);
+    buffer.open(QIODevice::WriteOnly);
+    image.save(&buffer, "PNG");
+
+    // Convert QByteArray to a base64 encoded string
+    QString base64Image = QString::fromLatin1(byteArray.toBase64().data());
+    return updateUser("profile_image", base64Image);
 }

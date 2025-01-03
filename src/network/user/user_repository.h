@@ -18,12 +18,12 @@ public:
     static UserModel getUserFromName(const QString& name);
 
     //update functions
-    static void updateUser(const QString& field, const QString& key);
-    static void updateUserName(const QString &newName);
-    static void updateUserEmail(const QString &newEmail);
-    static void updateUserDob(const QString &newDob);
-    static void updateUserBio(const QString &newBio);
-    static void updateUserProfilePic(const QIcon &newProfilePic);
+    static bool updateUser(const QString& field, const QString& key);
+    static bool updateUserName(const QString &newName);
+    static bool updateUserEmail(const QString &newEmail);
+    static bool updateUserDob(const QString &newDob);
+    static bool updateUserBio(const QString &newBio);
+    static bool updateUserProfilePic(const QIcon &newProfilePic);
 };
 
 #endif // USER_REPOSITORY_H

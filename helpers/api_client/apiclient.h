@@ -11,7 +11,7 @@ class ApiClient : public QObject
     Q_OBJECT
 public:
     QNetworkReply* makeGetRequest(const QString& url);
-    QNetworkReply* makePostRequest(const QString& url, const QJsonObject& data);
+    QNetworkReply* makePostRequest(const QString& url, const QJsonObject& data, const QString& key);
 
     const QString& getLoginUrl() const;
     const QString& getSignupUrl() const;
@@ -30,6 +30,8 @@ private:
     const QString updateUserDataUrl = baseUrl + "update/users/";
 
 signals:
+private slots:
+    void handleNetworkError(QNetworkReply::NetworkError);
 };
 
 #endif // APICLIENT_H

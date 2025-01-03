@@ -236,7 +236,7 @@ void Signup::on_create_account_btn_clicked()
     // Create and make Network Request
     ApiClient* apiClient = ApiClient::getInstance();
     QString url = ApiClient::getInstance()->getUserDataUrl();
-    QNetworkReply *reply = apiClient->makePostRequest(url, jsonData);
+    QNetworkReply *reply = apiClient->makePostRequest(url, jsonData, "");
 
     // Connect to the finished signal to handle the response
     connect(reply, &QNetworkReply::finished, this, [=]() {
