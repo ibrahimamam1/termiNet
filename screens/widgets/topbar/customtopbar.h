@@ -29,6 +29,7 @@ private slots:
 
 signals:
     void messageIconClicked();
+    void profileIconClicked();
 };
 
 #endif // CUSTOMTOPBAR_H

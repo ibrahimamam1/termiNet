@@ -16,6 +16,7 @@ Home::Home(QWidget *parent) : QMainWindow(parent), user(AuthenticatedUser::getIn
 
     topBar = new CustomTopBar();
     connect(topBar, &CustomTopBar::messageIconClicked, this, &Home::onMessageIconClicked);
+    connect(topBar, &CustomTopBar::profileIconClicked, this, &Home::onProfileIconClicked);
     leftNav = new LeftNavigationWidget();
 
     // Center area layout
@@ -26,10 +27,16 @@ Home::Home(QWidget *parent) : QMainWindow(parent), user(AuthenticatedUser::getIn
     centerArea->addWidget(threadView);
     centerArea->addWidget(communityPage);
 
+    //setup profile view
+    profileview = new ProfileView(this);
+    profileview->hide();
+    profileVisible = false;
+
     // Body layout
     bodyContainer = new QHBoxLayout();
     bodyContainer->addWidget(leftNav, 2);
-    bodyContainer->addWidget(centerArea, 8);
+    bodyContainer->addWidget(centerArea, 6);
+    bodyContainer->addWidget(profileview, 1);
 
     // Combine header and body into main container
     mainContainer->addWidget(topBar, 1);
@@ -39,6 +46,9 @@ Home::Home(QWidget *parent) : QMainWindow(parent), user(AuthenticatedUser::getIn
     //setup message page
     msgPage = new MessagePage();
     connect(&WebSocketClient::getInstance(), &WebSocketClient::messageReceived,msgPage, &MessagePage::onMessageReceived);
+
+
+
 
     // Set window properties
     setWindowTitle("Home");
@@ -109,6 +119,17 @@ void Home::onMessageIconClicked(){
     std::vector convos = db.getAllConversations();
     msgPage->messageListView->setConverstaion(convos);
     msgPage->show();
+}
+
+void Home::onProfileIconClicked(){
+    if(profileVisible){
+        profileVisible = false;
+        profileview->hide();
+    }
+    else{
+        profileVisible = true;
+        profileview->show();
+    }
 }
 
 

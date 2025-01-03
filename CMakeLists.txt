@@ -92,6 +92,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         src/network/user/user_repository.h src/network/user/user_repository.cpp
         src/models/user/usermodel.h src/models/user/usermodel.cpp
         src/models/user/authenticateduser.h src/models/user/authenticateduser.cpp
+        screens/profile_view/profileview.h screens/profile_view/profileview.cpp
+
 
 
 

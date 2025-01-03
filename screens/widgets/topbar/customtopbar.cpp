@@ -27,7 +27,7 @@ CustomTopBar::CustomTopBar(QWidget *parent)
     profileIcon->setPixmap(QPixmap("../../assets/profileIcon.png"));
     profileIcon->setCursor(Qt::PointingHandCursor);
     profileIcon->setTextInteractionFlags(Qt::TextBrowserInteraction);
-    connect(profileIcon, &QLabel::linkActivated, this, &CustomTopBar::onProfileIconClicked);
+    connect(profileIcon, &ClickableLabel::clicked, this, &CustomTopBar::onProfileIconClicked);
 
     headerContainer->addWidget(logo, 1);
     headerContainer->addWidget(searchBar, 6);
@@ -50,4 +50,5 @@ void CustomTopBar::onMessageIconClicked(){
 }
 void CustomTopBar::onProfileIconClicked(){
     qDebug() << "Profiles Btn Clicked";
+    emit profileIconClicked();
 }

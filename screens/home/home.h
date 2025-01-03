@@ -19,6 +19,7 @@
 #include "../widgets/threadView/threadview.h"
 #include "../../src/models/user/authenticateduser.h"
 #include "../message/messagepage.h"
+#include "../profile_view/profileview.h"
 
 class Home : public QMainWindow
 {
@@ -40,13 +41,16 @@ public:
     LeftNavigationWidget *leftNav;
     QStackedWidget *centerArea;
     ThreadView *threadView;
+    ProfileView *profileview;
     CommunityPage *communityPage;
     MessagePage *msgPage;
+    bool profileVisible;
 
 private slots:
 
     void onCommentBtnClicked(int parentThreadId);
     void onMessageIconClicked();
+    void onProfileIconClicked();
 
 private:
     UserModel *user;

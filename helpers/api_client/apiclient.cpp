@@ -3,6 +3,7 @@
 #include <QJsonObject>
 #include <QNetworkRequest>
 #include <QNetworkReply>
+#include "../../src/models/user/authenticateduser.h"
 
 ApiClient* ApiClient::instance = nullptr;
 
@@ -20,19 +21,35 @@ QNetworkReply* ApiClient::makeGetRequest(const QString &url){
     return reply;
 
 }
-QNetworkReply* ApiClient::makePostRequest(const QString &url, const QJsonObject& data){
+QNetworkReply* ApiClient::makePostRequest(const QString &url, const QJsonObject& data, const QString& key) {
+
     QNetworkRequest request(url);
+    qDebug() << "Converting JSON...";
     QJsonDocument doc(data);
     QByteArray jsonData = doc.toJson();
-    qDebug() << "Sending JSON:" << QString(jsonData);
 
+    // Encrypt or hash the ID before sending
+    QByteArray idHeaderValue = key.toUtf8();
+
+    qDebug() << "Setting Headers...";
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     request.setHeader(QNetworkRequest::ContentLengthHeader, QByteArray::number(jsonData.size()));
     request.setRawHeader("X-Custom-Client-Header", "Qt-Client");
+    request.setRawHeader("id", idHeaderValue);
 
+    qDebug() << "Making Request...";
     QNetworkReply *reply = manager->post(request, jsonData);
-    return reply;
+    qDebug() << "made request";
+    // Connect signals for proper memory management
+    connect(reply, &QNetworkReply::finished, reply, &QNetworkReply::deleteLater);
+    connect(reply, &QNetworkReply::errorOccurred, this, &ApiClient::handleNetworkError);
 
+    qDebug() << "Sent JSON:" << QString(jsonData);
+    return reply;
+}
+
+void ApiClient::handleNetworkError(QNetworkReply::NetworkError error) {
+    qWarning() << "Network error occurred:" << error;
 }
 
 ApiClient* ApiClient::getInstance() {
@@ -43,3 +60,4 @@ ApiClient* ApiClient::getInstance() {
 const QString& ApiClient::getLoginUrl() const{ return loginUrl;}
 const QString& ApiClient::getSignupUrl() const{ return signupUrl;}
 const QString& ApiClient::getUserDataUrl() const{ return userDataUrl;}
+const QString& ApiClient::getUpdateUserDataUrl() const { return updateUserDataUrl; }

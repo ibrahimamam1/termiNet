@@ -11,11 +11,12 @@ class ApiClient : public QObject
     Q_OBJECT
 public:
     QNetworkReply* makeGetRequest(const QString& url);
-    QNetworkReply* makePostRequest(const QString& url, const QJsonObject& data);
+    QNetworkReply* makePostRequest(const QString& url, const QJsonObject& data, const QString& key);
 
     const QString& getLoginUrl() const;
     const QString& getSignupUrl() const;
     const QString& getUserDataUrl() const;
+    const QString& getUpdateUserDataUrl() const;
     static ApiClient* getInstance();
 
 private:
@@ -26,8 +27,11 @@ private:
     const QString loginUrl = baseUrl + "login/";
     const QString signupUrl = baseUrl + "signup/";
     const QString userDataUrl = baseUrl + "users/";
+    const QString updateUserDataUrl = baseUrl + "update/users/";
 
 signals:
+private slots:
+    void handleNetworkError(QNetworkReply::NetworkError);
 };
 
 #endif // APICLIENT_H
