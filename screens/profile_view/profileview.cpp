@@ -108,26 +108,31 @@ void ProfileView::onSaveButtonClicked() {
 
     // Update the username if it has changed
     if (instance->getName() != userName->text()) {
+        qDebug() << "Updating User Name";
         UserRepository::updateUserName(userName->text());
     }
 
     // Update the email if it has changed
     if (instance->getEmail() != userEmail->text()) {
+        qDebug() << "Updating User Email";
         UserRepository::updateUserEmail(userEmail->text());
     }
 
     // Update the date of birth if it has changed
     if (instance->getDob() != userDob->text()) {
+        qDebug() << "Updating User Dob";
         UserRepository::updateUserDob(userDob->text());
     }
 
     // Update the bio if it has changed
     if (instance->getBio() != userBio->text()) {
+        qDebug() << "Updating User Bio";
         UserRepository::updateUserBio(userBio->text());
     }
 
     // Update the profile picture if it has changed
     if (profileIcon.cacheKey() != instance->getProfilePic().cacheKey()) {
+        qDebug() << "Updating User Profile Pic";
         UserRepository::updateUserProfilePic(profileIcon);
     }
 

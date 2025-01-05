@@ -93,6 +93,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         src/models/user/usermodel.h src/models/user/usermodel.cpp
         src/models/user/authenticateduser.h src/models/user/authenticateduser.cpp
         screens/profile_view/profileview.h screens/profile_view/profileview.cpp
+        src/common/theme/apptheme.h src/common/theme/apptheme.cpp
 
 
 

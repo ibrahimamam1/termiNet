@@ -3,6 +3,7 @@
 #include "screens/home/home.h"
 #include "src/models/user/usermodel.h"
 #include "src/network/user/user_repository.h"
+#include "src/common/theme/apptheme.h"
 
 #include <QApplication>
 #include <QMessageBox>
@@ -15,6 +16,10 @@ Home* Home::instance = nullptr;
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+    a.setStyle("Fusion");
+
+    QPalette darkPalette = AppTheme::getDarkPalette();
+    a.setPalette(darkPalette);
     QEventLoop loop;
     bool initializationComplete = false;
 

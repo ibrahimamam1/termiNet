@@ -38,11 +38,13 @@ class Login : public QDialog
 public:
     explicit Login(QWidget *parent = nullptr);
     ~Login();
+    void setupConnections();
+    void setupUI();
 signals:
     void loginSuccessful();
 
 private slots:
-    void on_login_btn_clicked();
+    void onLoginButtonClicked();
     void onForgotPasswordClicked();
     void onCreateAccountClicked();
 
