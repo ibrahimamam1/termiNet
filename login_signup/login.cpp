@@ -2,9 +2,10 @@
 #include "signup.h"
 #include "../helpers/api_client/apiclient.h"
 #include "../helpers/hash_helper/hashhelper.h"
-#include "../db/login/loginrepository.h"
+#include "../src/network/login/loginrepository.h"
 #include "../src/network/user/user_repository.h"
 #include "../helpers/apphelper.h"
+#include "../src/common/type/types.h"
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QMessageBox>
@@ -110,15 +111,19 @@ void Login::onLoginButtonClicked()
     }
 
     QString hashedPassword = HashHelper::hashString(password);
-    bool isLoginSuccessful = LoginRepository::login(email, hashedPassword);
+    LoginResult loginResult = LoginRepository::login(email, hashedPassword);
 
-    if (isLoginSuccessful) {
+    if (loginResult == LoginResult::SUCCESS) {
         UserModel user = UserRepository::getUserFromEmail(email);
         AuthenticatedUser::setInstance(user);
         AppHelper::saveUserForPersistentLogin(user.getId());
         emit loginSuccessful();
-    } else {
+    } else if(loginResult == LoginResult::FAILED){
         QMessageBox::critical(this, "Login Failed", "Incorrect email or password. Please try again.");
+    }else if(loginResult == LoginResult::SERVER_ERROR){
+        QMessageBox::critical(this, "Server Error", "Please check your internet Connection or try later");
+    }else{
+        QMessageBox::critical(this, "Network Error", "Please check your internet Connection or try later");
     }
 }
 

@@ -1,5 +1,5 @@
 #include "loginrepository.h"
-#include "../../helpers/api_client/apiclient.h"
+#include "../../../helpers/api_client/apiclient.h"
 #include <QPointer>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -8,15 +8,17 @@
 
 LoginRepository::LoginRepository() {}
 
-bool LoginRepository::login(const QString& email, const QString& pass){
+LoginResult LoginRepository::login(const QString& email, const QString& pass){
+
     ApiClient *apiclient = ApiClient::getInstance();
     QString loginUri = apiclient->getLoginUrl() + email + "/" + pass;
+
     QNetworkReply *loginReply = apiclient->makeGetRequest(loginUri);
     QPointer<QNetworkReply> safeLoginReply(loginReply);
 
     // Create an event loop to wait for the response
     QEventLoop loop;
-    bool loginSuccessful = false;
+    LoginResult loginResult;
 
     QObject::connect(loginReply, &QNetworkReply::finished, [&]() {
 
@@ -27,13 +29,16 @@ bool LoginRepository::login(const QString& email, const QString& pass){
                 QJsonObject jsonObject = jsonDoc.object();
                 if (jsonObject.contains("body")) {
                     QJsonObject body = jsonObject["body"].toObject();
-                    loginSuccessful = body["Grant Access"].toBool();
+                    bool success = body["Grant Access"].toBool();
+                    loginResult = success ? LoginResult::SUCCESS : LoginResult::FAILED;
                 }
             } else {
                 qDebug() << "Invalid response format, not a json object";
+                loginResult = LoginResult::SERVER_ERROR;
             }
         } else {
             qDebug() << "Login Error:" << safeLoginReply->errorString();
+            loginResult = LoginResult::NETWORK_ERROR;
         }
         safeLoginReply->deleteLater();
         loop.quit();
@@ -41,6 +46,6 @@ bool LoginRepository::login(const QString& email, const QString& pass){
 
     // Wait for the request to complete
     loop.exec();
-    return loginSuccessful;
+    return loginResult;
 }
 
