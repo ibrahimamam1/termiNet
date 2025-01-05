@@ -26,15 +26,26 @@ int main(int argc, char *argv[])
     //int userId = AppHelper::checkPersitentLogin();
     int userId = -1;
     if(userId == -1){
-        // Create and show login window
+        // Create and show login/signup window
         auto loginWindow = new Login();
-        loginWindow->setAttribute(Qt::WA_DeleteOnClose); // Auto-delete when closed
+        auto signUpPage = new Signup();
+
+        loginWindow->setAttribute(Qt::WA_DeleteOnClose);
+        signUpPage->setAttribute(Qt::WA_DeleteOnClose);
+
+        auto stackedWidget = new QStackedWidget;
+        stackedWidget->addWidget(loginWindow);
+        stackedWidget->addWidget(signUpPage);
+
         QObject::connect(loginWindow, &Login::loginSuccessful, [&]() {
             initializationComplete = true;
-            loginWindow->deleteLater();
+            stackedWidget->deleteLater();
             loop.quit();
         });
-        loginWindow->show();
+        QObject::connect(loginWindow, &Login::createAccountClicked, [&] () {
+            stackedWidget->setCurrentIndex(1);
+        });
+        stackedWidget->show();
     }else{
         UserModel user = UserRepository::getUserFromId(userId);
         AuthenticatedUser::setInstance(user);

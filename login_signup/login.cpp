@@ -135,10 +135,5 @@ void Login::onForgotPasswordClicked()
 
 void Login::onCreateAccountClicked()
 {
-    auto signupPage = new Signup();
-    signupPage->setAttribute(Qt::WA_DeleteOnClose);
-    this->hide();
-    signupPage->show();
-
-    connect(signupPage, &Signup::signupSuccessful, this, &Login::loginSuccessful);
+    emit createAccountClicked();
 }

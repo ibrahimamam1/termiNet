@@ -42,6 +42,7 @@ public:
     void setupUI();
 signals:
     void loginSuccessful();
+    void createAccountClicked();
 
 private slots:
     void onLoginButtonClicked();
