@@ -1,0 +1,14 @@
+<RCC>
+    <qresource prefix="/">
+        <file>assets/comment.png</file>
+        <file>assets/createPost.png</file>
+        <file>assets/facebook.png</file>
+        <file>assets/google.png</file>
+        <file>assets/icons8-plus-ios-17-glyph.zip</file>
+        <file>assets/imageIcon.png</file>
+        <file>assets/logo.png</file>
+        <file>assets/messageIcon.png</file>
+        <file>assets/newMessage.png</file>
+        <file>assets/profileIcon.png</file>
+    </qresource>
+</RCC>

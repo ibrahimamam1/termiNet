@@ -10,6 +10,7 @@ class ApiClient : public QObject
 {
     Q_OBJECT
 public:
+    explicit ApiClient(QObject *parent = nullptr);
     QNetworkReply* makeGetRequest(const QString& url);
     QNetworkReply* makePostRequest(const QString& url, const QJsonObject& data, const QString& key);
 
@@ -17,12 +18,12 @@ public:
     const QString& getSignupUrl() const;
     const QString& getUserDataUrl() const;
     const QString& getUpdateUserDataUrl() const;
-    static ApiClient* getInstance();
+    static ApiClient& getInstance();
 
 private:
-    explicit ApiClient(QObject *parent = nullptr);
-    static ApiClient* instance;
-    QNetworkAccessManager *manager;
+
+    static std::unique_ptr<ApiClient> instance;
+    std::unique_ptr<QNetworkAccessManager> manager;
     const QString baseUrl = "http://127.0.0.1:8080/";
     const QString loginUrl = baseUrl + "login/";
     const QString signupUrl = baseUrl + "signup/";

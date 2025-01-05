@@ -21,10 +21,14 @@ set(PROJECT_SOURCES
 
 )
 
+set(PROJECT_RESOURCES
+    resources.qrc
+)
+
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(termiNet
         MANUAL_FINALIZATION
-        ${PROJECT_SOURCES}
+        ${PROJECT_SOURCES} ${PROJECT_RESOURCES}
 
         screens/home/home.h screens/home/home.cpp screens/home/home.ui
         screens/home/home.h screens/home/home.cpp screens/home/home.ui
@@ -78,7 +82,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         helpers/api_client/apiclient.h helpers/api_client/apiclient.cpp
         helpers/hash_helper/hashhelper.h helpers/hash_helper/hashhelper.cpp
         helpers/message_client/messageclient.h helpers/message_client/messageclient.cpp
-        db/login/loginrepository.h db/login/loginrepository.cpp
+
         screens/message/widgets/chat_page/singleMessage/singlemessage.h screens/message/widgets/chat_page/singleMessage/singlemessage.cpp
         screens/message/widgets/chat_page/chatpage.h screens/message/widgets/chat_page/chatpage.cpp
         helpers/apphelper.h helpers/apphelper.cpp
@@ -93,6 +97,11 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         src/models/user/usermodel.h src/models/user/usermodel.cpp
         src/models/user/authenticateduser.h src/models/user/authenticateduser.cpp
         screens/profile_view/profileview.h screens/profile_view/profileview.cpp
+        src/common/theme/apptheme.h src/common/theme/apptheme.cpp
+        src/common/type/types.h
+        src/network/login/loginrepository.h src/network/login/loginrepository.cpp
+        src/helpers/validators/formvalidator.h src/helpers/validators/formvalidator.cpp
+        resources.qrc
 
 
 
