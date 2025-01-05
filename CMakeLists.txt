@@ -21,10 +21,14 @@ set(PROJECT_SOURCES
 
 )
 
+set(PROJECT_RESOURCES
+    resources.qrc
+)
+
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(termiNet
         MANUAL_FINALIZATION
-        ${PROJECT_SOURCES}
+        ${PROJECT_SOURCES} ${PROJECT_RESOURCES}
 
         screens/home/home.h screens/home/home.cpp screens/home/home.ui
         screens/home/home.h screens/home/home.cpp screens/home/home.ui
@@ -96,6 +100,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         src/common/theme/apptheme.h src/common/theme/apptheme.cpp
         src/common/type/types.h
         src/network/login/loginrepository.h src/network/login/loginrepository.cpp
+        src/helpers/validators/formvalidator.h src/helpers/validators/formvalidator.cpp
+        resources.qrc
 
 
 

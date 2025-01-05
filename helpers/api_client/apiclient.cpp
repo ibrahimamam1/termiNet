@@ -5,12 +5,12 @@
 #include <QNetworkReply>
 #include "../../src/models/user/authenticateduser.h"
 
-ApiClient* ApiClient::instance = nullptr;
+std::unique_ptr<ApiClient> ApiClient::instance = nullptr;
 
 ApiClient::ApiClient(QObject *parent)
     : QObject{parent}
 {
-    manager = new QNetworkAccessManager(this);
+    manager = std::make_unique<QNetworkAccessManager>(this);
 }
 
 QNetworkReply* ApiClient::makeGetRequest(const QString &url){
@@ -52,10 +52,10 @@ void ApiClient::handleNetworkError(QNetworkReply::NetworkError error) {
     qWarning() << "Network error occurred:" << error;
 }
 
-ApiClient* ApiClient::getInstance() {
+ApiClient& ApiClient::getInstance() {
     if(instance == nullptr)
-        instance = new ApiClient();
-    return instance;
+        instance = std::make_unique<ApiClient>();
+    return *instance;
 }
 const QString& ApiClient::getLoginUrl() const{ return loginUrl;}
 const QString& ApiClient::getSignupUrl() const{ return signupUrl;}

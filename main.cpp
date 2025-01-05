@@ -7,6 +7,7 @@
 
 #include <QApplication>
 #include <QMessageBox>
+#include <QStyleHints>
 #include "helpers/apphelper.h"
 #include "helpers/websocket_client/websocketclient.h"
 #include "src/db/manager/databasemanager.h"
@@ -19,7 +20,16 @@ int main(int argc, char *argv[])
     a.setStyle("Fusion");
 
     QPalette darkPalette = AppTheme::getDarkPalette();
-    a.setPalette(darkPalette);
+    QPalette lightPalette = AppTheme::getLightPalette();
+
+    //check system theme
+    bool isDarkMode = QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark;
+
+    if(isDarkMode)
+        a.setPalette(darkPalette);
+    else
+        a.setPalette(lightPalette);
+
     QEventLoop loop;
     bool initializationComplete = false;
 
@@ -39,7 +49,6 @@ int main(int argc, char *argv[])
 
         QObject::connect(loginWindow, &Login::loginSuccessful, [&]() {
             initializationComplete = true;
-            stackedWidget->deleteLater();
             loop.quit();
         });
         QObject::connect(loginWindow, &Login::createAccountClicked, [&] () {

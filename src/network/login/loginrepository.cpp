@@ -10,17 +10,18 @@ LoginRepository::LoginRepository() {}
 
 LoginResult LoginRepository::login(const QString& email, const QString& pass){
 
-    ApiClient *apiclient = ApiClient::getInstance();
-    QString loginUri = apiclient->getLoginUrl() + email + "/" + pass;
+    //prepare login URI
+    ApiClient& apiclient = ApiClient::getInstance();
+    QString loginUri = apiclient.getLoginUrl() + email + "/" + pass;
 
-    QNetworkReply *loginReply = apiclient->makeGetRequest(loginUri);
-    QPointer<QNetworkReply> safeLoginReply(loginReply);
+    //Make login Request to server
+    QPointer<QNetworkReply> safeLoginReply(apiclient.makeGetRequest(loginUri));
 
-    // Create an event loop to wait for the response
+    //Wait for response
     QEventLoop loop;
     LoginResult loginResult;
 
-    QObject::connect(loginReply, &QNetworkReply::finished, [&]() {
+    QObject::connect(safeLoginReply, &QNetworkReply::finished, [&]() {
 
         if (safeLoginReply && safeLoginReply->error() == QNetworkReply::NoError) {
             QByteArray data = safeLoginReply->readAll();

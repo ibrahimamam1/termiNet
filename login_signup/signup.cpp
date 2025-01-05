@@ -2,6 +2,7 @@
 #include "../src/network/user/user_repository.h"
 #include "../helpers/api_client/apiclient.h"
 #include "../helpers/hash_helper/hashhelper.h"
+#include "../src/helpers/validators/formvalidator.h"
 #include<iostream>
 #include<iomanip>
 #include<string>
@@ -157,8 +158,7 @@ bool Signup::validate_signup_form(QString& name, QString& email, QString& sex, Q
     }
 
     // Validate Email
-    std::regex email_pattern(R"((\w+)(\.{0,1})(\w*)@(\w+)\.(\w+))");
-    if (!std::regex_match(email.toStdString(), email_pattern)) {
+    if (!FormValidator::validateEmailAddress(email)) {
         errorMsg = "Invalid Email address\n";
         return false;
     }
@@ -179,19 +179,7 @@ bool Signup::validate_signup_form(QString& name, QString& email, QString& sex, Q
     }
 
     // Validate Password
-    bool is_char = false, is_number = false, is_alpha = false;
-    if (pass.length() < 6) {
-        errorMsg = "Password must be at least 6 characters long\n";
-        return false;
-    }
-    for (auto c : pass) {
-        if (c.isLetter()) is_alpha = true;
-        else if (c.isDigit()) is_number = true;
-        else is_char = true;
-        if (is_char && is_number && is_alpha) break;
-    }
-    if (!(is_char && is_number && is_alpha)) {
-        errorMsg = "Password must contain at least one letter, one digit, and one special character\n";
+    if(!FormValidator::validatePassword(pass, errorMsg)){
         return false;
     }
     if (pass != pass2) {
@@ -234,9 +222,9 @@ void Signup::on_create_account_btn_clicked()
     QByteArray jsonDataBytes = jsonDoc.toJson();
 
     // Create and make Network Request
-    ApiClient* apiClient = ApiClient::getInstance();
-    QString url = ApiClient::getInstance()->getUserDataUrl();
-    QNetworkReply *reply = apiClient->makePostRequest(url, jsonData, "");
+    ApiClient& apiClient = ApiClient::getInstance();
+    QString url = ApiClient::getInstance().getUserDataUrl();
+    QNetworkReply *reply = apiClient.makePostRequest(url, jsonData, "");
 
     // Connect to the finished signal to handle the response
     connect(reply, &QNetworkReply::finished, this, [=]() {

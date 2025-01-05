@@ -5,6 +5,7 @@
 #include "../src/network/login/loginrepository.h"
 #include "../src/network/user/user_repository.h"
 #include "../helpers/apphelper.h"
+#include "../src/helpers/validators/formvalidator.h"
 #include "../src/common/type/types.h"
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -29,7 +30,7 @@ void Login::setupUI()
 
     // Setup Logo
     logo = new QLabel(this);
-    logo->setPixmap(QPixmap("../../assets/logo.png"));
+    logo->setPixmap(QPixmap(":/assets/logo.png"));
 
     // Setup Welcome Text
     welcomeText = new QLabel("Welcome Back!", this);
@@ -105,8 +106,9 @@ void Login::onLoginButtonClicked()
     QString email = emailField->text().trimmed();
     QString password = passwordField->text().trimmed();
 
-    if (email.isEmpty() || password.isEmpty()) {
-        QMessageBox::warning(this, "Input Error", "Please fill in all fields.");
+    //Validate Form
+    if(!FormValidator::validateEmailAddress(email)){
+        QMessageBox::warning(this, "Input Error", "Invalid Email Address.");
         return;
     }
 

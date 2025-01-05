@@ -12,7 +12,7 @@ UserRepository::UserRepository() {}
 
 UserModel UserRepository::getUser(const QString& userUri){
 
-    QNetworkReply *userDataReply = ApiClient::getInstance()->makeGetRequest(userUri);
+    QNetworkReply *userDataReply = ApiClient::getInstance().makeGetRequest(userUri);
     QPointer<QNetworkReply> safeUserDataReply(userDataReply);
 
     UserModel user = UserModel();
@@ -60,15 +60,15 @@ UserModel UserRepository::getUser(const QString& userUri){
 }
 
 UserModel UserRepository::getUserFromEmail(const QString& email){
-    QString uri = ApiClient::getInstance()->getUserDataUrl() + "1/" + email;
+    QString uri = ApiClient::getInstance().getUserDataUrl() + "1/" + email;
     return getUser(uri);
 }
 UserModel UserRepository::getUserFromName(const QString& name){
-    QString uri = ApiClient::getInstance()->getUserDataUrl() + "2/" + name;
+    QString uri = ApiClient::getInstance().getUserDataUrl() + "2/" + name;
     return getUser(uri);
 }
 UserModel UserRepository::getUserFromId(int id){
-    QString uri = ApiClient::getInstance()->getUserDataUrl() + "3/" + QString::number(id);
+    QString uri = ApiClient::getInstance().getUserDataUrl() + "3/" + QString::number(id);
     return getUser(uri);
 }
 
@@ -81,9 +81,9 @@ bool UserRepository::updateUser(const QString& field, const QString& new_data){
     jsonObject["field"] = field;
     jsonObject["new_data"] = new_data;
 
-    ApiClient* api_client = ApiClient::getInstance();
-    QString url = api_client->getUpdateUserDataUrl();
-    QNetworkReply *reply =  api_client->makePostRequest(url, jsonObject, key);
+    ApiClient& api_client = ApiClient::getInstance();
+    QString url = api_client.getUpdateUserDataUrl();
+    QNetworkReply *reply =  api_client.makePostRequest(url, jsonObject, key);
 
     // Wait for the reply to finish
     QEventLoop loop;
