@@ -4,7 +4,7 @@
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-#include "../widgets/clickablelabel.h"
+#include "../../../../src/common/widgets/clickable_label.h"
 #include <QLineEdit>
 #include <QTextEdit>
 #include <QPushButton>

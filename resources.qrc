@@ -10,5 +10,6 @@
         <file>assets/messageIcon.png</file>
         <file>assets/newMessage.png</file>
         <file>assets/profileIcon.png</file>
+        <file>src/network/login/google.json</file>
     </qresource>
 </RCC>

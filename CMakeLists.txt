@@ -7,8 +7,8 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Sql Network WebSockets)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Sql Network WebSockets)
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Sql Network WebSockets NetworkAuth)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Sql Network WebSockets NetworkAuth)
 
 set(PROJECT_SOURCES
         main.cpp
@@ -39,7 +39,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 
         login_signup/widgets/divider.h login_signup/widgets/divider.cpp
         login_signup/widgets/socials.h login_signup/widgets/socials.cpp
-        screens/widgets/clickablelabel.h
+
 
         screens/create_community/createcommunity.h
         screens/create_community/createcommunity.cpp
@@ -102,6 +102,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         src/network/login/loginrepository.h src/network/login/loginrepository.cpp
         src/helpers/validators/formvalidator.h src/helpers/validators/formvalidator.cpp
         resources.qrc
+        src/common/widgets/clickable_label.h
+
 
 
 
@@ -127,7 +129,7 @@ else()
     endif()
 endif()
 
-target_link_libraries(termiNet PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Sql Qt${QT_VERSION_MAJOR}::Network Qt${QT_VERSION_MAJOR}::WebSockets)
+target_link_libraries(termiNet PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Sql Qt${QT_VERSION_MAJOR}::Network Qt${QT_VERSION_MAJOR}::WebSockets Qt${QT_VERSION_MAJOR}::NetworkAuth)
 
 if(${QT_VERSION} VERSION_LESS 6.1.0)
   set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.example.termiNet)
