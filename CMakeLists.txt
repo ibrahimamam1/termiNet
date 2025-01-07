@@ -103,6 +103,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         src/helpers/validators/formvalidator.h src/helpers/validators/formvalidator.cpp
         resources.qrc
         src/common/widgets/clickable_label.h
+        src/network/login/.gitignore
 
 
 
