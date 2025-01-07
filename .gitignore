@@ -1,2 +1,3 @@
 build/
+src/network/login/google_auth.json
 .env
