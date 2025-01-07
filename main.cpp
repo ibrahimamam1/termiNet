@@ -49,6 +49,7 @@ int main(int argc, char *argv[])
 
         QObject::connect(loginWindow, &Login::loginSuccessful, [&]() {
             initializationComplete = true;
+            stackedWidget->hide();
             loop.quit();
         });
         QObject::connect(loginWindow, &Login::createAccountClicked, [&] () {
