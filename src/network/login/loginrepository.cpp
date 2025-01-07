@@ -55,13 +55,16 @@ LoginResult LoginRepository::login(const QString& email, const QString& pass){
     return loginResult;
 }
 
-void LoginRepository::googleLogin(){
+LoginResult LoginRepository::googleLogin() {
     auto google = new QOAuth2AuthorizationCodeFlow();
     google->setScope("email");
 
     QObject::connect(google, &QOAuth2AuthorizationCodeFlow::authorizeWithBrowser, &QDesktopServices::openUrl);
-    const QJsonDocument document = AppHelper::loadJsonFromFile(":/src/network/login/google.json");
+
+    // Load Google OAuth2 credentials from JSON file
+    const QJsonDocument document = AppHelper::loadJsonFromFile(":/src/network/login/google_auth.json");
     const auto object = document.object();
+
     const auto settingsObject = object["installed"].toObject();
     const QUrl authUri(settingsObject["auth_uri"].toString());
     const QString clientId = settingsObject["client_id"].toString();
@@ -71,16 +74,52 @@ void LoginRepository::googleLogin(){
     const QUrl redirectUri(redirectUris[0].toString());
     const auto port = static_cast<quint16>(redirectUri.port());
 
-    google->setAccessTokenUrl(authUri);
-    google->setClientIdentifier(clientId);
+    // Set OAuth2 parameters
+    google->setAuthorizationUrl(authUri);
     google->setAccessTokenUrl(tokenUri);
+    google->setClientIdentifier(clientId);
     google->setClientIdentifierSharedKey(clientSecret);
 
+    // Set up the reply handler
     auto replyHandler = new QOAuthHttpServerReplyHandler(port);
     google->setReplyHandler(replyHandler);
 
+    QEventLoop loop;
+    LoginResult result = LoginResult::FAILED;
+
+    // Connect to the granted signal to capture the response
+    QObject::connect(google, &QOAuth2AuthorizationCodeFlow::granted, [&]() {
+        qDebug() << "OAuth2 flow completed successfully!";
+        qDebug() << "Access Token:" << google->token();
+        qDebug() << "Refresh Token:" << google->refreshToken();
+        qDebug() << "Expiration Date:" << google->expirationAt();
+
+        // Check if the access token is valid
+        if (!google->token().isEmpty()) {
+            result = LoginResult::SUCCESS;
+        } else {
+            result = LoginResult::FAILED;
+        }
+
+        loop.quit();
+    });
+
+    // Handle errors
+    QObject::connect(google, &QOAuth2AuthorizationCodeFlow::error, [&](const QString &error, const QString &errorDescription) {
+        qDebug() << "OAuth2 error:" << error << "-" << errorDescription;
+        result = LoginResult::NETWORK_ERROR; // Login failed
+        loop.quit();
+    });
+
+    // Start the OAuth2 flow
     google->grant();
 
+    loop.exec();
 
+    // Clean up
+    google->deleteLater();
+    replyHandler->deleteLater();
+
+    return result;
 }
 

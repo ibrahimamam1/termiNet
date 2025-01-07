@@ -7,15 +7,16 @@
 
 class SocialsWidget: public QWidget
 {
+    Q_OBJECT
+
     QHBoxLayout *container;
     ClickableLabel* googleLogo;
     ClickableLabel* facebookLogo;
 
 public:
     SocialsWidget(QWidget *parent = nullptr);
-
-private slots:
-    void onGoogleLoginClicked();
+signals:
+    void googleLoginClicked();
 };
 
 #endif // SOCIALS_H

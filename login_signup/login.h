@@ -46,6 +46,7 @@ signals:
 
 private slots:
     void onLoginButtonClicked();
+    void onGoogleLogin();
     void onForgotPasswordClicked();
     void onCreateAccountClicked();
 

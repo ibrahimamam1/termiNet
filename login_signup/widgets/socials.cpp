@@ -8,7 +8,9 @@ SocialsWidget::SocialsWidget(QWidget *parent) {
     facebookLogo = new ClickableLabel();
 
     googleLogo->setPixmap(QPixmap("../../assets/google.png"));
-    QObject::connect(googleLogo, &ClickableLabel::clicked, this, &SocialsWidget::onGoogleLoginClicked);
+    QObject::connect(googleLogo, &ClickableLabel::clicked, this, [=]{
+        emit googleLoginClicked();
+    });
     facebookLogo->setPixmap(QPixmap("../../assets/facebook.png"));
 
     container->addItem(new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum));
@@ -16,7 +18,4 @@ SocialsWidget::SocialsWidget(QWidget *parent) {
     container->addWidget(facebookLogo, 1);
     container->addItem(new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum));
 }
-void SocialsWidget::onGoogleLoginClicked(){
-    qDebug() << "Will start google login";
-    LoginRepository::googleLogin();
-}
+
