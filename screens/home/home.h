@@ -9,7 +9,7 @@
 #include<vector>
 #include "../widgets/topbar/customtopbar.h"
 #include "../widgets/leftNavigation/leftnavigationwidget.h"
-#include"../widgets/clickablelabel.h"
+#include"../../src/common/widgets//clickable_label.h"
 #include "../widgets/thread//threadwidget.h"
 #include "../../src/models/user/usermodel.h"
 #include "../../models/community/communitymodel.h"

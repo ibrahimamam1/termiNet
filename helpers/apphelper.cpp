@@ -114,3 +114,23 @@ const QString AppHelper::getDefaultProfilePicturePath() {
 
     return profilePicPath;
 }
+
+const QJsonDocument AppHelper::loadJsonFromFile(const QString& filePath){
+
+    QFile file(filePath);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qWarning() << "Could not open the JSON file.";
+        return QJsonDocument();
+    }
+
+    QByteArray jsonData = file.readAll();
+    file.close();
+
+    QJsonDocument document = QJsonDocument::fromJson(jsonData);
+    if (document.isNull()) {
+        qWarning() << "Failed to create JSON document.";
+        return QJsonDocument();
+    }
+
+    return document;
+}

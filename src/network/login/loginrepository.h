@@ -8,6 +8,7 @@ class LoginRepository
 public:
     LoginRepository();
     static LoginResult login(const QString& email, const QString& password);
+    static LoginResult googleLogin();
 };
 
 #endif // LOGINREPOSITORY_H

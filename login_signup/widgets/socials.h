@@ -3,15 +3,20 @@
 #include<QWidget>
 #include<QLabel>
 #include<QHBoxLayout>
+#include "../../src/common/widgets/clickable_label.h"
 
 class SocialsWidget: public QWidget
 {
+    Q_OBJECT
+
     QHBoxLayout *container;
-    QLabel* googleLogo;
-    QLabel* facebookLogo;
+    ClickableLabel* googleLogo;
+    ClickableLabel* facebookLogo;
 
 public:
     SocialsWidget(QWidget *parent = nullptr);
+signals:
+    void googleLoginClicked();
 };
 
 #endif // SOCIALS_H

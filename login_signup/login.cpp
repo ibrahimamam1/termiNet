@@ -76,6 +76,7 @@ void Login::setupUI()
     divider = new DividerWidget(this);
     socials = new SocialsWidget(this);
 
+
     //setup login VLayout
     loginContainer->addWidget(logo);
     loginContainer->addWidget(welcomeText, 0, Qt::AlignCenter);
@@ -99,6 +100,7 @@ void Login::setupConnections()
     connect(loginBtn, &QPushButton::clicked, this, &Login::onLoginButtonClicked);
     connect(forgotPassword, &QLabel::linkActivated, this, &Login::onForgotPasswordClicked);
     connect(createAccount, &QLabel::linkActivated, this, &Login::onCreateAccountClicked);
+    connect(socials, &SocialsWidget::googleLoginClicked, this, &Login::onGoogleLogin);
 }
 
 void Login::onLoginButtonClicked()
@@ -129,6 +131,21 @@ void Login::onLoginButtonClicked()
     }
 }
 
+void Login::onGoogleLogin(){
+    LoginResult login = LoginRepository::googleLogin();
+    if(login == LoginResult::SUCCESS){
+        UserModel user = UserRepository::getUserFromEmail("test@gmail.com");
+        AuthenticatedUser::setInstance(user);
+        AppHelper::saveUserForPersistentLogin(user.getId());
+        emit loginSuccessful();
+    }else if(login == LoginResult::FAILED){
+        QMessageBox::critical(this, "Login Failed", "Incorrect email or password. Please try again.");
+    }else if(login == LoginResult::SERVER_ERROR){
+        QMessageBox::critical(this, "Server Error", "Please check your internet Connection or try later");
+    }else{
+        QMessageBox::critical(this, "Network Error", "Please check your internet Connection or try later");
+    }
+}
 void Login::onForgotPasswordClicked()
 {
     qDebug() << "Forgot password clicked";
