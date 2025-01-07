@@ -12,6 +12,9 @@ SocialsWidget::SocialsWidget(QWidget *parent) {
         emit googleLoginClicked();
     });
     facebookLogo->setPixmap(QPixmap("../../assets/facebook.png"));
+    QObject::connect(facebookLogo, &ClickableLabel::clicked, this, [=]{
+        emit facebookLoginClicked();
+    });
 
     container->addItem(new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum));
     container->addWidget(googleLogo, 1);

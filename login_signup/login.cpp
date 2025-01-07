@@ -39,6 +39,10 @@ void Login::setupUI()
     welcomeFont.setBold(true);
     welcomeText->setFont(welcomeFont);
 
+    auto welcomeRow = new QHBoxLayout();
+    welcomeRow->addWidget(logo);
+    welcomeRow->addWidget(welcomeText);
+
     // Setup Form Fields
     emailField = new QLineEdit(this);
     emailField->setPlaceholderText("Enter Your Email");
@@ -78,8 +82,8 @@ void Login::setupUI()
 
 
     //setup login VLayout
-    loginContainer->addWidget(logo);
-    loginContainer->addWidget(welcomeText, 0, Qt::AlignCenter);
+    loginContainer->addStretch();
+    loginContainer->addLayout(welcomeRow);
     loginContainer->addLayout(formContainer);
     loginContainer->addLayout(bottomContainer);
     loginContainer->addWidget(divider);
@@ -101,6 +105,7 @@ void Login::setupConnections()
     connect(forgotPassword, &QLabel::linkActivated, this, &Login::onForgotPasswordClicked);
     connect(createAccount, &QLabel::linkActivated, this, &Login::onCreateAccountClicked);
     connect(socials, &SocialsWidget::googleLoginClicked, this, &Login::onGoogleLogin);
+    connect(socials, &SocialsWidget::facebookLoginClicked, this, &Login::onFacebookLogin);
 }
 
 void Login::onLoginButtonClicked()
@@ -146,6 +151,11 @@ void Login::onGoogleLogin(){
         QMessageBox::critical(this, "Network Error", "Please check your internet Connection or try later");
     }
 }
+
+void Login::onFacebookLogin(){
+    QMessageBox::warning(this, "Unavailable", "Service Currently Unavailable, please use google or email");
+}
+
 void Login::onForgotPasswordClicked()
 {
     qDebug() << "Forgot password clicked";
@@ -156,3 +166,5 @@ void Login::onCreateAccountClicked()
 {
     emit createAccountClicked();
 }
+
+

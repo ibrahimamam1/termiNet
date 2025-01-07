@@ -17,6 +17,7 @@ public:
     SocialsWidget(QWidget *parent = nullptr);
 signals:
     void googleLoginClicked();
+    void facebookLoginClicked();
 };
 
 #endif // SOCIALS_H
