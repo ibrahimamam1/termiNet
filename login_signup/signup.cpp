@@ -27,8 +27,11 @@ Signup::Signup(QWidget *parent) : QDialog(parent)
     emailLabel = new QLabel(this);
     emailField = new QLineEdit(this);
     dateOfBirthBox = new QVBoxLayout();
-    dobLabel = new QLabel(this);
-    dobField = new QLineEdit(this);
+    auto dobRow = new QHBoxLayout();
+    dobLabel = new QLabel("Date Of Birth", this);
+    dayField = new QLineEdit(this);
+    monthField = new QLineEdit(this);
+    yearField = new QLineEdit(this);
     paswordBox = new QVBoxLayout();
     passwordLabel = new QLabel(this);
     passwordField = new QLineEdit(this);
@@ -61,10 +64,14 @@ Signup::Signup(QWidget *parent) : QDialog(parent)
     emailBox->addWidget(emailField, 2);
     emailBox->addStretch(4);
 
-    dobLabel->setText("Date of Birth");
-    dobField->setPlaceholderText("DD-MM-YYYY");
+    dayField->setPlaceholderText("DD");
+    monthField->setPlaceholderText("MM");
+    yearField->setPlaceholderText("YY");
+    dobRow->addWidget(dayField);
+    dobRow->addWidget(monthField);
+    dobRow->addWidget(yearField);
     dateOfBirthBox->addWidget(dobLabel, 1);
-    dateOfBirthBox->addWidget(dobField, 2);
+    dateOfBirthBox->addLayout(dobRow, 2);
     dateOfBirthBox->addStretch(4);
 
     passwordLabel->setText("Password");
@@ -114,37 +121,17 @@ Signup::Signup(QWidget *parent) : QDialog(parent)
 
 Signup::~Signup()
 {
-    // Clean up dynamically allocated memory
-    delete mainContainer;
-    delete signUpContainer;
-    delete signUpFormContainer;
-    delete titleText;
-    delete userNameBox;
-    delete userNameLabel;
-    delete userNameField;
-    delete emailBox;
-    delete emailLabel;
-    delete emailField;
-    delete dateOfBirthBox;
-    delete dobLabel;
-    delete dobField;
-    delete paswordBox;
-    delete passwordLabel;
-    delete passwordField;
-    delete comfirmPasswordBox;
-    delete comfirmPasswordLabel;
-    delete comfirmPasswordField;
-    delete signupBtn;
-    delete divider;
-    delete socials;
+
 }
 
 #include <regex>
 #include <iostream>
 
-bool Signup::validate_signup_form(QString& name, QString& email, QString& sex, QString& dob, QString& pass, QString& pass2, QString& errorMsg) {
+bool Signup::validate_signup_form(const QString& name, const QString& email, const QString& sex,
+                                  const int& dayOfBirth, const int& monthOfBirth, const int& yearOfBirth,
+                                  const QString& pass, const QString& pass2, QString& errorMsg) {
     // Validate Username
-    if(name.length() == 0 || email.length()==0 || sex.length()==0 || dob.length()==0 || pass.length()==0 || pass2.length()==0){
+    if(name.length() == 0 || email.length()==0 || sex.length()==0 || dayOfBirth == 0 || monthOfBirth == 0 || yearOfBirth == 0 || pass.length()==0 || pass2.length()==0){
         errorMsg = "Fields cannot be left empty\n";
         return false;
     }
@@ -163,18 +150,10 @@ bool Signup::validate_signup_form(QString& name, QString& email, QString& sex, Q
         return false;
     }
 
-    // Validate Date of Birth (dd/mm/yyyy)
-    std::regex dob_pattern(R"((\d{2})\/(\d{2})\/(\d{4}))");
-    if (std::regex_match(dob.toStdString(), dob_pattern)) {
-        int day = std::stoi(dob.toStdString().substr(0, 2));
-        int month = std::stoi(dob.toStdString().substr(3, 2));
-        int year = std::stoi(dob.toStdString().substr(6, 4));
-        if (day < 1 || day > 31 || month < 1 || month > 12) {
-            errorMsg =  "Invalid date in Date of Birth\n";
-            return false;
-        }
-    } else {
-        errorMsg = "Date of Birth must be in dd/mm/yyyy format\n";
+    // Validate Date of Birth
+    QDate date(dayOfBirth, monthOfBirth, yearOfBirth);
+    if(!date.isValid()){
+        errorMsg =  "Invalid Date of Birth\n";
         return false;
     }
 
@@ -197,13 +176,15 @@ void Signup::on_create_account_btn_clicked()
     QString name = userNameField->text();
     QString email = emailField->text();
     QString sex = "M";
-    QString dob = dobField->text();
+    int dayOfBirth = dayField->text().toInt();
+    int monthOfBirth = monthField->text().toInt();
+    int yearofBirth = monthField->text().toInt();
     QString pass = passwordField->text();
     QString pass2 = comfirmPasswordField->text();
 
     QString errorMsg;
 
-    if(!validate_signup_form(name, email, sex, dob, pass, pass2, errorMsg)){
+    if(!validate_signup_form(name, email, sex, dayOfBirth, monthOfBirth, yearofBirth, pass, pass2, errorMsg)){
         QMessageBox::critical(this, errorMsg, errorMsg, QMessageBox::Ok);
         return;
     }
@@ -213,7 +194,8 @@ void Signup::on_create_account_btn_clicked()
     jsonData["user_name"] = name;
     jsonData["user_email"] = email;
     jsonData["user_sex"] = sex;
-    jsonData["user_dob"] = dob;
+    QDate date(dayOfBirth, monthOfBirth, yearofBirth);
+    jsonData["user_dob"] = date.toString("yyyy-MM-dd");
     jsonData["user_bio"] = "";
     jsonData["password"] = HashHelper::hashString(pass);
     jsonData["created_at"] = QDateTime::currentDateTimeUtc().toString(Qt::ISODate);

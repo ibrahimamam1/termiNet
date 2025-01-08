@@ -29,7 +29,9 @@ class Signup : public QDialog
     QLineEdit *emailField;
     QVBoxLayout *dateOfBirthBox;
     QLabel *dobLabel;
-    QLineEdit *dobField;
+    QLineEdit* dayField;
+    QLineEdit* monthField;
+    QLineEdit* yearField;
     QVBoxLayout *paswordBox;
     QLabel *passwordLabel;
     QLineEdit *passwordField;
@@ -43,7 +45,9 @@ class Signup : public QDialog
 
 public:
    explicit Signup(QWidget *parent = nullptr);
-    bool validate_signup_form(QString& name, QString& email, QString& sex, QString& dob, QString& pass, QString& pass2, QString& errorMsg);
+    bool validate_signup_form(const QString& name, const QString& email, const QString& sex,
+                                const int& dayOfBirth, const int& monthOfBirth, const int& yearOfBirth,
+                                const QString& pass, const QString& pass2, QString& errorMsg);
    void readUserTable();
    ~Signup();
    signals:
