@@ -52,6 +52,11 @@ int main(int argc, char *argv[])
             stackedWidget->hide();
             loop.quit();
         });
+        QObject::connect(signUpPage, &Signup::signupSuccessful, [&]() {
+            initializationComplete = true;
+            stackedWidget->hide();
+            loop.quit();
+        });
         QObject::connect(loginWindow, &Login::createAccountClicked, [&] () {
             stackedWidget->setCurrentIndex(1);
         });

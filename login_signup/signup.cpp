@@ -3,6 +3,7 @@
 #include "../helpers/api_client/apiclient.h"
 #include "../helpers/hash_helper/hashhelper.h"
 #include "../src/helpers/validators/formvalidator.h"
+#include "../helpers/apphelper.h"
 #include<iostream>
 #include<iomanip>
 #include<string>
@@ -221,6 +222,9 @@ void Signup::on_create_account_btn_clicked()
             // Handle the server's response
             if (responseJson.contains("Status") && responseJson["Status"].toString() == "Created") {
                 QMessageBox::information(this, "Account Created", "Account Created Successfully\nEnjoy Sharing Your Ideas", QMessageBox::Ok);
+                UserModel user = UserRepository::getUserFromEmail(email);
+                AuthenticatedUser::setInstance(user);
+                AppHelper::saveUserForPersistentLogin(user.getId());
                 emit signupSuccessful();
             } else {
                 QString errorMessage = responseJson.contains("message") ? responseJson["message"].toString() : "Unknown error from server.";
