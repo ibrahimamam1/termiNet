@@ -1,4 +1,4 @@
-#include "login_signup/signup.h"
+#include "src/screens/signup/signup.h"
 #include "login_signup/login.h"
 #include "screens/home/home.h"
 #include "src/models/user/usermodel.h"

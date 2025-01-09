@@ -5,6 +5,7 @@ class FormValidator
 {
 public:
     FormValidator();
+    static bool validateUserName(const QString& name, QString& error_msg);
     static bool validateEmailAddress(const QString& email);
     static bool validatePassword(const QString& pass, QString& errorMsg);
 };

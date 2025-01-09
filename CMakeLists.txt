@@ -16,7 +16,7 @@ set(PROJECT_SOURCES
 
 
         login_signup/login.h login_signup/login.cpp
-        login_signup/signup.h login_signup/signup.cpp
+
 
 
 )
@@ -104,6 +104,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         resources.qrc
         src/common/widgets/clickable_label.h
         src/network/login/.gitignore
+        src/screens/signup/signup.h src/screens/signup/signup.cpp
 
 
 

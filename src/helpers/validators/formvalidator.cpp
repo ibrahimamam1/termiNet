@@ -2,6 +2,19 @@
 #include <regex>
 
 FormValidator::FormValidator() {}
+
+bool FormValidator::validateUserName(const QString& name, QString& error_msg){
+    if (name.length() < 3) {
+        error_msg = "User Name must be at least 3 characters\n";
+        return false;
+    }
+    if (!name[0].isLetter()) {
+        error_msg = "User Name must start with a letter\n";
+        return false;
+    }
+    return true;
+}
+
 bool FormValidator::validateEmailAddress(const QString &email){
 
     std::regex email_pattern(R"((\w+)(\.{0,1})(\w*)@(\w+)\.(\w+))");
@@ -10,6 +23,7 @@ bool FormValidator::validateEmailAddress(const QString &email){
 
     return true;
 }
+
 bool FormValidator::validatePassword(const QString& pass, QString& errorMsg){
 
     bool is_char = false, is_number = false, is_alpha = false;
@@ -29,3 +43,4 @@ bool FormValidator::validatePassword(const QString& pass, QString& errorMsg){
     }
     return true;
 }
+
