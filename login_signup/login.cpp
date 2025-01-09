@@ -1,10 +1,11 @@
 #include "login.h"
-#include "signup.h"
+
 #include "../helpers/api_client/apiclient.h"
 #include "../helpers/hash_helper/hashhelper.h"
 #include "../src/network/login/loginrepository.h"
 #include "../src/network/user/user_repository.h"
 #include "../helpers/apphelper.h"
+#include "../src/models/user/authenticateduser.h"
 #include "../src/helpers/validators/formvalidator.h"
 #include "../src/common/type/types.h"
 #include <QJsonDocument>
