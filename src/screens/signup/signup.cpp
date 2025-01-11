@@ -4,6 +4,7 @@
 #include "../../../helpers/hash_helper/hashhelper.h"
 #include "../../helpers/validators/formvalidator.h"
 #include "../../../helpers/apphelper.h"
+#include "../../network/signup/signup_repository.h"
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QNetworkRequest>
@@ -20,7 +21,8 @@ Signup::Signup(QWidget *parent) : QDialog(parent) {
 Signup::~Signup() {}
 
 void Signup::setupUI() {
-    mainContainer = new QHBoxLayout(this);
+    //first page
+    mainContainer = new QHBoxLayout();
     signUpContainer = new QVBoxLayout();
     signUpFormContainer = new QVBoxLayout();
 
@@ -37,7 +39,26 @@ void Signup::setupUI() {
     mainContainer->addStretch(4);
     mainContainer->addLayout(signUpContainer, 2);
     mainContainer->addStretch(4);
-    setLayout(mainContainer);
+
+
+    //second page
+    secondPageContainer = new QVBoxLayout();
+    secondPageUserNameField = createFormField("User Name", "Enter Your Username");
+    secondPageDateOfBirthField = new QDateEdit(QDate::currentDate(), this);
+    finishButton = new QPushButton("Done");
+
+
+    //setup stacked widget
+    pages = new QStackedWidget(this);
+
+    auto page1 = new QWidget(this);
+    page1->setLayout(mainContainer);
+
+    auto page2 = new QWidget(this);
+    page2->setLayout(secondPageContainer);
+
+    pages->addWidget(page1);
+    pages->addWidget(page2);
 
     setWindowTitle("Sign Up");
     setMinimumWidth(400);
@@ -90,6 +111,7 @@ void Signup::setupSignupButton() {
 void Signup::setupSocialsLogin() {
     divider = new DividerWidget();
     socials = new SocialsWidget();
+    connect(socials, &SocialsWidget::googleLoginClicked, this, &Signup::onGoogleSignup);
 }
 
 QString Signup::validateSignupForm(const QString& name, const QString& email, const QDate& dateOfBirth,
@@ -132,43 +154,60 @@ void Signup::onCreateAccountBtnClicked() {
         return;
     }
 
-    QJsonObject jsonData = createUserJson(name, email, dateOfBirth, password);
-    sendSignupRequest(jsonData);
+    int error_code = SignupRepository::createNewUserAccountWithEmailAndPassword(name, email, dateOfBirth, password, error_message);
+    if(error_code){
+        QString errorMessage = responseJson.contains("Message") ? responseJson["Message"].toString() : "Unknown error from server.";
+        QMessageBox::critical(this, "Signup Failed", "Creating Your Account Failed\n" + errorMessage, QMessageBox::Ok);
+    }else{
+        QMessageBox::information(this, "Account Created", "Account Created Successfully\nEnjoy Sharing Your Ideas", QMessageBox::Ok);
+        UserModel user = UserRepository::getUserFromEmail(jsonData["user_email"].toString());
+        AuthenticatedUser::setInstance(user);
+        AppHelper::saveUserForPersistentLogin(user.getId());
+        emit signupSuccessful();
+    }
 }
 
-QJsonObject Signup::createUserJson(const QString& name, const QString& email, const QDate& dateOfBirth, const QString& password) {
-    QJsonObject jsonData;
-    jsonData["user_name"] = name;
-    jsonData["user_email"] = email;
-    jsonData["user_sex"] = "M"; // Default value
-    jsonData["user_dob"] = dateOfBirth.toString("yyyy-MM-dd");
-    jsonData["user_bio"] = "";
-    jsonData["password"] = HashHelper::hashString(password);
-    jsonData["created_at"] = QDateTime::currentDateTimeUtc().toString(Qt::ISODate);
-    return jsonData;
-}
 
-void Signup::sendSignupRequest(const QJsonObject& jsonData) {
-    ApiClient& apiClient = ApiClient::getInstance();
-    QString url = apiClient.getUserDataUrl();
-    QNetworkReply* reply = apiClient.makePostRequest(url, jsonData, "");
 
-    connect(reply, &QNetworkReply::finished, this, [=]() {
-        if (reply->error() == QNetworkReply::NoError) {
-            QJsonObject responseJson = QJsonDocument::fromJson(reply->readAll()).object();
-            if (responseJson.contains("Status") && responseJson["Status"].toString() == "Created") {
+void Signup::onGoogleSignup(){
+    qDebug() << "Signup: Will initiate signup";
+    GoogleReply reply = SignupRepository::googleSignup();
+    if(!reply.accessToken.isEmpty()){
+        pages->setCurrentIndex(1);
+        connect(finishButton, &QPushButton::clicked, this, [&], {
+            QString name = secondPageUserNameField->findChild<QLineEdit*>()->text();
+            QDateTime dob = secondPageDateOfBirthField->date();
+            QString error_msg;
+
+            if (name.isEmpty()){
+                QMessageBox::critical(this, "Validation Error", "User Name field cannot be left empty", QMessageBox::Ok);
+                return;
+            }
+
+            if(!FormValidator::validateUserName(name, error_msg)){
+                QMessageBox::critical(this, "Validation Error", errorMsg, QMessageBox::Ok);
+                return;
+            }
+
+            if (!dateOfBirth.isValid()){
+                QMessageBox::critical(this, "Validation Error", "Invalid Date of Birth", QMessageBox::Ok);
+                return;
+            }
+
+            int error_code = SignupRepository::createNewUserAccountWithGoogle(name, "", dob, reply.idToken, error_message);
+            if(error_code){
+                QString errorMessage = responseJson.contains("Message") ? responseJson["Message"].toString() : "Unknown error from server.";
+                QMessageBox::critical(this, "Signup Failed", "Creating Your Account Failed\n" + errorMessage, QMessageBox::Ok);
+            }else{
                 QMessageBox::information(this, "Account Created", "Account Created Successfully\nEnjoy Sharing Your Ideas", QMessageBox::Ok);
-                UserModel user = UserRepository::getUserFromEmail(jsonData["user_email"].toString());
+                UserModel user = UserRepository::getUserFromGoogleId(reply.idToken);
                 AuthenticatedUser::setInstance(user);
                 AppHelper::saveUserForPersistentLogin(user.getId());
                 emit signupSuccessful();
-            } else {
-                QString errorMessage = responseJson.contains("Message") ? responseJson["Message"].toString() : "Unknown error from server.";
-                QMessageBox::critical(this, "Signup Failed", "Creating Your Account Failed\n" + errorMessage, QMessageBox::Ok);
             }
-        } else {
-            QMessageBox::critical(this, "Signup Failed", "Creating Your Account Failed\n" + reply->errorString(), QMessageBox::Ok);
-        }
-        reply->deleteLater();
-    });
+
+        });
+    }
+
 }
+

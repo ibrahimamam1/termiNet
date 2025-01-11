@@ -18,6 +18,7 @@
 class Signup : public QDialog
 {
     Q_OBJECT
+    QStackedWidget *pages;
     QHBoxLayout *mainContainer;
     QVBoxLayout *signUpContainer;
     QVBoxLayout *signUpFormContainer;
@@ -31,6 +32,10 @@ class Signup : public QDialog
     DividerWidget *divider;
     SocialsWidget *socials;
 
+    QHBoxLayout *secondPageContainer;
+    QVBoxLayout *secondPageUserNameField;
+    QDateEdit *secondPageDateOfBirthField;
+    QPushButton *finishButton;
 
 public:
     explicit Signup(QWidget *parent = nullptr);
@@ -48,6 +53,8 @@ signals:
     void signupSuccessful();
 private slots:
     void onCreateAccountBtnClicked();
+    void onGoogleSignup();
+    void onAccountSetupComplete();
 
 
 };
