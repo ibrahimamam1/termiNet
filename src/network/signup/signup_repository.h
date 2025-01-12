@@ -6,10 +6,12 @@ class SignupRepository
 {
 public:
     SignupRepository();
-    int createNewUserAccount(const int code, const QString& name, const QString& email, const QDate& dateOfBirth, const QString& password, QString& error_msg);
-    int createNewUserAccountWithEmailAndPassword(const QString& name, const QString& email, const QDate& dateOfBirth, const QString& password, QString& error_msg);
-    int createNewUserAccountWithGoogle(const QString& name, const QDate& dateOfBirth, QString& error_msg);
+    static int createNewUserAccount(const int code, const QString& name, const QString& email, const QDate& dateOfBirth, const QString& password, QString& error_msg);
+    static int createNewUserAccountWithEmailAndPassword(const QString& name, const QString& email, const QDate& dateOfBirth, const QString& password, QString& error_msg);
+    static int createNewUserAccountWithGoogle(const QString& name, const QDate& dateOfBirth, const QString& idToken, QString& error_msg);
     static const GoogleReply googleSignup();
+
+
 };
 
 #endif // SIGNUP_REPOSITORY_H

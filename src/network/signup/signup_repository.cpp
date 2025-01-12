@@ -12,7 +12,7 @@
 SignupRepository::SignupRepository() {}
 
 int SignupRepository::createNewUserAccount(const int code, const QString& name, const QString& email, const QDate& dateOfBirth, const QString& password, QString& error_msg) {
-
+    qDebug() << "SignupRepository: create new user account general";
     QJsonObject jsonData;
     jsonData["user_name"] = name;
     jsonData["user_email"] = email;
@@ -20,28 +20,45 @@ int SignupRepository::createNewUserAccount(const int code, const QString& name, 
     jsonData["user_bio"] = "";
     jsonData["password"] = HashHelper::hashString(password);
     jsonData["created_at"] = QDateTime::currentDateTimeUtc().toString(Qt::ISODate);
+    if(code == 1)
+        jsonData["method"] = "Email";
+    else if(code == 2){
+        jsonData["method"] = "Google";
+        jsonData["user_id"] = password;
+        jsonData["password"] = " ";
+    }
+
+    qDebug() << "SignupRepository: created json data";
 
     ApiClient& apiClient = ApiClient::getInstance();
-    QString url = apiClient.getUserDataUrl() + QString::number(code) + "/";
+    QString url = apiClient.getUserDataUrl();
     QNetworkReply* reply = apiClient.makePostRequest(url, jsonData, "");
+    qDebug() << "SignupRepository: made post request";
 
-    connect(reply, &QNetworkReply::finished, this, [=]() {
+    QEventLoop loop;
+    int err = 0;
+
+    QObject::connect(reply, &QNetworkReply::finished, [&]() {
         if (reply->error() == QNetworkReply::NoError) {
+            qDebug() << "SignupRepository: got response";
             QJsonObject responseJson = QJsonDocument::fromJson(reply->readAll()).object();
             if (responseJson.contains("Status") && responseJson["Status"].toString() == "Created") {
                 error_msg = "OK";
-                return 0;
+                loop.quit();
             } else {
                 error_msg = responseJson["Status"].toString();
-                return 1;
+                loop.quit();
+                err = 1;
             }
         } else {
             error_msg = reply->errorString();
-            return 1
+            err = 1;
+            loop.quit();
         }
         reply->deleteLater();
     });
-    return 0;
+    loop.exec();
+    return err;
 }
 const GoogleReply SignupRepository::googleSignup(){
     qDebug() << "Signup Repository: signup with google";
@@ -81,6 +98,7 @@ const GoogleReply SignupRepository::googleSignup(){
         qDebug() << "OAuth2 flow completed successfully!";
         googleReply.accessToken = google->token();
         googleReply.refreshToken = google->refreshToken();
+        QVariantMap extra = google->extraTokens();
         googleReply.idToken = extra["id_token"].toString();
         googleReply.expirationDate = google->expirationAt();
         loop.quit();
@@ -106,8 +124,11 @@ const GoogleReply SignupRepository::googleSignup(){
 }
 int SignupRepository::createNewUserAccountWithEmailAndPassword(const QString& name, const QString& email,
                                                                const QDate& dateOfBirth, const QString& password, QString& error_msg){
+    qDebug() << "SignupRepository: create new user with email and password";
     return createNewUserAccount(1, name, email, dateOfBirth, password, error_msg);
 }
-int SignupRepository::createNewUserAccountWithGoogle(const QString& name, const QDate& dateOfBirth, QString& error_msg){
-    return createNewUserAccount(2, name, "", dateOfBirth, "", error_msg);
+int SignupRepository::createNewUserAccountWithGoogle(const QString& name, const QDate& dateOfBirth, const QString& idToken, QString& error_msg){
+    return createNewUserAccount(2, name, " ", dateOfBirth, idToken, error_msg);
 }
+
+

@@ -23,6 +23,10 @@ class Signup : public QDialog
     QVBoxLayout *signUpContainer;
     QVBoxLayout *signUpFormContainer;
     QLabel *titleText;
+    QLineEdit* userNameInput;
+    QLineEdit* emailInput;
+    QLineEdit* passwordInput;
+    QLineEdit* confirmPasswordInput;
     QVBoxLayout *userNameField;
     QVBoxLayout *emailField;
     QDateEdit* dateOfBirthField;
@@ -32,7 +36,7 @@ class Signup : public QDialog
     DividerWidget *divider;
     SocialsWidget *socials;
 
-    QHBoxLayout *secondPageContainer;
+    QVBoxLayout *secondPageContainer;
     QVBoxLayout *secondPageUserNameField;
     QDateEdit *secondPageDateOfBirthField;
     QPushButton *finishButton;
@@ -54,7 +58,6 @@ signals:
 private slots:
     void onCreateAccountBtnClicked();
     void onGoogleSignup();
-    void onAccountSetupComplete();
 
 
 };
