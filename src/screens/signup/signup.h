@@ -19,7 +19,6 @@ class Signup : public QDialog
 {
     Q_OBJECT
     QStackedWidget *pages;
-    QHBoxLayout *mainContainer;
     QVBoxLayout *signUpContainer;
     QVBoxLayout *signUpFormContainer;
     QLabel *titleText;

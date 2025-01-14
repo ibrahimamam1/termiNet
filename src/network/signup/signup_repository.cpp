@@ -46,7 +46,7 @@ int SignupRepository::createNewUserAccount(const int code, const QString& name, 
                 error_msg = "OK";
                 loop.quit();
             } else {
-                error_msg = responseJson["Status"].toString();
+                error_msg = responseJson["Message"].toString();
                 loop.quit();
                 err = 1;
             }

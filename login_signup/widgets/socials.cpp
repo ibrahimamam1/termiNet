@@ -16,9 +16,12 @@ SocialsWidget::SocialsWidget(QWidget *parent) {
         emit facebookLoginClicked();
     });
 
-    container->addItem(new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum));
-    container->addWidget(googleLogo, 1);
-    container->addWidget(facebookLogo, 1);
-    container->addItem(new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum));
+    container->addStretch();
+    container->addWidget(googleLogo);
+    container->addSpacing(20);
+    container->addWidget(facebookLogo);
+    container->addStretch();
+
+    this->setLayout(container);
 }
 

@@ -22,7 +22,6 @@ Signup::~Signup() {}
 
 void Signup::setupUI() {
     //first page
-    mainContainer = new QHBoxLayout();
     signUpContainer = new QVBoxLayout();
     signUpFormContainer = new QVBoxLayout();
 
@@ -31,34 +30,67 @@ void Signup::setupUI() {
     setupSignupButton();
     setupSocialsLogin();
 
-    signUpContainer->addWidget(titleText, 1);
-    signUpContainer->addLayout(signUpFormContainer, 5);
-    signUpContainer->addWidget(divider, 1);
-    signUpContainer->addWidget(socials, 1);
+    signUpContainer->addWidget(titleText);
+    signUpContainer->addLayout(signUpFormContainer);
+    signUpContainer->addWidget(divider);
+    signUpContainer->addWidget(socials);
 
-    mainContainer->addStretch(4);
-    mainContainer->addLayout(signUpContainer, 2);
-    mainContainer->addStretch(4);
+    // Create a centered layout for the first page
+    auto firstPageCenteredInnerLayout = new QVBoxLayout();
+    firstPageCenteredInnerLayout->addStretch();
+    firstPageCenteredInnerLayout->addLayout(signUpContainer);
+    firstPageCenteredInnerLayout->addStretch();
+    firstPageCenteredInnerLayout->setAlignment(Qt::AlignCenter);
+
+    auto firstPageCenteredOuterLayout = new QHBoxLayout();
+    firstPageCenteredOuterLayout->addStretch();
+    firstPageCenteredOuterLayout->addLayout(firstPageCenteredInnerLayout);
+    firstPageCenteredOuterLayout->addStretch();
+    firstPageCenteredOuterLayout->setAlignment(Qt::AlignCenter);
 
 
     //second page
     secondPageContainer = new QVBoxLayout();
-    secondPageUserNameField = createFormField("User Name", "Enter Your Username");
+    secondPageUserNameField = createFormField("Username", "Choose Your Username");
+    auto dateLabel = new QLabel("Date Of Birth");
     secondPageDateOfBirthField = new QDateEdit(QDate::currentDate());
     finishButton = new QPushButton("Done");
+    secondPageContainer->addStretch();
+    secondPageContainer->addLayout(secondPageUserNameField);
+    secondPageContainer->addWidget(dateLabel);
+    secondPageContainer->addWidget(secondPageDateOfBirthField);
+    secondPageContainer->addWidget(finishButton);
+    secondPageContainer->addStretch();
+
+    // Create a centered layout for the second page
+    auto secondPageCenteredInnerLayout = new QVBoxLayout();
+    secondPageCenteredInnerLayout->addStretch();
+    secondPageCenteredInnerLayout->addLayout(secondPageContainer);
+    secondPageCenteredInnerLayout->addStretch();
+    secondPageCenteredInnerLayout->setAlignment(Qt::AlignCenter);
+    auto secondPageCenteredOuterLayout = new QHBoxLayout();
+    secondPageCenteredOuterLayout->addStretch();
+    secondPageCenteredOuterLayout->addLayout(secondPageCenteredInnerLayout);
+    secondPageCenteredOuterLayout->addStretch();
+    secondPageCenteredOuterLayout->setAlignment(Qt::AlignCenter);
 
 
     //setup stacked widget
-    pages = new QStackedWidget(this);
+    pages = new QStackedWidget();
 
     auto page1 = new QWidget();
-    page1->setLayout(mainContainer);
+    page1->setLayout(firstPageCenteredOuterLayout);
 
     auto page2 = new QWidget();
-    page2->setLayout(secondPageContainer);
+    page2->setLayout(secondPageCenteredOuterLayout);
 
     pages->addWidget(page1);
     pages->addWidget(page2);
+
+    auto pageLayout = new QVBoxLayout(this);
+    pageLayout->addWidget(pages);
+    this->setLayout(pageLayout);
+
 
     setWindowTitle("Sign Up");
     setMinimumWidth(400);
@@ -66,7 +98,7 @@ void Signup::setupUI() {
 }
 
 void Signup::setupTitleText() {
-    titleText = new QLabel("Hello, Let's create your termiNet Account!!", this);
+    titleText = new QLabel("Hello, Let's create your termiNet Account!!");
     QFont titleFont = titleText->font();
     titleFont.setBold(true);
     titleFont.setPointSize(20);
@@ -76,14 +108,14 @@ void Signup::setupTitleText() {
 void Signup::setupFormFields() {
     userNameField = createFormField("Username", "Enter Your UserName");
     emailField = createFormField("Email", "Enter Your Email");
-    dateOfBirthField = new QDateEdit(QDate::currentDate(), this);
+    dateOfBirthField = new QDateEdit(QDate::currentDate());
     dateOfBirthField->setDisplayFormat("dd/MM/yyyy");
     passwordField = createFormField("Password", "Enter Your Password", QLineEdit::Password);
     confirmPasswordField = createFormField("Confirm Password", "Confirm Your Password", QLineEdit::Password);
 
     signUpFormContainer->addLayout(userNameField);
     signUpFormContainer->addLayout(emailField);
-    signUpFormContainer->addWidget(new QLabel("Date Of Birth", this));
+    signUpFormContainer->addWidget(new QLabel("Date Of Birth"));
     signUpFormContainer->addWidget(dateOfBirthField);
     signUpFormContainer->addLayout(passwordField);
     signUpFormContainer->addLayout(confirmPasswordField);
@@ -109,7 +141,7 @@ QVBoxLayout* Signup::createFormField(const QString& labelText, const QString& pl
 }
 
 void Signup::setupSignupButton() {
-    signupBtn = new QPushButton("Create Account", this);
+    signupBtn = new QPushButton("Create Account");
     connect(signupBtn, &QPushButton::clicked, this, &Signup::onCreateAccountBtnClicked);
     signUpFormContainer->addWidget(signupBtn, 1);
     signUpFormContainer->addStretch(4);
@@ -148,29 +180,24 @@ QString Signup::validateSignupForm(const QString& name, const QString& email, co
 }
 
 void Signup::onCreateAccountBtnClicked() {
-    qDebug() << "Signup: create account button clicked";
     QString name = userNameInput->text();
     QString email = emailInput->text();
     QDate dateOfBirth = dateOfBirthField->date();
     QString password = passwordInput->text();
     QString confirmPassword = confirmPasswordInput->text();
-    qDebug() << "Retrieved info from form";
 
     QString errorMsg = validateSignupForm(name, email, dateOfBirth, password, confirmPassword);
     if (!errorMsg.isEmpty()) {
         QMessageBox::critical(this, "Validation Error", errorMsg, QMessageBox::Ok);
         return;
     }
-    qDebug() << "Signup form valid";
 
     QString errorMessage = "";
     int errorCode = SignupRepository::createNewUserAccountWithEmailAndPassword(name, email, dateOfBirth, password, errorMessage);
     qDebug() << "Signup: Create New User account with email and password complete";
     if(errorCode){
-        qDebug() << "Signup: Error encountered";
         QMessageBox::critical(this, "Signup Failed", "Creating Your Account Failed\n" + errorMessage, QMessageBox::Ok);
     }else{
-        qDebug() << "Signup: No error encountered";
         QMessageBox::information(this, "Account Created", "Account Created Successfully\nEnjoy Sharing Your Ideas", QMessageBox::Ok);
         UserModel user = UserRepository::getUserFromEmail(email);
         AuthenticatedUser::setInstance(user);
@@ -182,43 +209,53 @@ void Signup::onCreateAccountBtnClicked() {
 
 
 void Signup::onGoogleSignup(){
-    qDebug() << "Signup: Will initiate signup";
     GoogleReply reply = SignupRepository::googleSignup();
+
+    QEventLoop loop;
+
     if(!reply.accessToken.isEmpty()){
-        qDebug() << "Got Access token";
         pages->setCurrentIndex(1);
         connect(finishButton, &QPushButton::clicked, this, [&](){
-            QString name = secondPageUserNameField->findChild<QLineEdit*>()->text();
+            QString name = userNameInput->text();
             QDate dob = secondPageDateOfBirthField->date();
             QString errorMsg = "";
 
             if (name.isEmpty()){
                 QMessageBox::critical(this, "Validation Error", "User Name field cannot be left empty", QMessageBox::Ok);
+                loop.quit();
                 return;
             }
 
             if(!FormValidator::validateUserName(name, errorMsg)){
                 QMessageBox::critical(this, "Validation Error", errorMsg, QMessageBox::Ok);
+                loop.quit();
                 return;
             }
 
             if (!dob.isValid()){
                 QMessageBox::critical(this, "Validation Error", "Invalid Date of Birth", QMessageBox::Ok);
+                loop.quit();
                 return;
             }
+
             QString errorMessage;
             int error_code = SignupRepository::createNewUserAccountWithGoogle(name, dob, reply.idToken, errorMessage);
             if(error_code){
                 QMessageBox::critical(this, "Signup Failed", "Creating Your Account Failed\n" + errorMessage, QMessageBox::Ok);
+                loop.quit();
             }else{
                 QMessageBox::information(this, "Account Created", "Account Created Successfully\nEnjoy Sharing Your Ideas", QMessageBox::Ok);
                 UserModel user = UserRepository::getUserFromGoogleId(reply.idToken);
                 AuthenticatedUser::setInstance(user);
                 AppHelper::saveUserForPersistentLogin(user.getId());
+                loop.quit();
                 emit signupSuccessful();
             }
 
         });
+        loop.exec();
+
     }
+
 }
 
