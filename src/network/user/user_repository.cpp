@@ -71,6 +71,10 @@ UserModel UserRepository::getUserFromId(int id){
     QString uri = ApiClient::getInstance().getUserDataUrl() + "3/" + QString::number(id);
     return getUser(uri);
 }
+UserModel UserRepository::getUserFromGoogleId(const QString& googleId){
+    QString uri = ApiClient::getInstance().getUserDataUrl() + "4/" + googleId;
+    return getUser(uri);
+}
 
 //update functions
 
@@ -135,3 +139,4 @@ bool UserRepository::updateUserProfilePic(const QIcon &newProfilePic) {
     QString base64Image = QString::fromLatin1(byteArray.toBase64().data());
     return updateUser("profile_image", base64Image);
 }
+

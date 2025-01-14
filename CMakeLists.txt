@@ -105,6 +105,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         src/common/widgets/clickable_label.h
         src/network/login/.gitignore
         src/screens/signup/signup.h src/screens/signup/signup.cpp
+        src/network/signup/signup_repository.h src/network/signup/signup_repository.cpp
+
 
 
 
