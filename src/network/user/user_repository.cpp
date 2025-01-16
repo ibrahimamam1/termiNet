@@ -27,7 +27,7 @@ UserModel UserRepository::getUser(const QString& userUri){
                 if (jsonObject.contains("body")) {
                     QJsonObject body = jsonObject["body"].toObject();
 
-                    user.setId(body["user_id"].toInt());
+                    user.setId(body["user_id"].toString());
                     user.setName(body["user_name"].toString());
                     user.setEmail(body["user_email"].toString());
                     user.setSex(body["user_sex"].toString());
@@ -67,20 +67,17 @@ UserModel UserRepository::getUserFromName(const QString& name){
     QString uri = ApiClient::getInstance().getUserDataUrl() + "2/" + name;
     return getUser(uri);
 }
-UserModel UserRepository::getUserFromId(int id){
-    QString uri = ApiClient::getInstance().getUserDataUrl() + "3/" + QString::number(id);
+UserModel UserRepository::getUserFromId(const QString& id){
+    QString uri = ApiClient::getInstance().getUserDataUrl() + "3/" + id;
     return getUser(uri);
 }
-UserModel UserRepository::getUserFromGoogleId(const QString& googleId){
-    QString uri = ApiClient::getInstance().getUserDataUrl() + "4/" + googleId;
-    return getUser(uri);
-}
+
 
 //update functions
 
 bool UserRepository::updateUser(const QString& field, const QString& new_data){
     QJsonObject jsonObject;
-    QString key = QString::number(AuthenticatedUser::getInstance()->getId());
+    QString key = AuthenticatedUser::getInstance()->getId();
     jsonObject["id"] = key;
     jsonObject["field"] = field;
     jsonObject["new_data"] = new_data;

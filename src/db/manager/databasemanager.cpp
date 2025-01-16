@@ -133,7 +133,7 @@ bool DatabaseManager::addIncomingMessage(const MessageModel& msg){
 }
 
 
-std::vector<MessageModel> DatabaseManager::getSentMessagesTo(int id){
+std::vector<MessageModel> DatabaseManager::getSentMessagesTo(const QString& id){
     std::vector<MessageModel>msgs;
 
     if(!db.open()){
@@ -151,7 +151,7 @@ std::vector<MessageModel> DatabaseManager::getSentMessagesTo(int id){
         return msgs;
     }
     while(q.next()){
-        UserModel receiver = UserRepository::getUserFromId(q.value(3).toInt());
+        UserModel receiver = UserRepository::getUserFromId(q.value(3).toString());
         QString content = q.value(2).toString();
         QDateTime time = q.value(3).toDateTime();
         msgs.push_back(MessageModel(receiver , content, time));
@@ -159,7 +159,7 @@ std::vector<MessageModel> DatabaseManager::getSentMessagesTo(int id){
     return msgs;
 }
 
-std::vector<MessageModel> DatabaseManager::getReceivedMessagesFrom(int id){
+std::vector<MessageModel> DatabaseManager::getReceivedMessagesFrom(const QString& id){
     std::vector<MessageModel>msgs;
 
     if(!db.open()){
@@ -245,7 +245,7 @@ std::vector<MessageModel>DatabaseManager::getAllConversations(){
     }
 
     while(q.next()){
-        int userId = q.value(0).toInt();
+        QString userId = q.value(0).toString();
         QDateTime timestamp = q.value(1).toDateTime();
         QString messageText = q.value(2).toString();
         QString direction = q.value(3).toString();

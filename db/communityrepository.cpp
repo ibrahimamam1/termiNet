@@ -106,7 +106,7 @@ bool CommunityRepository::addNewCommunity(CommunityModel community) {
 
     // Add user id to users_communitites table
     q.prepare("insert into users_communities(user_id, community_id) values (:u_id, :c_id);");
-    int u_id = AuthenticatedUser::getInstance()->getId();
+    QString u_id = AuthenticatedUser::getInstance()->getId();
     q.bindValue(":u_id", u_id);
     q.bindValue(":c_id", id);
 
@@ -117,7 +117,7 @@ bool CommunityRepository::addNewCommunity(CommunityModel community) {
     return true;
 }
 
-std::vector<CommunityModel> CommunityRepository::getUserCommunities(int user_id){
+std::vector<CommunityModel> CommunityRepository::getUserCommunities(const QString& user_id){
     QSqlQuery q;
     std::vector<CommunityModel> comms;
 

@@ -1,13 +1,13 @@
 #include "login.h"
 
-#include "../helpers/api_client/apiclient.h"
-#include "../helpers/hash_helper/hashhelper.h"
-#include "../src/network/login/loginrepository.h"
-#include "../src/network/user/user_repository.h"
-#include "../helpers/apphelper.h"
-#include "../src/models/user/authenticateduser.h"
-#include "../src/helpers/validators/formvalidator.h"
-#include "../src/common/type/types.h"
+#include "../../../helpers/api_client/apiclient.h"
+#include "../../../helpers/hash_helper/hashhelper.h"
+#include "../../network/login/loginrepository.h"
+#include "../../network/user/user_repository.h"
+#include "../../../helpers/apphelper.h"
+#include "../../models/user/authenticateduser.h"
+#include "../../helpers/validators/formvalidator.h"
+#include "../../common/type/types.h"
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QMessageBox>
@@ -138,9 +138,11 @@ void Login::onLoginButtonClicked()
 }
 
 void Login::onGoogleLogin(){
-    LoginResult login = LoginRepository::googleLogin();
+    QString googleId = "";
+    LoginResult login = LoginRepository::googleLogin(googleId);
     if(login == LoginResult::SUCCESS){
-        UserModel user = UserRepository::getUserFromEmail("test@gmail.com");
+        UserModel user = UserRepository::getUserFromId(googleId);
+        qDebug() << "Got User " << user.getName();
         AuthenticatedUser::setInstance(user);
         AppHelper::saveUserForPersistentLogin(user.getId());
         emit loginSuccessful();

@@ -1,5 +1,5 @@
 #include "src/screens/signup/signup.h"
-#include "login_signup/login.h"
+#include "src/screens/login/login.h"
 #include "screens/home/home.h"
 #include "src/models/user/usermodel.h"
 #include "src/network/user/user_repository.h"
@@ -33,9 +33,9 @@ int main(int argc, char *argv[])
     QEventLoop loop;
     bool initializationComplete = false;
 
-    //int userId = AppHelper::checkPersitentLogin();
-    int userId = -1;
-    if(userId == -1){
+    //QString userId = AppHelper::checkPersitentLogin();
+    QString userId = "";
+    if(userId.length() <= 5){
         // Create and show login/signup window
         auto loginWindow = new Login();
         auto signUpPage = new Signup();
@@ -63,6 +63,7 @@ int main(int argc, char *argv[])
         stackedWidget->show();
     }else{
         UserModel user = UserRepository::getUserFromId(userId);
+        qDebug() << "Got User " << user.getName();
         AuthenticatedUser::setInstance(user);
         initializationComplete = true;
         loop.quit();

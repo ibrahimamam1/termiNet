@@ -11,8 +11,8 @@
 #include <QPushButton>
 #include <QFrame>
 #include <QFont>
-#include "../../../login_signup/widgets/divider.h"
-#include "../../../login_signup/widgets/socials.h"
+#include "../../common/widgets/divider.h"
+#include "../../common/widgets/socials_widget.h"
 #include "../../../screens/home/home.h"
 
 class Signup : public QDialog

@@ -13,9 +13,9 @@
 #include<QLabel>
 #include<QLineEdit>
 #include<QPushButton>
-#include"widgets/divider.h"
-#include "widgets/socials.h"
-#include "../src/models/user/usermodel.h"
+#include"../../common/widgets/divider.h"
+#include "../../common/widgets/socials_widget.h"
+#include "../../models/user/usermodel.h"
 
 
 class Login : public QDialog

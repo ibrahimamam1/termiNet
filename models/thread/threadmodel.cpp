@@ -29,7 +29,7 @@ void ThreadModel::setCommentCount(const int count){ this->comment_count = count;
 QString ThreadModel::getCreatedAt() const { return created_at; }
 void ThreadModel::setCreatedAt(const QString &created_at) { this->created_at = created_at; }
 
-int ThreadModel::getAuthorId() const { return author.getId(); }
+QString ThreadModel::getAuthorId() const { return author.getId(); }
 QString ThreadModel::getAuthorName() const{return author.getName();}
 
 

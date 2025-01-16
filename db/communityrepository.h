@@ -6,7 +6,7 @@ class CommunityRepository
 public:
     CommunityRepository();
     static bool addNewCommunity(CommunityModel community);
-    static std::vector<CommunityModel> getUserCommunities(int user_id);
+    static std::vector<CommunityModel> getUserCommunities(const QString& user_id);
     static int getMemberCount(int comm_id);
 };
 

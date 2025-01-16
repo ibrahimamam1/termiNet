@@ -19,7 +19,7 @@ std::vector<MessageModel> MessageRepository::getMessagesForUser(const QString& f
     while(q.next()){
         QDateTime timestamp = q.value(1).toDateTime();
         QString content = q.value(2).toString();
-        UserModel receiver = UserRepository::getUserFromId(q.value(3).toInt());
+        UserModel receiver = UserRepository::getUserFromId(q.value(3).toString());
 
         msgs.push_back(MessageModel(receiver, content, timestamp));
     }

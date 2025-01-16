@@ -15,7 +15,7 @@ set(PROJECT_SOURCES
 
 
 
-        login_signup/login.h login_signup/login.cpp
+
 
 
 
@@ -37,8 +37,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 
 
 
-        login_signup/widgets/divider.h login_signup/widgets/divider.cpp
-        login_signup/widgets/socials.h login_signup/widgets/socials.cpp
+
+
 
 
         screens/create_community/createcommunity.h
@@ -106,6 +106,10 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         src/network/login/.gitignore
         src/screens/signup/signup.h src/screens/signup/signup.cpp
         src/network/signup/signup_repository.h src/network/signup/signup_repository.cpp
+        src/common/widgets/divider.h
+        src/common/widgets/socials_widget.h
+        src/screens/login/login.h src/screens/login/login.cpp
+
 
 
 

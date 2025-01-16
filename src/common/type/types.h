@@ -6,11 +6,12 @@
 enum LoginResult {SUCCESS, FAILED, SERVER_ERROR, NETWORK_ERROR};
 
 //google reply
-typedef struct {
-    QString refreshToken;
+typedef struct{
     QString accessToken;
-    QString idToken;
+    QString refreshToken;
+    QString googleUserId;
+    QString email;
     QDateTime expirationDate;
-}GoogleReply;
+}GoogleReply ;
 
 #endif // TYPES_H

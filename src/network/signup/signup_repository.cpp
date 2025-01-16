@@ -11,24 +11,7 @@
 #include <QJsonArray>
 SignupRepository::SignupRepository() {}
 
-int SignupRepository::createNewUserAccount(const int code, const QString& name, const QString& email, const QDate& dateOfBirth, const QString& password, QString& error_msg) {
-    qDebug() << "SignupRepository: create new user account general";
-    QJsonObject jsonData;
-    jsonData["user_name"] = name;
-    jsonData["user_email"] = email;
-    jsonData["user_dob"] = dateOfBirth.toString("yyyy-MM-dd");
-    jsonData["user_bio"] = "";
-    jsonData["password"] = HashHelper::hashString(password);
-    jsonData["created_at"] = QDateTime::currentDateTimeUtc().toString(Qt::ISODate);
-    if(code == 1)
-        jsonData["method"] = "Email";
-    else if(code == 2){
-        jsonData["method"] = "Google";
-        jsonData["user_id"] = password;
-        jsonData["password"] = " ";
-    }
-
-    qDebug() << "SignupRepository: created json data";
+int SignupRepository::createNewUserAccount(const QJsonObject& jsonData, QString& error_msg) {
 
     ApiClient& apiClient = ApiClient::getInstance();
     QString url = apiClient.getUserDataUrl();
@@ -99,8 +82,20 @@ const GoogleReply SignupRepository::googleSignup(){
         googleReply.accessToken = google->token();
         googleReply.refreshToken = google->refreshToken();
         QVariantMap extra = google->extraTokens();
-        googleReply.idToken = extra["id_token"].toString();
-        googleReply.expirationDate = google->expirationAt();
+
+        // Decode the ID token to get the user ID
+        QString idToken = extra["id_token"].toString();
+        QStringList parts = idToken.split('.');
+        if (parts.length() >= 2) {
+            QByteArray payload = QByteArray::fromBase64(parts[1].toUtf8());
+            QJsonDocument jsonDoc = QJsonDocument::fromJson(payload);
+            QJsonObject jsonObj = jsonDoc.object();
+
+            // Store the sub claim (Google user ID)
+            googleReply.googleUserId = jsonObj["sub"].toString();
+            googleReply.email = jsonObj["email"].toString();
+
+        }
         loop.quit();
     });
 
@@ -124,11 +119,29 @@ const GoogleReply SignupRepository::googleSignup(){
 }
 int SignupRepository::createNewUserAccountWithEmailAndPassword(const QString& name, const QString& email,
                                                                const QDate& dateOfBirth, const QString& password, QString& error_msg){
-    qDebug() << "SignupRepository: create new user with email and password";
-    return createNewUserAccount(1, name, email, dateOfBirth, password, error_msg);
+    QJsonObject jsonData;
+    jsonData["method"] = "Email";
+    jsonData["user_name"] = name;
+    jsonData["user_email"] = email;
+    jsonData["user_dob"] = dateOfBirth.toString("yyyy-MM-dd");
+    jsonData["user_bio"] = "";
+    jsonData["password"] = HashHelper::hashString(password);
+    jsonData["created_at"] = QDateTime::currentDateTimeUtc().toString(Qt::ISODate);
+
+    return createNewUserAccount(jsonData, error_msg);
 }
-int SignupRepository::createNewUserAccountWithGoogle(const QString& name, const QDate& dateOfBirth, const QString& idToken, QString& error_msg){
-    return createNewUserAccount(2, name, " ", dateOfBirth, idToken, error_msg);
+int SignupRepository::createNewUserAccountWithGoogle(const QString& name, const QString& email, const QDate& dob, const QString& idToken, QString& error_msg){
+    QJsonObject jsonData;
+    jsonData["method"] = "Google";
+    jsonData["user_name"] = name;
+    jsonData["user_email"] = email;
+    jsonData["user_dob"] = dob.toString("yyyy-MM-dd");
+    jsonData["user_bio"] = "";
+    jsonData["password"] = "";
+    jsonData["created_at"] = QDateTime::currentDateTimeUtc().toString(Qt::ISODate);
+    jsonData["user_id"] = idToken;
+
+    return createNewUserAccount(jsonData, error_msg);
 }
 
 
