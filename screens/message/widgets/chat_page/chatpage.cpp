@@ -50,8 +50,8 @@ void ChatPage::onSendButtonClicked(){
     try{
         QJsonObject messageJson;
         messageJson["type"] = 2;
-        messageJson["source"] = QString::number(AuthenticatedUser::getInstance()->getId());
-        messageJson["destination"] = QString::number(otherUser.getId());
+        messageJson["source"] = AuthenticatedUser::getInstance()->getId();
+        messageJson["destination"] = otherUser.getId();
         messageJson["content"] = text;
 
         QJsonDocument jsonDoc(messageJson);

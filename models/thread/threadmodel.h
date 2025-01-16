@@ -38,7 +38,7 @@ public:
     QString getCreatedAt() const;
     void setCreatedAt(const QString &created_at);
 
-    int getAuthorId() const;
+    QString getAuthorId() const;
     QString getAuthorName() const;
     void setAuthorId(int author_id);
 

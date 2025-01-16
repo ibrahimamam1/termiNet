@@ -79,7 +79,7 @@ void MessagePage::onMessageReceived(const QString& msg) {
 
     // Extract the sender id and message string
     if (jsonObj.contains("sender_id") && jsonObj.contains("message")) {
-        int sender_id = jsonObj["sender_id"].toInt();
+        QString sender_id = jsonObj["sender_id"].toString();
         QString message = jsonObj["message"].toString();
 
         qDebug() << "Received message from :" << sender_id;

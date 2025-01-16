@@ -6,7 +6,7 @@
 class UserModel
 {
 private:
-    unsigned int id;
+    QString id;
     QString name;
     QString email;
     QString sex;
@@ -18,11 +18,12 @@ private:
 
 public:
     UserModel();
-    UserModel(int u_id, QString u_name, QString u_email, QString u_sex, QString u_dob, QString u_bio, QString u_created_at, const QIcon& u_profilePic);
+    UserModel(const QString& u_id, const QString& u_name, const QString& u_email, const QString& u_sex,
+              const QString& u_dob, const QString& u_bio, const QString& u_created_at, const QIcon& u_profilePic);
     UserModel(const UserModel& user);
 
     // Getters
-    unsigned int getId() const;
+    QString getId() const;
     QString getName() const;
     QString getEmail() const;
     QString getSex() const;
@@ -32,7 +33,7 @@ public:
     QIcon getProfilePic() const;
 
     // Setters
-    void setId(unsigned int id);
+    void setId(const QString& id);
     void setName(const QString &name);
     void setEmail(const QString &email);
     void setSex(const QString &sex);

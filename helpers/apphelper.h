@@ -7,8 +7,8 @@ class AppHelper
 {
 public:
     AppHelper();
-    static void saveUserForPersistentLogin(const int& user_id);
-    static const int checkPersitentLogin();
+    static void saveUserForPersistentLogin(const QString& user_id);
+    static const QString checkPersitentLogin();
     static const QString getDefaultProfilePicturePath();
     static const QJsonDocument loadJsonFromFile(const QString& filePath);
 };

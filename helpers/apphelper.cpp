@@ -8,7 +8,7 @@
 #include <QDebug>
 #include <QApplication>
 
-void AppHelper::saveUserForPersistentLogin(const int& user_id){
+void AppHelper::saveUserForPersistentLogin(const QString& user_id){
 
     //Get standart config location
     QString configLocation = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
@@ -44,19 +44,19 @@ void AppHelper::saveUserForPersistentLogin(const int& user_id){
     qDebug() << "User ID saved for persistent login to:" << path; // For debugging
 }
 
-const int AppHelper::checkPersitentLogin(){
+const QString AppHelper::checkPersitentLogin(){
 
-    QString configLocation = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation);
+    QString configLocation = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     if (configLocation.isEmpty()) {
         qWarning() << "Could not determine writable config location.";
-        return -1;
+        return "";
     }
-    QString path = configLocation + "/terminet/login.txt";
+    QString path = configLocation + "/login.txt";
     QFile file(path);
 
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
         qWarning() << "Failed to open file for reading:" << path << file.errorString(); // Changed "writing" to "reading"
-        return -1;
+        return "";
     }
 
     QTextStream in(&file);
@@ -65,7 +65,7 @@ const int AppHelper::checkPersitentLogin(){
     if (in.atEnd()) {
         qWarning() << "Login file is empty or missing timestamp.";
         file.close();
-        return -1;
+        return "";
     }
     in.readLine();
 
@@ -73,20 +73,12 @@ const int AppHelper::checkPersitentLogin(){
     if (in.atEnd()) {
         qWarning() << "Login file is incomplete, missing user ID.";
         file.close();
-        return -1;
+        return "";
     }
     QString userIdStr = in.readLine();
-    bool ok;
-    int userId = userIdStr.toInt(&ok);
-
-    if (!ok) {
-        qWarning() << "Failed to convert user ID from string:" << userIdStr;
-        file.close();
-        return -1;
-    }
 
     file.close();
-    return userId;
+    return userIdStr;
 }
 
 const QString AppHelper::getDefaultProfilePicturePath() {

@@ -55,7 +55,7 @@ LoginResult LoginRepository::login(const QString& email, const QString& pass){
     return loginResult;
 }
 
-LoginResult LoginRepository::googleLogin() {
+LoginResult LoginRepository::googleLogin(QString& googleId) {
     auto google = new QOAuth2AuthorizationCodeFlow();
     google->setScope("email");
 
@@ -96,6 +96,8 @@ LoginResult LoginRepository::googleLogin() {
 
         // Check if the access token is valid
         if (!google->token().isEmpty()) {
+            auto extraTokens = google->extraTokens();
+            googleId = extraTokens["id_token"].toString();
             result = LoginResult::SUCCESS;
         } else {
             result = LoginResult::FAILED;

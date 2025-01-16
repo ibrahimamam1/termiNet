@@ -39,7 +39,7 @@ void WebSocketClient::onConnected() {
     //Send an init message to the sever
     QJsonObject json;
     json["type"] = 1;
-    json["key"] = QString::number(AuthenticatedUser::getInstance()->getId());
+    json["key"] = AuthenticatedUser::getInstance()->getId();
 
     QJsonDocument doc(json);
 

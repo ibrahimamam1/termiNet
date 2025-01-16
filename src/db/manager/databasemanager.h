@@ -24,8 +24,8 @@ public:
      bool addIncomingMessage(const MessageModel& msg);
     bool createSchema();
 
-    std::vector<MessageModel>getSentMessagesTo(int id);
-    std::vector<MessageModel>getReceivedMessagesFrom(int id) ;
+    std::vector<MessageModel>getSentMessagesTo(const QString& id);
+    std::vector<MessageModel>getReceivedMessagesFrom(const QString& id) ;
     std::vector<MessageModel>getAllConversations();
 
     ~DatabaseManager();

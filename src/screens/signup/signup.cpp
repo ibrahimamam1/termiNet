@@ -215,44 +215,26 @@ void Signup::onGoogleSignup(){
 
     if(!reply.accessToken.isEmpty()){
         pages->setCurrentIndex(1);
-        connect(finishButton, &QPushButton::clicked, this, [&](){
-            QString name = userNameInput->text();
-            QDate dob = secondPageDateOfBirthField->date();
-            QString errorMsg = "";
-
-            if (name.isEmpty()){
-                QMessageBox::critical(this, "Validation Error", "User Name field cannot be left empty", QMessageBox::Ok);
-                loop.quit();
-                return;
-            }
-
-            if(!FormValidator::validateUserName(name, errorMsg)){
-                QMessageBox::critical(this, "Validation Error", errorMsg, QMessageBox::Ok);
-                loop.quit();
-                return;
-            }
-
-            if (!dob.isValid()){
-                QMessageBox::critical(this, "Validation Error", "Invalid Date of Birth", QMessageBox::Ok);
-                loop.quit();
-                return;
-            }
+        connect(finishButton, &QPushButton::clicked,this,[&]{
+            auto userName = userNameInput->text();
+            auto dob = secondPageDateOfBirthField->date();
 
             QString errorMessage;
-            int error_code = SignupRepository::createNewUserAccountWithGoogle(name, dob, reply.idToken, errorMessage);
+            int error_code = SignupRepository::createNewUserAccountWithGoogle(userName, reply.email, dob, reply.googleUserId, errorMessage);
             if(error_code){
                 QMessageBox::critical(this, "Signup Failed", "Creating Your Account Failed\n" + errorMessage, QMessageBox::Ok);
                 loop.quit();
             }else{
                 QMessageBox::information(this, "Account Created", "Account Created Successfully\nEnjoy Sharing Your Ideas", QMessageBox::Ok);
-                UserModel user = UserRepository::getUserFromGoogleId(reply.idToken);
+                UserModel user = UserRepository::getUserFromId(reply.googleUserId);
                 AuthenticatedUser::setInstance(user);
                 AppHelper::saveUserForPersistentLogin(user.getId());
                 loop.quit();
                 emit signupSuccessful();
             }
-
         });
+
+
         loop.exec();
 
     }

@@ -35,7 +35,7 @@ void ThreadRepository::addThreadtoDb(ThreadModel& thread){
     q.bindValue(":title",  thread.getTitle());
     q.bindValue(":content", thread.getContent());
     q.bindValue(":created_at",   QString(created_at));
-    q.bindValue(":author_id",   QString::number(thread.getAuthorId()));
+    q.bindValue(":author_id",   thread.getAuthorId());
     q.bindValue(":community_id",   QString::number(thread.getCommunityId()));
     q.bindValue(":parent_thread_id",   QString::number(thread.getParentThreadId()));
 
@@ -63,7 +63,7 @@ std::vector<ThreadModel> ThreadRepository::loadAllThreadsFromCommunity(int commu
     }
     while (q.next()) {
         int commentCount = getCommentCountForThread(q.value(0).toInt());
-        UserModel author = UserRepository::getUserFromId(q.value(4).toInt());
+        UserModel author = UserRepository::getUserFromId(q.value(4).toString());
 
         // Create ThreadModel object
         ThreadModel t(
@@ -91,7 +91,7 @@ std::vector<ThreadModel> ThreadRepository::loadAllCommentsFromDb(int thread_id) 
     if (q.exec()) {
         while (q.next()) {
             int commentCount = getCommentCountForThread(q.value(0).toInt());
-            UserModel author = UserRepository::getUserFromId(q.value(4).toInt());
+            UserModel author = UserRepository::getUserFromId(q.value(4).toString());
             // Create ThreadModel object
             ThreadModel t(
                 q.value(0).toInt(),
@@ -146,7 +146,7 @@ ThreadModel ThreadRepository::getSingleThread(int thread_id){
         return ThreadModel();
     }
 
-    UserModel author = UserRepository::getUserFromId(q.value(4).toInt());
+    UserModel author = UserRepository::getUserFromId(q.value(4).toString());
     ThreadModel thread(
         q.value(0).toInt(),
         q.value(1).toString(),
