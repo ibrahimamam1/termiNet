@@ -1,6 +1,8 @@
 #include "threadrepository.h"
 #include <QSqlQuery>
 #include <QJsonObject>
+#include <QJsonDocument>
+#include <QJsonArray>
 #include <QNetworkReply>
 #include <QEventLoop>
 #include "../../network/user/user_repository.h"
@@ -33,31 +35,61 @@ bool ThreadRepository::postNewThread(ThreadModel& thread){
     return false;
 }
 
-std::vector<ThreadModel> ThreadRepository::loadAllThreadsFromCommunity(int community_id) {
+std::vector<ThreadModel> ThreadRepository::loadThreads(const QString& filter, const QString& value) {
+    qDebug() << "Thread Repo loading threads";
+    ApiClient& client = ApiClient::getInstance();
+    QString url = client.getThreadsUrl() + filter + "/" + value;
+    QEventLoop loop;
+    QNetworkReply *reply = client.makeGetRequest(url);
+    QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
+
+    loop.exec();
     std::vector<ThreadModel> threads;
-    QSqlQuery q;
 
-    if(community_id == -1)
-        q.prepare("SELECT * FROM threads;");
-    else{
-        q.prepare("SELECT * FROM threads where community_id = :c_id");
-        q.bindValue(":c_id", community_id);
+    if (reply->error() == QNetworkReply::NoError) {
+        QByteArray data = reply->readAll();
+        QJsonDocument jsonData = QJsonDocument::fromJson(data);
+
+        if (jsonData.isArray()) {
+            QJsonArray jsonArray = jsonData.array();
+
+            for (const QJsonValue& jsonValue : jsonArray) {
+                if (jsonValue.isObject()) {
+                    QJsonObject jsonObject = jsonValue.toObject();
+
+                    // Extract values from the JSON object
+                    QString title = jsonObject["title"].toString();
+                    QString content = jsonObject["content"].toString();
+                    QString createdAt = jsonObject["created_at"].toString();
+                    QString authorId = jsonObject["author_id"].toString();
+                    size_t threadId = static_cast<size_t>(jsonObject["thread_id"].toInt());
+                    size_t communityId = static_cast<size_t>(jsonObject["community_id"].toInt());
+                    size_t parentThreadId = static_cast<size_t>(jsonObject["parent_thead_id"].toInt());
+
+                    UserModel author = UserRepository::getUserFromId(authorId);
+                    ThreadModel thread(title, content, author, communityId, threadId, createdAt, parentThreadId);
+
+                    threads.push_back(thread);
+                }
+            }
+        } else {
+            qDebug() << "JSON data is not an array.";
+        }
+    } else {
+        qDebug() << "Network error:" << reply->errorString();
     }
 
-    if (!q.exec()) {
-        qDebug() << "Failed to get threads";
-        return threads;
-    }
-    while (q.next()) {
-        int commentCount = getCommentCountForThread(q.value(0).toInt());
-        UserModel author = UserRepository::getUserFromId(q.value(4).toString());
-
-        // Create ThreadModel object
-        ThreadModel t;
-
-        threads.push_back(t);
-    }
+    reply->deleteLater();
     return threads;
+}
+std::vector<ThreadModel> ThreadRepository::loadAllThreads(){
+    return loadThreads("n", "0");
+}
+std::vector<ThreadModel> ThreadRepository::loadAllThreadsFromUser(const QString& userId){
+    return loadThreads("user_id", userId);
+}
+std::vector<ThreadModel> ThreadRepository::loadAllThreadsFromCommunity(const int& communityId){
+    return loadThreads("community_id", QString::number(communityId));
 }
 
 std::vector<ThreadModel> ThreadRepository::loadAllCommentsFromDb(int thread_id) {
@@ -121,17 +153,3 @@ ThreadModel ThreadRepository::getSingleThread(int thread_id){
 
 }
 
-QString ThreadRepository::getAuthorName(int auth_id){
-    QSqlQuery q;
-    q.prepare("Select user_name from users where user_id=:author_id");
-    q.bindValue(":author_id", auth_id);
-
-    if(q.exec()){
-        if(q.next()){
-            return q.value(0).toString();
-        }
-    }
-
-    qDebug() << "Failed to get the author name";
-    return NULL;
-}
