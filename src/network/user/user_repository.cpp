@@ -77,14 +77,14 @@ UserModel UserRepository::getUserFromId(const QString& id){
 
 bool UserRepository::updateUser(const QString& field, const QString& new_data){
     QJsonObject jsonObject;
-    QString key = AuthenticatedUser::getInstance()->getId();
+    QString key = AuthenticatedUser::getInstance().getId();
     jsonObject["id"] = key;
     jsonObject["field"] = field;
     jsonObject["new_data"] = new_data;
 
     ApiClient& api_client = ApiClient::getInstance();
     QString url = api_client.getUpdateUserDataUrl();
-    QNetworkReply *reply =  api_client.makePostRequest(url, jsonObject, key);
+    QNetworkReply *reply =  api_client.makePostRequest(url, jsonObject);
 
     // Wait for the reply to finish
     QEventLoop loop;

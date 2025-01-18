@@ -14,7 +14,7 @@ ProfileView::ProfileView(QWidget *parent)
 
     // Profile Picture Section
 
-    profileIcon = AuthenticatedUser::getInstance()->getProfilePic();
+    profileIcon = AuthenticatedUser::getInstance().getProfilePic();
     profilePic = new QLabel();
     profilePic->setPixmap(profileIcon.pixmap(QSize(100, 100)));
 
@@ -35,7 +35,7 @@ ProfileView::ProfileView(QWidget *parent)
     // Username Row
     auto userNameRow = new QHBoxLayout();
     userName = new QLineEdit(this);
-    userName->setText(AuthenticatedUser::getInstance()->getName());
+    userName->setText(AuthenticatedUser::getInstance().getName());
     userName->setReadOnly(true);
     changeUserName = new QPushButton("Edit", this);
     connect(changeUserName, &QPushButton::clicked, this, [this]() {
@@ -48,7 +48,7 @@ ProfileView::ProfileView(QWidget *parent)
     // Email Row
     auto userEmailRow = new QHBoxLayout();
     userEmail = new QLineEdit(this);
-    userEmail->setText(AuthenticatedUser::getInstance()->getEmail());
+    userEmail->setText(AuthenticatedUser::getInstance().getEmail());
     userEmail->setReadOnly(true);
     changeUserEmail = new QPushButton("Edit", this);
     connect(changeUserEmail, &QPushButton::clicked, this, [this]() {
@@ -61,7 +61,7 @@ ProfileView::ProfileView(QWidget *parent)
     // Date of Birth Row
     auto userDobRow = new QHBoxLayout();
     userDob = new QLineEdit(this);
-    userDob->setText(AuthenticatedUser::getInstance()->getDob());
+    userDob->setText(AuthenticatedUser::getInstance().getDob());
     userDob->setReadOnly(true);
     changeUserDob = new QPushButton("Edit", this);
     connect(changeUserDob, &QPushButton::clicked, this, [this]() {
@@ -74,7 +74,7 @@ ProfileView::ProfileView(QWidget *parent)
     // Bio Row
     auto userBioRow = new QHBoxLayout();
     userBio = new QLineEdit(this);
-    userBio->setPlaceholderText(AuthenticatedUser::getInstance()->getBio());
+    userBio->setPlaceholderText(AuthenticatedUser::getInstance().getBio());
     userBio->setReadOnly(true);
     changeUserBio = new QPushButton("Edit", this);
     connect(changeUserBio, &QPushButton::clicked, this, [this]() {
@@ -107,31 +107,31 @@ void ProfileView::onSaveButtonClicked() {
     auto instance = AuthenticatedUser::getInstance();
 
     // Update the username if it has changed
-    if (instance->getName() != userName->text()) {
+    if (instance.getName() != userName->text()) {
         qDebug() << "Updating User Name";
         UserRepository::updateUserName(userName->text());
     }
 
     // Update the email if it has changed
-    if (instance->getEmail() != userEmail->text()) {
+    if (instance.getEmail() != userEmail->text()) {
         qDebug() << "Updating User Email";
         UserRepository::updateUserEmail(userEmail->text());
     }
 
     // Update the date of birth if it has changed
-    if (instance->getDob() != userDob->text()) {
+    if (instance.getDob() != userDob->text()) {
         qDebug() << "Updating User Dob";
         UserRepository::updateUserDob(userDob->text());
     }
 
     // Update the bio if it has changed
-    if (instance->getBio() != userBio->text()) {
+    if (instance.getBio() != userBio->text()) {
         qDebug() << "Updating User Bio";
         UserRepository::updateUserBio(userBio->text());
     }
 
     // Update the profile picture if it has changed
-    if (profileIcon.cacheKey() != instance->getProfilePic().cacheKey()) {
+    if (profileIcon.cacheKey() != instance.getProfilePic().cacheKey()) {
         qDebug() << "Updating User Profile Pic";
         UserRepository::updateUserProfilePic(profileIcon);
     }

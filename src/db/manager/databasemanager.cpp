@@ -176,7 +176,7 @@ std::vector<MessageModel> DatabaseManager::getReceivedMessagesFrom(const QString
         qDebug() << "Failed to retreived messages\nError: "<<q.lastError().text();
         return msgs;
     }
-    UserModel user = *AuthenticatedUser::getInstance();
+    UserModel& user = AuthenticatedUser::getInstance();
     while(q.next()){
         QString content = q.value(2).toString();
         QDateTime time = q.value(3).toDateTime();

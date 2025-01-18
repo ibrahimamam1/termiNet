@@ -1,12 +1,12 @@
 #include "threadwidget.h"
 #include "../../../src/models/user/usermodel.h"
-#include "../../../models/thread/threadmodel.h"
-#include "../../../db/thread/thread_repository.h"
+#include "../../../../src/models/thread/threadmodel.h"
+#include "../../../src/network/threads/threadrepository.h"
 #include "../../home/home.h"
 
 ThreadWidget::ThreadWidget(const ThreadModel& thread, QWidget *parent) : QWidget(parent),
     threadContainer(new QVBoxLayout(this)),
-    userName(new QLabel(thread.getAuthorName(), this)),
+    userName(new QLabel(thread.getAuthor().getName(), this)),
     postTime(new QLabel(thread.getCreatedAt(), this)),
     title(new QLabel(thread.getTitle(), this)),
     content(new QTextEdit(this)),

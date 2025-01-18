@@ -39,7 +39,12 @@ CustomTopBar::CustomTopBar(QWidget *parent)
 void CustomTopBar::onCreatePostIconClicked(){
     qDebug() << "Create Post Btn Clicked";
     CreatePost *createPostWidget = new CreatePost();
+    connect(createPostWidget, &CreatePost::postCreated, this, &CustomTopBar::onPostCreated);
     createPostWidget->show();
+}
+
+void CustomTopBar::onPostCreated(bool success){
+    emit postCreated(success);
 }
 void CustomTopBar::onSearchTriggered(){
 

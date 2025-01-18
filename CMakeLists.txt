@@ -67,8 +67,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 
 
 
-        models/thread/threadmodel.h models/thread/threadmodel.cpp
-        db/thread/thread_repository.h db/thread/thread_repository.cpp
+
+
         screens/community_page/widgets/communitydescriptionwidget.h screens/community_page/widgets/communitydescriptionwidget.cpp
         models/community/communitymodel.h models/community/communitymodel.cpp
         screens/widgets/replyBox/replybox.h screens/widgets/replyBox/replybox.cpp
@@ -109,6 +109,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         src/common/widgets/divider.h
         src/common/widgets/socials_widget.h
         src/screens/login/login.h src/screens/login/login.cpp
+        src/models/thread/threadmodel.h src/models/thread/threadmodel.cpp
+        src/network/threads/threadrepository.h src/network/threads/threadrepository.cpp
 
 
 

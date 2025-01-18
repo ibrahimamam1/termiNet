@@ -50,7 +50,7 @@ void ChatPage::onSendButtonClicked(){
     try{
         QJsonObject messageJson;
         messageJson["type"] = 2;
-        messageJson["source"] = AuthenticatedUser::getInstance()->getId();
+        messageJson["source"] = AuthenticatedUser::getInstance().getId();
         messageJson["destination"] = otherUser.getId();
         messageJson["content"] = text;
 
@@ -92,7 +92,7 @@ void ChatPage::setMessages(std::vector<MessageModel> msgs){
     messages = msgs;
 
     for(const auto& message : messages){
-        int direction = message.getOtherUser().getId() == AuthenticatedUser::getInstance()->getId() ? 1 : 2;
+        int direction = message.getOtherUser().getId() == AuthenticatedUser::getInstance().getId() ? 1 : 2;
         SingleMessage *messageWidget = new SingleMessage(message, direction, this);
         chatContainer->addWidget(messageWidget);
     }

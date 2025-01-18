@@ -15,7 +15,7 @@ int SignupRepository::createNewUserAccount(const QJsonObject& jsonData, QString&
 
     ApiClient& apiClient = ApiClient::getInstance();
     QString url = apiClient.getUserDataUrl();
-    QNetworkReply* reply = apiClient.makePostRequest(url, jsonData, "");
+    QNetworkReply* reply = apiClient.makePostRequest(url, jsonData);
     qDebug() << "SignupRepository: made post request";
 
     QEventLoop loop;

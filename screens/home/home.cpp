@@ -2,6 +2,7 @@
 #include "../../helpers/websocket_client/websocketclient.h"
 #include "../../src/db/manager/databasemanager.h"
 #include<QTextBrowser>
+#include<QTimer>
 
 Home::Home(QWidget *parent) : QMainWindow(parent), user(AuthenticatedUser::getInstance())
 {
@@ -15,6 +16,7 @@ Home::Home(QWidget *parent) : QMainWindow(parent), user(AuthenticatedUser::getIn
     mainContainer = new QVBoxLayout(centralWidget);
 
     topBar = new CustomTopBar();
+    connect(topBar, &CustomTopBar::postCreated, this, &Home::onPostCreated);
     connect(topBar, &CustomTopBar::messageIconClicked, this, &Home::onMessageIconClicked);
     connect(topBar, &CustomTopBar::profileIconClicked, this, &Home::onProfileIconClicked);
     leftNav = new LeftNavigationWidget();
@@ -130,6 +132,22 @@ void Home::onProfileIconClicked(){
         profileVisible = true;
         profileview->show();
     }
+}
+
+void Home::onPostCreated(bool success){
+    //show toast message
+    QLabel *messageLabel = new QLabel();
+    messageLabel->setAlignment(Qt::AlignCenter);
+    messageLabel->setStyleSheet(success ? "color: green;" : "color: red;");
+    messageLabel->setText(success ? "Post created successfully!" : "Failed to create post.");
+
+    mainContainer->addWidget(messageLabel);
+
+    // Timer to remove the message after 3 seconds
+    QTimer::singleShot(5000, [this, messageLabel]() {
+        mainContainer->removeWidget(messageLabel);
+        delete messageLabel;
+    });
 }
 
 

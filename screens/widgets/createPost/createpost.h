@@ -11,8 +11,8 @@
 #include <QFrame>
 #include <QPushButton>
 #include <QSqlQuery>
-#include "../../../models/thread/threadmodel.h"
-#include "../../../db/thread/thread_repository.h"
+#include "../../../../src/models/thread/threadmodel.h"
+#include "../../../src/network/threads/threadrepository.h"
 
 class CreatePost : public QWidget
 {
@@ -22,15 +22,14 @@ class CreatePost : public QWidget
     QTextEdit *textArea;
     QPushButton *postBtn;
 
-    ThreadRepository *threadRepo;
-
 
 public:
     explicit CreatePost(QWidget *parent = nullptr);
 private slots:
-    void on_postBtn_clicked();
+    void onPostBtnClicked();
 
 signals:
+    void postCreated(bool success);
 };
 
 #endif // CREATEPOST_H

@@ -1,7 +1,7 @@
 #include "replybox.h"
 #include "../../../src/models/user/authenticateduser.h"
-#include "../../../models/thread/threadmodel.h"
-#include "../../../db/thread/thread_repository.h"
+#include "../../../src/models/thread/threadmodel.h"
+#include "../../../src/network/threads/threadrepository.h"
 
 ReplyBox::ReplyBox(QWidget *parent)
     : QWidget{parent}
@@ -20,9 +20,9 @@ ReplyBox::ReplyBox(QWidget *parent)
         QString title = "";
         QString text = reply->toPlainText();
 
-        UserModel *user = AuthenticatedUser::getInstance();
-        ThreadModel thread(0, title, text,0, "", *user, -1, currentThreadId);
-        ThreadRepository::addThreadtoDb(thread);
+        UserModel& user = AuthenticatedUser::getInstance();
+        ThreadModel thread;
+        ThreadRepository::postNewThread(thread);
 
         reply->clear();
     });

@@ -7,7 +7,7 @@
 #include <QHBoxLayout>
 #include <QSplitter>
 #include <vector>
-#include "../../../models/thread/threadmodel.h"
+#include "../../../src/models/thread/threadmodel.h"
 #include "../replyBox/replybox.h"
 
 class ThreadView : public QWidget

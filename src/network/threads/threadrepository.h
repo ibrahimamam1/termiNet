@@ -6,7 +6,7 @@ class ThreadRepository
 {
 public:
     ThreadRepository();
-    static void addThreadtoDb(ThreadModel& thread);
+    static bool postNewThread(ThreadModel& thread);
     static std::vector<ThreadModel> loadAllThreadsFromCommunity(int community_id = -1);
     static std::vector<ThreadModel> loadAllThreadsFromUser(int user_id);
     static std::vector<ThreadModel> loadAllCommentsFromDb(int thread_id);

@@ -1,6 +1,7 @@
 #include "createpost.h"
 #include "../../../src/models/user/usermodel.h"
 #include "../../home/home.h"
+#include <QTimer>
 
 CreatePost::CreatePost(QWidget *parent)
     : QWidget{parent}
@@ -17,23 +18,28 @@ CreatePost::CreatePost(QWidget *parent)
     mainContainer->addWidget(textArea, 6);
     mainContainer->addWidget(postBtn, 2);
 
-    connect(this->postBtn, &QPushButton::clicked, this, &CreatePost::on_postBtn_clicked);
+    connect(this->postBtn, &QPushButton::clicked, this, &CreatePost::onPostBtnClicked);
 
-    threadRepo = new ThreadRepository();
 }
-void CreatePost::on_postBtn_clicked()
+void CreatePost::onPostBtnClicked()
 {
     QString title = this->titleArea->text();
     QString text = this->textArea->toPlainText();
 
-    UserModel *user = AuthenticatedUser::getInstance();
-    int community_id = -1;;
-
+    UserModel& user = AuthenticatedUser::getInstance();
+    int communityId = 0;
     if(Home::getInstance()->centerArea->currentIndex() == 1){
-        community_id = Home::getInstance()->communityPage->getCommunity().getId();
+        communityId = Home::getInstance()->communityPage->getCommunity().getId();
     }
-    ThreadModel thread(0, title, text, 0, "", *user, community_id, -1);
-    threadRepo->addThreadtoDb(thread);
+    ThreadModel thread(title, text, user, communityId);
+    bool success = ThreadRepository::postNewThread(thread);
+    if(success){
+        title.clear();
+        text.clear();
+        this->hide();
+    }
+    emit postCreated(success);
+
 
 
 }

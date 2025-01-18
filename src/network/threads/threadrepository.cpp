@@ -1,51 +1,38 @@
-#include "thread_repository.h"
+#include "threadrepository.h"
 #include <QSqlQuery>
-#include "../../src/network/user/user_repository.h"
+#include <QJsonObject>
+#include <QNetworkReply>
+#include <QEventLoop>
+#include "../../network/user/user_repository.h"
+#include "../../../../helpers/api_client/apiclient.h"
 
 ThreadRepository::ThreadRepository() {}
 
-void ThreadRepository::addThreadtoDb(ThreadModel& thread){
-    QSqlQuery q;
-    int id;
+bool ThreadRepository::postNewThread(ThreadModel& thread){
+    QJsonObject jsonData;
+    jsonData["title"] = thread.getTitle();
+    jsonData["content"] = thread.getContent();
+    jsonData["author_id"] = thread.getAuthor().getId();
+    jsonData["community_id"] = QString::number(thread.getCommunityId());
+    jsonData["parent_thread_id"] = QString::number(thread.getParentThreadId());
+    jsonData["created_at"] = QDateTime::currentDateTime().toString(Qt::ISODate);
 
-    //get next thread id from sequence
-    if (q.exec("SELECT NEXTVAL('THREADSEQ');")) {
-        if (q.next()) {
-            id = q.value(0).toInt();
-        } else {
-            qDebug() << "Failed to retrieve the next sequence value.";
+    QEventLoop loop;
+    ApiClient& client = ApiClient::getInstance();
+    QString url = client.getPostThreadUrl();
+    QNetworkReply *reply = client.makePostRequest(url, jsonData);
+    QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
+
+    loop.exec();
+    if (reply->error() == QNetworkReply::NoError) {
+        int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+        if (statusCode == 200) {
+            return true;
         }
-    } else {
-        qDebug() << "Failed to execute the sequence query:" << q.lastError().text();
     }
-
-    q.prepare(
-        "INSERT INTO threads(thread_id, title, content, created_at, author_id, community_id, parent_thread_id)"
-        "values(:thread_id, :title, :content, :created_at, :author_id, :community_id, :parent_thread_id)"
-        );
-
-
-    //get current time and date and convert it to a postgresql compatible type
-    time_t now = time(nullptr);
-    tm *ltm = localtime(&now);
-    char created_at[11]; // YYYY-MM-DD is 10 characters + null terminator
-    strftime(created_at, sizeof(created_at), "%Y-%m-%d", ltm);
-
-    q.bindValue(":thread_id", id);
-    q.bindValue(":title",  thread.getTitle());
-    q.bindValue(":content", thread.getContent());
-    q.bindValue(":created_at",   QString(created_at));
-    q.bindValue(":author_id",   thread.getAuthorId());
-    q.bindValue(":community_id",   QString::number(thread.getCommunityId()));
-    q.bindValue(":parent_thread_id",   QString::number(thread.getParentThreadId()));
-
-    if (!q.exec()) {
-        qDebug() << "Insert failed:" << q.lastError().text();
-    } else {
-        qDebug() << "Thread Insert successful";
-    }
-
+    return false;
 }
+
 std::vector<ThreadModel> ThreadRepository::loadAllThreadsFromCommunity(int community_id) {
     std::vector<ThreadModel> threads;
     QSqlQuery q;
@@ -66,16 +53,7 @@ std::vector<ThreadModel> ThreadRepository::loadAllThreadsFromCommunity(int commu
         UserModel author = UserRepository::getUserFromId(q.value(4).toString());
 
         // Create ThreadModel object
-        ThreadModel t(
-            q.value(0).toInt(),
-            q.value(1).toString(),
-            q.value(2).toString(),
-            commentCount,
-            q.value(3).toString(),
-            author,
-            q.value(5).toInt(),
-            q.value(6).toInt()
-            );
+        ThreadModel t;
 
         threads.push_back(t);
     }
@@ -93,16 +71,7 @@ std::vector<ThreadModel> ThreadRepository::loadAllCommentsFromDb(int thread_id) 
             int commentCount = getCommentCountForThread(q.value(0).toInt());
             UserModel author = UserRepository::getUserFromId(q.value(4).toString());
             // Create ThreadModel object
-            ThreadModel t(
-                q.value(0).toInt(),
-                q.value(1).toString(),
-                q.value(2).toString(),
-                commentCount,
-                q.value(3).toString(),
-                author,
-                q.value(5).toInt(),
-                q.value(6).toInt()
-                );
+            ThreadModel t;
 
             threads.push_back(t);
         }
@@ -147,16 +116,7 @@ ThreadModel ThreadRepository::getSingleThread(int thread_id){
     }
 
     UserModel author = UserRepository::getUserFromId(q.value(4).toString());
-    ThreadModel thread(
-        q.value(0).toInt(),
-        q.value(1).toString(),
-        q.value(2).toString(),
-        getCommentCountForThread(q.value(0).toInt()),
-        q.value(3).toString(),
-        author,
-        q.value(5).toInt(),
-        q.value(6).toInt()
-        );
+    ThreadModel thread;
     return thread;
 
 }

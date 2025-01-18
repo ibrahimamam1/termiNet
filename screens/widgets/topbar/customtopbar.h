@@ -26,10 +26,12 @@ private slots:
     void onSearchTriggered();
     void onMessageIconClicked();
     void onProfileIconClicked();
+    void onPostCreated(bool success);
 
 signals:
     void messageIconClicked();
     void profileIconClicked();
+    void postCreated(bool success);
 };
 
 #endif // CUSTOMTOPBAR_H
