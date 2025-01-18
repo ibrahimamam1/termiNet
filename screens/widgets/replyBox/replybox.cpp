@@ -17,11 +17,11 @@ ReplyBox::ReplyBox(QWidget *parent)
 
     connect(replyButton, &QPushButton::clicked, this, [this]() {
         qDebug() << "Yup you want to comment a thread huh";
-        QString title = "";
+        QString title = "reply to " + parentThread.getAuthor().getName();
         QString text = reply->toPlainText();
 
         UserModel& user = AuthenticatedUser::getInstance();
-        ThreadModel thread;
+        ThreadModel thread(title, text, user, parentThread.getCommunityId(), parentThread.getThreadId());
         ThreadRepository::postNewThread(thread);
 
         reply->clear();
@@ -35,6 +35,6 @@ ReplyBox::ReplyBox(QWidget *parent)
     replyContainer->addLayout(replyButtonContainer, 2);
 }
 
-void ReplyBox::setCurrentThreadId(int id){
-    currentThreadId = id;
+void ReplyBox::setParentThread(const ThreadModel& parent){
+    parentThread = parent;
 }

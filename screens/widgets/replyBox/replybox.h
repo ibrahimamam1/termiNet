@@ -6,6 +6,7 @@
 #include <QVBoxLayout>
 #include <QTextEdit>
 #include <QPushButton>
+#include "../../../src/models/thread/threadmodel.h"
 
 class ReplyBox : public QWidget
 {
@@ -15,11 +16,11 @@ class ReplyBox : public QWidget
     QHBoxLayout *replyButtonContainer;
     QPushButton *replyButton;
 
-    int currentThreadId;
+    ThreadModel parentThread;
 
 public:
     explicit ReplyBox(QWidget *parent = nullptr);
-    void setCurrentThreadId(int id);
+    void setParentThread(const ThreadModel& parent);
 
 signals:
 };

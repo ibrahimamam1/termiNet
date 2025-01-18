@@ -11,8 +11,7 @@ public:
     static std::vector<ThreadModel> loadThreads(const QString& filter, const QString& value);
     static std::vector<ThreadModel> loadAllThreadsFromCommunity(const int& communityId );
     static std::vector<ThreadModel> loadAllThreadsFromUser(const QString& user_id);
-    static std::vector<ThreadModel> loadAllCommentsFromDb(int parent_thread_id);
-    static int getCommentCountForThread(int thread_id);
+    static std::vector<ThreadModel> loadAllThreadsFromParentThread(int parent_thread_id);
     static ThreadModel getSingleThread(int thread_id);
 };
 
