@@ -17,7 +17,6 @@ bool ThreadRepository::postNewThread(ThreadModel& thread){
     jsonData["author_id"] = thread.getAuthor().getId();
     jsonData["community_id"] = QString::number(thread.getCommunityId());
     jsonData["parent_thread_id"] = QString::number(thread.getParentThreadId());
-    jsonData["created_at"] = QDateTime::currentDateTime().toString(Qt::ISODate);
 
     QEventLoop loop;
     ApiClient& client = ApiClient::getInstance();
@@ -65,9 +64,10 @@ std::vector<ThreadModel> ThreadRepository::loadThreads(const QString& filter, co
                     size_t threadId = static_cast<size_t>(jsonObject["thread_id"].toInt());
                     size_t communityId = static_cast<size_t>(jsonObject["community_id"].toInt());
                     size_t parentThreadId = static_cast<size_t>(jsonObject["parent_thead_id"].toInt());
+                    size_t commentCount = static_cast<size_t>(jsonObject["comment_count"].toInt());
 
                     UserModel author = UserRepository::getUserFromId(authorId);
-                    ThreadModel thread(title, content, author, communityId, threadId, createdAt, parentThreadId);
+                    ThreadModel thread(title, content, author, communityId, parentThreadId, threadId, createdAt, commentCount);
 
                     threads.push_back(thread);
                 }
@@ -92,64 +92,7 @@ std::vector<ThreadModel> ThreadRepository::loadAllThreadsFromCommunity(const int
     return loadThreads("community_id", QString::number(communityId));
 }
 
-std::vector<ThreadModel> ThreadRepository::loadAllCommentsFromDb(int thread_id) {
-    QSqlQuery q;
-    q.prepare("SELECT * FROM threads where parent_thread_id = :parent_id");
-    q.bindValue(":parent_id", thread_id);
-
-    std::vector<ThreadModel> threads;
-    if (q.exec()) {
-        while (q.next()) {
-            int commentCount = getCommentCountForThread(q.value(0).toInt());
-            UserModel author = UserRepository::getUserFromId(q.value(4).toString());
-            // Create ThreadModel object
-            ThreadModel t;
-
-            threads.push_back(t);
-        }
-    } else {
-        qDebug() << "Failed to execute get threads query:" << q.lastError().text();
-    }
-
-    return threads;
-}
-
-int ThreadRepository::getCommentCountForThread(int thread_id){
-    QSqlQuery q;
-    int commentCount = 0;
-
-    q.prepare("SELECT COUNT(*) FROM threads WHERE parent_thread_id = :parent");
-    q.bindValue(":parent", thread_id);
-
-    if (q.exec()) {
-        if (q.next()) {
-            commentCount = q.value(0).toInt();
-        } else {
-            qDebug() << "Failed to fetch COUNT result for parent_id:" << q.value(6).toInt();
-        }
-    } else {
-        qDebug() << "Failed to execute COUNT query:" << q.lastError().text();
-    }
-
-    return commentCount;
-}
-ThreadModel ThreadRepository::getSingleThread(int thread_id){
-    QSqlQuery q;
-    q.prepare("SELECT * from threads where thread_id = :thread_id");
-    q.bindValue(":thread_id", thread_id);
-
-    if(!q.exec()){
-        qDebug() << "Failed to load thread " << q.lastError();
-        return ThreadModel();
-    }
-    if(!q.next()){
-        qDebug() << "Empty Row : Thread doers not exist";
-        return ThreadModel();
-    }
-
-    UserModel author = UserRepository::getUserFromId(q.value(4).toString());
-    ThreadModel thread;
-    return thread;
-
+std::vector<ThreadModel> ThreadRepository::loadAllThreadsFromParentThread(const int parent_thread_id) {
+    return loadThreads("parent_thread_id", QString::number(parent_thread_id));
 }
 

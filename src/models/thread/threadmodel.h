@@ -21,8 +21,9 @@ public:
     ThreadModel();
     ThreadModel(const QString &title, const QString &content,
                 const UserModel& author, const size_t community_id = 0,
-                const size_t thread_id = 0, const QString &created_at = QDateTime::currentDateTime().toString(Qt::ISODate),
-                const size_t parent_thread_id = 0, const size_t c_count = 0);
+                const size_t parent_thread_id = 0, const size_t thread_id = 0,
+                const QString &created_at = QDateTime::currentDateTime().toString(Qt::ISODate),
+                const size_t c_count = 0);
 
     // Getter and setter methods
     size_t getThreadId() const;

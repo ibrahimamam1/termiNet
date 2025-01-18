@@ -81,7 +81,7 @@ void ThreadView::switchToCommentScreen(const ThreadModel& thread) {
     }
 
     // Load new comments for the specific thread
-    comments = ThreadRepository::loadAllCommentsFromDb(thread.getThreadId());
+    comments = ThreadRepository::loadAllThreadsFromParentThread(thread.getThreadId());
 
     // Populate comments layout
     for(const auto& comment : comments){
@@ -92,6 +92,6 @@ void ThreadView::switchToCommentScreen(const ThreadModel& thread) {
     commentsLayout->addStretch(1);
 
     // Switch to comments page
-    replyBox->setCurrentThreadId(thread.getThreadId());
+    replyBox->setParentThread(thread);
     threadPages->setCurrentIndex(1);
 }

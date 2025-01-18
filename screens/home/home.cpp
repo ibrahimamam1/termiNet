@@ -95,7 +95,7 @@ void Home::onCommentBtnClicked(int parentThreadID){
 
             //Fetch and display comments
             threads.clear();
-            threads = ThreadRepository::loadAllCommentsFromDb(parentThreadWidget->getThreadId());
+            threads = ThreadRepository::loadAllThreadsFromParentThread(parentThreadWidget->getThreadId());
             for (const auto &thread : threads) {
                 ThreadWidget *commentWidget = new ThreadWidget(thread, this);
                 commentsContainer->addWidget(commentWidget);

@@ -6,10 +6,10 @@ ThreadModel::ThreadModel()
 
 // Parameterized constructor
 ThreadModel::ThreadModel(
-    const QString& t_title, const QString& t_content,
+    const QString &t_title, const QString &t_content,
     const UserModel& t_author, const size_t t_community_id,
-    const size_t t_id, const QString& t_created_at,
-    const size_t t_parent_thread_id, const size_t c_count)
+    const size_t t_parent_thread_id, const size_t t_id,
+    const QString &t_created_at, const size_t c_count)
     :title(t_title), content(t_content),
     created_at(t_created_at), author(t_author),
     thread_id(t_id), community_id(t_community_id),
