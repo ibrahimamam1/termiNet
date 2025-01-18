@@ -51,9 +51,10 @@ private slots:
     void onCommentBtnClicked(int parentThreadId);
     void onMessageIconClicked();
     void onProfileIconClicked();
+    void onPostCreated(bool success);
 
 private:
-    UserModel *user;
+    UserModel& user;
     static Home *instance;
     std::vector<ThreadModel>threads;
     std::vector<ThreadModel>savedThreads;

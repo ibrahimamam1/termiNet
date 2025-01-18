@@ -6,7 +6,7 @@
 #include<QLabel>
 #include<QTextEdit>
 #include<QPushButton>
-#include"../../../models/thread/threadmodel.h"
+#include"../../../../src/models/thread/threadmodel.h"
 
 class ThreadWidget : public QWidget
 {

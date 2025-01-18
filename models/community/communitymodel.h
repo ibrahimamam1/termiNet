@@ -3,7 +3,7 @@
 #include <QImage>
 #include <vector>
 #include "../categorymodel.h"
-#include "../thread/threadmodel.h"
+#include "../../src/models/thread/threadmodel.h"
 
 class CommunityModel
 {

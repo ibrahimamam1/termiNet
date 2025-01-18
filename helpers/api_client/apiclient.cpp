@@ -21,21 +21,19 @@ QNetworkReply* ApiClient::makeGetRequest(const QString &url){
     return reply;
 
 }
-QNetworkReply* ApiClient::makePostRequest(const QString &url, const QJsonObject& data, const QString& key) {
+QNetworkReply* ApiClient::makePostRequest(const QString &url, const QJsonObject& data) {
 
     QNetworkRequest request(url);
     qDebug() << "Converting JSON...";
     QJsonDocument doc(data);
     QByteArray jsonData = doc.toJson();
 
-    // Encrypt or hash the ID before sending
-    QByteArray idHeaderValue = key.toUtf8();
+
 
     qDebug() << "Setting Headers...";
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     request.setHeader(QNetworkRequest::ContentLengthHeader, QByteArray::number(jsonData.size()));
     request.setRawHeader("X-Custom-Client-Header", "Qt-Client");
-    request.setRawHeader("id", idHeaderValue);
 
     qDebug() << "Making Request...";
     QNetworkReply *reply = manager->post(request, jsonData);
@@ -61,3 +59,4 @@ const QString& ApiClient::getLoginUrl() const{ return loginUrl;}
 const QString& ApiClient::getSignupUrl() const{ return signupUrl;}
 const QString& ApiClient::getUserDataUrl() const{ return userDataUrl;}
 const QString& ApiClient::getUpdateUserDataUrl() const { return updateUserDataUrl; }
+const QString& ApiClient::getPostThreadUrl() const {return postThreadUrl;}

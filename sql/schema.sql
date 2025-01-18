@@ -13,19 +13,6 @@ create table if not exists users_communities(
     primary key(user_id, community_id)
 );
 
-create table if not exists threads(
-    thread_id integer primary key,
-    title varchar(200) not null,
-    content text,
-    created_at date,
-    author_id integer not null,
-    community_id integer,
-    parent_thread_id integer,
-);
-
-
-
-
 create table if not exists categories(
     category_id integer primary key,
     category_name text

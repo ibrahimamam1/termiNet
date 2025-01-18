@@ -1,6 +1,6 @@
 #include "communitymodel.h"
 #include "../../db/communityrepository.h"
-#include "../../db/thread/thread_repository.h"
+#include "../../src/network/threads/threadrepository.h"
 
 CommunityModel::CommunityModel()
     : id(-1),

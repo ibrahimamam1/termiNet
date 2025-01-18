@@ -12,12 +12,13 @@ class ApiClient : public QObject
 public:
     explicit ApiClient(QObject *parent = nullptr);
     QNetworkReply* makeGetRequest(const QString& url);
-    QNetworkReply* makePostRequest(const QString& url, const QJsonObject& data, const QString& key);
+    QNetworkReply* makePostRequest(const QString& url, const QJsonObject& data);
 
     const QString& getLoginUrl() const;
     const QString& getSignupUrl() const;
     const QString& getUserDataUrl() const;
     const QString& getUpdateUserDataUrl() const;
+    const QString& getPostThreadUrl() const;
     static ApiClient& getInstance();
 
 private:
@@ -29,6 +30,7 @@ private:
     const QString signupUrl = baseUrl + "signup/";
     const QString userDataUrl = baseUrl + "users/";
     const QString updateUserDataUrl = baseUrl + "update/users/";
+    const QString postThreadUrl = baseUrl + "threads/new/";
 
 signals:
 private slots:

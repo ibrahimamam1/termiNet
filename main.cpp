@@ -33,8 +33,7 @@ int main(int argc, char *argv[])
     QEventLoop loop;
     bool initializationComplete = false;
 
-    //QString userId = AppHelper::checkPersitentLogin();
-    QString userId = "";
+    QString userId = AppHelper::checkPersitentLogin();
     if(userId.length() <= 5){
         // Create and show login/signup window
         auto loginWindow = new Login();
@@ -63,7 +62,6 @@ int main(int argc, char *argv[])
         stackedWidget->show();
     }else{
         UserModel user = UserRepository::getUserFromId(userId);
-        qDebug() << "Got User " << user.getName();
         AuthenticatedUser::setInstance(user);
         initializationComplete = true;
         loop.quit();

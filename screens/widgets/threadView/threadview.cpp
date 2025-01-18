@@ -1,6 +1,6 @@
 #include "threadview.h"
 #include "../thread/threadwidget.h"
-#include "../../../db/thread/thread_repository.h"
+#include "../../../src/network/threads/threadrepository.h"
 #include <QScrollBar>
 
 ThreadView::ThreadView(std::vector<ThreadModel>t_threads, QWidget *parent)
