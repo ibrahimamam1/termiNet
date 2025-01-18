@@ -6,7 +6,7 @@
 
 Home::Home(QWidget *parent) : QMainWindow(parent), user(AuthenticatedUser::getInstance())
 {
-    threads = ThreadRepository::loadAllThreadsFromCommunity(-1);
+    threads = ThreadRepository::loadAllThreads();
 
     // Create a central widget
     QWidget* centralWidget = new QWidget(this);

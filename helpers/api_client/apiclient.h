@@ -19,6 +19,7 @@ public:
     const QString& getUserDataUrl() const;
     const QString& getUpdateUserDataUrl() const;
     const QString& getPostThreadUrl() const;
+    const QString& getThreadsUrl() const;
     static ApiClient& getInstance();
 
 private:
@@ -31,6 +32,7 @@ private:
     const QString userDataUrl = baseUrl + "users/";
     const QString updateUserDataUrl = baseUrl + "update/users/";
     const QString postThreadUrl = baseUrl + "threads/new/";
+    const QString threadsUrl = baseUrl + "threads/";
 
 signals:
 private slots:
