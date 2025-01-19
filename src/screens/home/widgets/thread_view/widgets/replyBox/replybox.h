@@ -6,7 +6,7 @@
 #include <QVBoxLayout>
 #include <QTextEdit>
 #include <QPushButton>
-#include "../../../src/models/thread/threadmodel.h"
+#include "../../../../../../models/thread/threadmodel.h"
 
 class ReplyBox : public QWidget
 {

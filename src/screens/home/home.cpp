@@ -1,6 +1,6 @@
 #include "home.h"
-#include "../../helpers/websocket_client/websocketclient.h"
-#include "../../src/db/manager/databasemanager.h"
+#include "../../../helpers/websocket_client/websocketclient.h"
+#include "../../db/manager/databasemanager.h"
 #include<QTextBrowser>
 #include<QTimer>
 
@@ -20,6 +20,9 @@ Home::Home(QWidget *parent) : QMainWindow(parent), user(AuthenticatedUser::getIn
     connect(topBar, &CustomTopBar::messageIconClicked, this, &Home::onMessageIconClicked);
     connect(topBar, &CustomTopBar::profileIconClicked, this, &Home::onProfileIconClicked);
     leftNav = new LeftNavigationWidget();
+    connect(leftNav, &LeftNavigationWidget::homeClicked, this, [this]{
+        threadView->switchToHomeScreen();
+    });
 
     // Center area layout
     centerArea = new QStackedWidget();
@@ -60,12 +63,12 @@ Home::Home(QWidget *parent) : QMainWindow(parent), user(AuthenticatedUser::getIn
 }
 
 
-Home* Home::getInstance(){
+Home& Home::getInstance(){
 
     if(instance == nullptr){
-        instance = new  Home();
+        instance = std::make_unique<Home>();
     }
-    return instance;
+    return *instance;
 }
 
 Home::~Home()
@@ -75,44 +78,42 @@ Home::~Home()
 
 
 
-void Home::onCommentBtnClicked(int parentThreadID){
+void Home::onCommentBtnClicked(const ThreadModel& parentThread){
 
-            // Create layouts for comment screen
-            QVBoxLayout *commentSection = new QVBoxLayout();
+    // Create layouts for comment screen
+    QVBoxLayout *commentSection = new QVBoxLayout();
 
-            QPushButton *goBack = new QPushButton();
-            goBack->setText("Back");
+    QPushButton *goBack = new QPushButton();
+    goBack->setText("Back");
 
-            QVBoxLayout *parentThreadContainer = new QVBoxLayout();
-            QVBoxLayout *commentsContainer = new QVBoxLayout();
-            QVBoxLayout *replyContainer = new QVBoxLayout();
+    QVBoxLayout *parentThreadContainer = new QVBoxLayout();
+    QVBoxLayout *commentsContainer = new QVBoxLayout();
+    QVBoxLayout *replyContainer = new QVBoxLayout();
 
-            //get parent thread using ThreadID
-            ThreadModel parentThread = ThreadRepository::getSingleThread(parentThreadID);
-            ThreadWidget *parentThreadWidget = new ThreadWidget(parentThread, this);
+    ThreadWidget *parentThreadWidget = new ThreadWidget(parentThread, this);
 
-            parentThreadContainer->addWidget(parentThreadWidget);
+    parentThreadContainer->addWidget(parentThreadWidget);
 
-            //Fetch and display comments
-            threads.clear();
-            threads = ThreadRepository::loadAllThreadsFromParentThread(parentThreadWidget->getThreadId());
-            for (const auto &thread : threads) {
-                ThreadWidget *commentWidget = new ThreadWidget(thread, this);
-                commentsContainer->addWidget(commentWidget);
-            }
-            commentsContainer->addStretch(1);
+    //Fetch and display comments
+    threads.clear();
+    threads = ThreadRepository::loadAllThreadsFromParentThread(parentThreadWidget->getThreadId());
+    for (const auto &thread : threads) {
+        ThreadWidget *commentWidget = new ThreadWidget(thread, this);
+        commentsContainer->addWidget(commentWidget);
+    }
+    commentsContainer->addStretch(1);
 
 
 
-            // // // Assemble the comment section layout
-            commentSection->addWidget(goBack, 1);
-            commentSection->addLayout(parentThreadContainer, 2);
-            commentSection->addLayout(commentsContainer, 8);
-            commentSection->addLayout(replyContainer, 2);
+    // // // Assemble the comment section layout
+    commentSection->addWidget(goBack, 1);
+    commentSection->addLayout(parentThreadContainer, 2);
+    commentSection->addLayout(commentsContainer, 8);
+    commentSection->addLayout(replyContainer, 2);
 
 
 
-            //centerArea->addLayout(commentSection);
+    //centerArea->addLayout(commentSection);
 }
 
 

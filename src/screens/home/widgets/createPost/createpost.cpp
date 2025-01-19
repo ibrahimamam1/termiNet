@@ -1,6 +1,7 @@
 #include "createpost.h"
-#include "../../../src/models/user/usermodel.h"
-#include "../../home/home.h"
+#include "../../../../models/user/usermodel.h"
+#include "../../../../models/user/authenticateduser.h"
+#include "../../home.h"
 #include <QTimer>
 
 CreatePost::CreatePost(QWidget *parent)
@@ -28,8 +29,8 @@ void CreatePost::onPostBtnClicked()
 
     UserModel& user = AuthenticatedUser::getInstance();
     int communityId = 0;
-    if(Home::getInstance()->centerArea->currentIndex() == 1){
-        communityId = Home::getInstance()->communityPage->getCommunity().getId();
+    if(Home::getInstance().centerArea->currentIndex() == 1){
+        communityId = Home::getInstance().communityPage->getCommunity().getId();
     }
     ThreadModel thread(title, text, user, communityId);
     bool success = ThreadRepository::postNewThread(thread);

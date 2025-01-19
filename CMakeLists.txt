@@ -30,17 +30,6 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES} ${PROJECT_RESOURCES}
 
-        screens/home/home.h screens/home/home.cpp screens/home/home.ui
-        screens/home/home.h screens/home/home.cpp screens/home/home.ui
-
-
-
-
-
-
-
-
-
         screens/create_community/createcommunity.h
         screens/create_community/createcommunity.cpp
         screens/styles/buttonStyles.h
@@ -53,16 +42,16 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 
         db/communityrepository.h db/communityrepository.cpp
         screens/community_page/communitypage.h screens/community_page/communitypage.cpp
-        screens/widgets/topbar/customtopbar.h screens/widgets/topbar/customtopbar.cpp
-        screens/widgets/leftNavigation/leftnavigationwidget.h screens/widgets/leftNavigation/leftnavigationwidget.cpp
+
+
 
         sql/storage_buckets.sql
         db/storage/storagerepository.h db/storage/storagerepository.cpp
         utils/helper/apphelper.h utils/helper/apphelper.cpp
-        screens/widgets/createPost/createpost.cpp
-        screens/widgets/createPost/createpost.h
-        screens/widgets/thread/threadwidget.h screens/widgets/thread/threadwidget.cpp
-        screens/widgets/threadView/threadview.h screens/widgets/threadView/threadview.cpp
+
+
+
+
 
 
 
@@ -71,7 +60,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 
         screens/community_page/widgets/communitydescriptionwidget.h screens/community_page/widgets/communitydescriptionwidget.cpp
         models/community/communitymodel.h models/community/communitymodel.cpp
-        screens/widgets/replyBox/replybox.h screens/widgets/replyBox/replybox.cpp
+
         screens/message/messagepage.h screens/message/messagepage.cpp
         screens/message/widgets/message_list_view/messagelistview.h screens/message/widgets/message_list_view/messagelistview.cpp
 
@@ -111,6 +100,13 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         src/screens/login/login.h src/screens/login/login.cpp
         src/models/thread/threadmodel.h src/models/thread/threadmodel.cpp
         src/network/threads/threadrepository.h src/network/threads/threadrepository.cpp
+        src/screens/home/home.h src/screens/home/home.cpp
+        src/screens/home/widgets/createPost/createpost.h src/screens/home/widgets/createPost/createpost.cpp
+        src/screens/home/widgets/left_navigation/leftnavigation.h src/screens/home/widgets/left_navigation/leftnavigation.cpp
+        src/screens/home/widgets/thread_view/threadview.h src/screens/home/widgets/thread_view/threadview.cpp
+        src/screens/home/widgets/thread_view/widgets/thread/threadwidget.h src/screens/home/widgets/thread_view/widgets/thread/threadwidget.cpp
+        src/screens/home/widgets/thread_view/widgets/replyBox/replybox.h src/screens/home/widgets/thread_view/widgets/replyBox/replybox.cpp
+        src/screens/home/widgets/topBar/topbar.h src/screens/home/widgets/topBar/topbar.cpp
 
 
 

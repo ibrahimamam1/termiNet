@@ -12,7 +12,7 @@
 #include <QPushButton>
 #include <QSqlQuery>
 #include "../../../../src/models/thread/threadmodel.h"
-#include "../../../src/network/threads/threadrepository.h"
+#include "../../../../network/threads/threadrepository.h"
 
 class CreatePost : public QWidget
 {

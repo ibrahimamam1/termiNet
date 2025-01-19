@@ -7,19 +7,19 @@
 #include <QScrollArea>
 #include <QComboBox>
 #include<vector>
-#include "../widgets/topbar/customtopbar.h"
-#include "../widgets/leftNavigation/leftnavigationwidget.h"
-#include"../../src/common/widgets//clickable_label.h"
-#include "../widgets/thread//threadwidget.h"
-#include "../../src/models/user/usermodel.h"
-#include "../../models/community/communitymodel.h"
-#include "../../db/communityrepository.h"
-#include "../create_community/createcommunity.h"
-#include "../community_page/communitypage.h"
-#include "../widgets/threadView/threadview.h"
-#include "../../src/models/user/authenticateduser.h"
-#include "../message/messagepage.h"
-#include "../profile_view/profileview.h"
+#include "widgets/topBar/topbar.h"
+#include "widgets/left_navigation/leftnavigation.h"
+#include"../../common/widgets//clickable_label.h"
+#include "widgets/thread_view/widgets/thread/threadwidget.h"
+#include "../../models/user/usermodel.h"
+#include "../../../models/community/communitymodel.h"
+#include "../../../db/communityrepository.h"
+#include "../../../screens/create_community/createcommunity.h"
+#include "../../../screens/community_page/communitypage.h"
+#include "widgets/thread_view/threadview.h"
+#include "../../models/user/authenticateduser.h"
+#include "../../../screens/message/messagepage.h"
+#include "../../../screens/profile_view/profileview.h"
 
 class Home : public QMainWindow
 {
@@ -32,7 +32,7 @@ public:
     void showUserInfo();
     void loadThreads();
 
-    static Home* getInstance();
+    static Home& getInstance();
     ~Home();
 
     QVBoxLayout *mainContainer;
@@ -48,14 +48,14 @@ public:
 
 private slots:
 
-    void onCommentBtnClicked(int parentThreadId);
+    void onCommentBtnClicked(const ThreadModel& parentThread);
     void onMessageIconClicked();
     void onProfileIconClicked();
     void onPostCreated(bool success);
 
 private:
     UserModel& user;
-    static Home *instance;
+    static std::unique_ptr<Home> instance;
     std::vector<ThreadModel>threads;
     std::vector<ThreadModel>savedThreads;
 };

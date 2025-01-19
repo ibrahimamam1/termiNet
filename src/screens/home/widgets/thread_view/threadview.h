@@ -7,8 +7,8 @@
 #include <QHBoxLayout>
 #include <QSplitter>
 #include <vector>
-#include "../../../src/models/thread/threadmodel.h"
-#include "../replyBox/replybox.h"
+#include "../../../../models/thread/threadmodel.h"
+#include "widgets/replyBox/replybox.h"
 
 class ThreadView : public QWidget
 {
@@ -31,6 +31,7 @@ private:
 public:
     explicit ThreadView(std::vector<ThreadModel>t_threads, QWidget *parent = nullptr);
     void switchToCommentScreen(const ThreadModel& thread);
+    void switchToHomeScreen();
     ~ThreadView();  // Destructor to clean up dynamically allocated widgets
 
 signals:

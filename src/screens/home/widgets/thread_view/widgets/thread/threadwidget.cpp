@@ -1,7 +1,7 @@
 #include "threadwidget.h"
-#include "../../../src/models/user/usermodel.h"
+#include "../../../../../../models/user/usermodel.h"
 #include "../../../../src/models/thread/threadmodel.h"
-#include "../../../src/network/threads/threadrepository.h"
+#include "../../../../../../network/threads/threadrepository.h"
 #include "../../home/home.h"
 
 ThreadWidget::ThreadWidget(const ThreadModel& thread, QWidget *parent) : QWidget(parent),
@@ -22,7 +22,7 @@ ThreadWidget::ThreadWidget(const ThreadModel& thread, QWidget *parent) : QWidget
     postTime->setStyleSheet("font-size: 12px; color: gray;");
     title->setStyleSheet("font-size: 16px; font-weight: bold;");
     content->setReadOnly(true);
-    content->setText(content->toPlainText());
+    content->setText(thread.getContent());
     content->setStyleSheet("background-color: transparent;");
 
     // Configure the comment button

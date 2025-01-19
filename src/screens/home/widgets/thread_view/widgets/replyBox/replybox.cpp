@@ -1,7 +1,7 @@
 #include "replybox.h"
-#include "../../../src/models/user/authenticateduser.h"
-#include "../../../src/models/thread/threadmodel.h"
-#include "../../../src/network/threads/threadrepository.h"
+#include "../../../../../../models/user/authenticateduser.h"
+#include "../../../../../../models/thread/threadmodel.h"
+#include "../../../../../../network/threads/threadrepository.h"
 
 ReplyBox::ReplyBox(QWidget *parent)
     : QWidget{parent}
