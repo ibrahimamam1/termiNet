@@ -11,9 +11,10 @@
 #include <QPushButton>
 #include <QFrame>
 #include <QFont>
+#include <QStackedWidget>
 #include "../../common/widgets/divider.h"
 #include "../../common/widgets/socials_widget.h"
-#include "../../../screens/home/home.h"
+#include "../../../home/home.h"
 
 class Signup : public QDialog
 {

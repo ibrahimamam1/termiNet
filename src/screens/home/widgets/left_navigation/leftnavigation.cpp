@@ -1,6 +1,7 @@
-#include "leftnavigationwidget.h"
-#include "../../create_community/createcommunity.h"
-#include "../../home/home.h"
+#include "leftnavigation.h"
+#include "../../../../screens/create_community/createcommunity.h"
+#include "../../home.h"
+#include "../../../../models/user/authenticateduser.h"
 
 LeftNavigationWidget::LeftNavigationWidget(QWidget *parent)
     : QWidget{parent}
@@ -11,6 +12,9 @@ LeftNavigationWidget::LeftNavigationWidget(QWidget *parent)
     homeNav = new QVBoxLayout();
     home = new QLabel();
     home->setText("<a href='#'>Home</a>");
+    connect(home, &QLabel::linkActivated, this, [&]{
+        emit homeClicked();
+    });
     popular = new QLabel();
     popular->setText("<a href='#'>Popular</a>");
     discover = new QLabel();
@@ -67,10 +71,10 @@ void LeftNavigationWidget::onCreateCommunityBtnClicked(){
 
 void LeftNavigationWidget::onCommunityLabelClicked(CommunityModel community){
     qDebug() << "Okay let's switch to community page for" << community.getName();
-    Home* home = Home::getInstance();
+    Home& home = Home::getInstance();
 
-    home->communityPage->clearCommunityPage();
-    home->communityPage->setCommunityPage(community);
-    home->centerArea->setCurrentIndex(1);
+    home.communityPage->clearCommunityPage();
+    home.communityPage->setCommunityPage(community);
+    home.centerArea->setCurrentIndex(1);
 
 }

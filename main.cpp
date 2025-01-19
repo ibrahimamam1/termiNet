@@ -1,7 +1,8 @@
+#include "src/screens/home/home.h"
 #include "src/screens/signup/signup.h"
 #include "src/screens/login/login.h"
-#include "screens/home/home.h"
 #include "src/models/user/usermodel.h"
+#include "src/models/user/authenticateduser.h"
 #include "src/network/user/user_repository.h"
 #include "src/common/theme/apptheme.h"
 
@@ -12,7 +13,7 @@
 #include "helpers/websocket_client/websocketclient.h"
 #include "src/db/manager/databasemanager.h"
 
-Home* Home::instance = nullptr;
+std::unique_ptr<Home> Home::instance = nullptr;
 
 int main(int argc, char *argv[])
 {
@@ -80,9 +81,9 @@ int main(int argc, char *argv[])
 
 
     //show homepage
-    auto homePage = Home::getInstance();
-    homePage->setAttribute(Qt::WA_DeleteOnClose);
-    homePage->show();
+    Home& homePage = Home::getInstance();
+    homePage.setAttribute(Qt::WA_DeleteOnClose);
+    homePage.show();
 
     return a.exec();
 }

@@ -1,5 +1,5 @@
 #include "communitypage.h"
-#include "../widgets/thread/threadwidget.h"
+
 
 CommunityPage::CommunityPage(QWidget *parent)
     :QWidget{parent}

@@ -6,7 +6,7 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QVBoxLayout>
-#include "../../../src/common/widgets/clickable_label.h"
+#include "../../../../common/widgets/clickable_label.h"
 #include "../createPost//createpost.h"
 
 class CustomTopBar : public QWidget

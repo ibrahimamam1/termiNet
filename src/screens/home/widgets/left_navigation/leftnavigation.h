@@ -5,9 +5,9 @@
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QScrollArea>
-#include "../../../models/community/communitymodel.h"
-#include "../../../src/models/user/usermodel.h"
-#include "../../../db/communityrepository.h"
+#include "../../../../models/community/communitymodel.h"
+#include "../../../../models/user/usermodel.h"
+#include "../../../../db/communityrepository.h"
 
 class LeftNavigationWidget : public QWidget
 {
@@ -31,6 +31,7 @@ public:
     void onCreateCommunityBtnClicked();
 
 signals:
+    void homeClicked();
 
 private slots:
     void onCommunityLabelClicked(CommunityModel community);

@@ -3,8 +3,8 @@
 
 #include <QWidget>
 
-#include "../widgets/topbar/customtopbar.h"
-#include "../widgets/threadView/threadview.h"
+#include "../../src/screens/home/widgets/topBar/topbar.h"
+#include "../../src/screens/home/widgets/thread_view/threadview.h"
 #include "widgets/communitydescriptionwidget.h"
 
 class CommunityPage : public QWidget

@@ -5,6 +5,7 @@
 #include "../../helpers/validators/formvalidator.h"
 #include "../../../helpers/apphelper.h"
 #include "../../network/signup/signup_repository.h"
+#include "../../models/user/authenticateduser.h"
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QNetworkRequest>

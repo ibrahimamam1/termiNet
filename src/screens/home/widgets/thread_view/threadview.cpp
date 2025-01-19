@@ -1,6 +1,6 @@
 #include "threadview.h"
-#include "../thread/threadwidget.h"
-#include "../../../src/network/threads/threadrepository.h"
+#include "widgets/thread/threadwidget.h"
+#include "../../../../network/threads/threadrepository.h"
 #include <QScrollBar>
 
 ThreadView::ThreadView(std::vector<ThreadModel>t_threads, QWidget *parent)
@@ -65,10 +65,8 @@ ThreadView::ThreadView(std::vector<ThreadModel>t_threads, QWidget *parent)
     mainContainer->addStretch(2);
 }
 
-// Destructor to clean up dynamically allocated widgets
-ThreadView::~ThreadView() {
 
-}
+ThreadView::~ThreadView() {}
 
 void ThreadView::switchToCommentScreen(const ThreadModel& thread) {
     // Clear existing comment widgets
@@ -94,4 +92,8 @@ void ThreadView::switchToCommentScreen(const ThreadModel& thread) {
     // Switch to comments page
     replyBox->setParentThread(thread);
     threadPages->setCurrentIndex(1);
+}
+
+void ThreadView::switchToHomeScreen(){
+    threadPages->setCurrentIndex(0);
 }
