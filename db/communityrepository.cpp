@@ -1,120 +1,67 @@
 #include "communityrepository.h"
 #include <QDateTime>
-#include <QSqlError>
-#include <QSqlQuery>
+#include <QNetworkReply>
+#include <QEventLoop>
 #include <QImage>
 #include <QBuffer>
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QSqlQuery>
+#include <QSqlError>
 #include "../src/models/user/usermodel.h"
 #include "../src/models/user/authenticateduser.h"
-#include "category_repository.h"
+#include "../src/network/category/categoryrepository.h"
 #include "storage/storagerepository.h"
 #include "../utils/helper/apphelper.h"
+#include "../helpers/api_client/apiclient.h"
 
 CommunityRepository::CommunityRepository() {}
 
 bool CommunityRepository::addNewCommunity(CommunityModel community) {
-    QSqlQuery q;
-    QSqlDatabase db = QSqlDatabase::database();
-    db.transaction(); // Start a transaction
-
-    // Get unique community id
-    int id;
-    q.prepare("select nextval('CommunitySeq');");
-    if(q.exec()){
-        if(q.next()) id = q.value(0).toInt();
-    } else{
-        qDebug() << "Failed to get community Id : "<< q.lastError();
-        return false;
-    }
-
-    //Scale the icon and banner images
-    QImage scaledIconImage = AppHelper::createRoundedIcon(community.getIconImage(), 50);
-    QImage scaledBannerImage = community.getBannerImage().scaled(100, 100, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-
-    //Generate unique filenames for images
-    QString iconFilename = QString("%1_icon_%2.png").arg(community.getName(), id);
-    QString bannerFilename = QString("%1_banner_%2.png").arg(community.getName() ,id);
-
-    // Upload the images to the storage buckets
+    //Convert icon to base64 strings
     QByteArray iconData;
     QBuffer iconBuffer(&iconData);
     iconBuffer.open(QIODevice::WriteOnly);
-    scaledIconImage.save(&iconBuffer, "PNG"); // Save as PNG
+    community.getIconImage().save(&iconBuffer, "PNG");
+    QString iconBase64String = iconData.toBase64();
 
+    //Convert banner to base64 strings
     QByteArray bannerData;
     QBuffer bannerBuffer(&bannerData);
     bannerBuffer.open(QIODevice::WriteOnly);
-    scaledBannerImage.save(&bannerBuffer, "PNG"); // Save as PNG
+    community.getBannerImage().save(&bannerBuffer, "PNG");
+    QString bannerBase64String = bannerData.toBase64();
 
-    // Insert into iconsBucket
-    q.prepare("INSERT INTO iconsBucket(filename, filedata, uploaded_by) VALUES (:filename, :filedata, :uploaded_by)");
-    q.bindValue(":filename", iconFilename);
-    q.bindValue(":filedata", iconData);
-    q.bindValue(":uploaded_by", AuthenticatedUser::getInstance().getId());
+    QJsonObject jsonData;
+    jsonData["community_name"] = community.getName();
+    jsonData["community_description"] = community.getDescription();
+    jsonData["icon_image"] = iconBase64String;
+    jsonData["banner_image"] = bannerBase64String;
+    jsonData["founder"] = AuthenticatedUser::getInstance().getId();
 
-    if(!q.exec()){
-        qDebug() << "Failed to insert into iconsBucket: " << q.lastError();
-        return false;
+    //get categories
+    QList<CategoryModel> categories = community.getCategories();
+    QJsonArray categoriesArray;
+    for (const auto& c : categories) {
+        categoriesArray.append(QString::number(c.getId()));
+    }
+    jsonData["categories"] = categoriesArray;
+
+    QEventLoop loop;
+    ApiClient& client = ApiClient::getInstance();
+    QString url = client.getCommunitiesUrl() + "new/";
+    QNetworkReply *reply = client.makePostRequest(url, jsonData);
+    QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
+    loop.exec();
+
+    if(reply->error() == QNetworkReply::NoError){
+        QJsonObject responseJson = QJsonDocument::fromJson(reply->readAll()).object();
+        if (responseJson.contains("Status") && responseJson["Status"].toString() == "Created")
+            return true;
     }
 
-    // Insert into bannersBucket
-    q.prepare("INSERT INTO bannersBucket(filename, filedata, uploaded_by) VALUES (:filename, :filedata, :uploaded_by)");
-    q.bindValue(":filename", bannerFilename);
-    q.bindValue(":filedata", bannerData);
-    q.bindValue(":uploaded_by", AuthenticatedUser::getInstance().getId());
-
-    if(!q.exec()){
-        qDebug() << "Failed to insert into bannersBucket: " << q.lastError();
-        return false;
-    }
-
-    // TODO 4: Use the generated filenames as values for icon_image and banner_image in the communities insert query
-    q.prepare("INSERT INTO communities(community_id, name, description, icon_image, banner_image, created_at) VALUES (:id, :name, :des, :icon, :banner, :date);");
-
-    // Get current timestamp in UTC and convert to PostgreSQL-compatible format
-    QDateTime currentDateTime = QDateTime::currentDateTimeUtc();
-    QString formattedDate = currentDateTime.toString("yyyy-MM-dd HH:mm:ss");
-
-    q.bindValue(":id", id);
-    q.bindValue(":name", community.getName());
-    q.bindValue(":des", community.getDescription());
-    q.bindValue(":icon", iconFilename);
-    q.bindValue(":banner", bannerFilename);
-    q.bindValue(":date", formattedDate);
-
-    if(!q.exec()){
-        qDebug() << "Failed to insert into community table : " << q.lastError();
-        return false;
-    }
-
-    // Add categories to community_category joining table atomically
-    try {
-        for(auto cat : community.getCategories()){
-            q.prepare("INSERT INTO community_categories(community_id, category_id) VALUES (:id, :cat_id)");
-            q.bindValue(":id", id);
-            q.bindValue(":cat_id", cat.getId());
-            if(!q.exec()){
-                throw std::runtime_error("Failed to insert category");
-            }
-        }
-        db.commit(); // Commit the transaction if all insertions succeed
-    } catch (const std::exception& e) {
-        db.rollback();
-        qDebug() << "Transaction failed: " << e.what();
-        return false;
-    }
-
-    // Add user id to users_communitites table
-    q.prepare("insert into users_communities(user_id, community_id) values (:u_id, :c_id);");
-    QString u_id = AuthenticatedUser::getInstance().getId();
-    q.bindValue(":u_id", u_id);
-    q.bindValue(":c_id", id);
-
-    if(!q.exec()){
-        qDebug() << "Failed to add entry to user_community";
-        return false;
-    }
-    return true;
+    return false;
 }
 
 std::vector<CommunityModel> CommunityRepository::getUserCommunities(const QString& user_id){
@@ -149,8 +96,8 @@ std::vector<CommunityModel> CommunityRepository::getUserCommunities(const QStrin
             QString bannerPath = getCommName.value(4).toString();
             QImage iconImage = StorageRepository::getIconImage(iconPath);
             QImage bannerImage = StorageRepository::getBannerImage(bannerPath);
-            std::vector<CategoryModel>categories = CategoryRepository::getCategoriesForCommunity(id);
-            comms.push_back(CommunityModel(id, name, description, iconImage, bannerImage, categories));
+            QList<CategoryModel>categories = CategoryRepository::getCategoriesForCommunity(id);
+            comms.push_back(CommunityModel(name, description, iconImage, bannerImage, categories, id));
         }
     }
     return comms;

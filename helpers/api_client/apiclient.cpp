@@ -61,3 +61,5 @@ const QString& ApiClient::getUserDataUrl() const{ return userDataUrl;}
 const QString& ApiClient::getUpdateUserDataUrl() const { return updateUserDataUrl; }
 const QString& ApiClient::getPostThreadUrl() const {return postThreadUrl;}
 const QString& ApiClient::getThreadsUrl() const{ return threadsUrl; }
+const QString& ApiClient::getCategoriesUrl() const{ return categoryUrl; }
+const QString& ApiClient::getCommunitiesUrl() const{ return communityUrl; }

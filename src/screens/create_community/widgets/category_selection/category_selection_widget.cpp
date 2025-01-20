@@ -1,5 +1,5 @@
 #include "category_selection_widget.h"
-#include "../../../../db/category_repository.h"
+#include "../../../../network/category/categoryrepository.h"
 #include "../category/category_widget.h"
 
 
@@ -10,7 +10,7 @@ CategorySelectionWidget::CategorySelectionWidget(QWidget* parent)
     categoriesLayout = new QGridLayout();
     headerText = new QLabel("Select Categories");
 
-    allCategories = getCategories();
+    allCategories = CategoryRepository::getAllCategories();
     //for every category create a category widget and add it to a grid layout
     for(auto category : allCategories){
         CategoryWidget *widget = new CategoryWidget(category.getName(), category.getId());
@@ -23,12 +23,8 @@ CategorySelectionWidget::CategorySelectionWidget(QWidget* parent)
 
 }
 
-QList<CategoryModel> CategorySelectionWidget::getCategories() const{
-    return CategoryRepository::getCategories();
-}
-
-std::vector<CategoryModel> CategorySelectionWidget::getSelectedCategories() const{
-    std::vector<CategoryModel> selectedCategories;
+QList<CategoryModel> CategorySelectionWidget::getSelectedCategories() const{
+    QList<CategoryModel> selectedCategories;
 
     // Iterate through all child widgets in the categoriesLayout
     for (int i = 0; i < categoriesLayout->count(); ++i) {
@@ -37,7 +33,7 @@ std::vector<CategoryModel> CategorySelectionWidget::getSelectedCategories() cons
             CategoryWidget* categoryWidget = qobject_cast<CategoryWidget*>(item->widget());
             if (categoryWidget && categoryWidget->getIsSelected()) {
                 CategoryModel cat(categoryWidget->getCategoryId(), categoryWidget->getCategoryName());
-                selectedCategories.push_back(cat);
+                selectedCategories.append(cat);
             }
         }
     }

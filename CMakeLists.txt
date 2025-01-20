@@ -31,8 +31,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         ${PROJECT_SOURCES} ${PROJECT_RESOURCES}
 
         screens/styles/buttonStyles.h
-        models/categorymodel.h models/categorymodel.cpp
-        db/category_repository.h db/category_repository.cpp
+
+
 
 
 
@@ -41,7 +41,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 
 
 
-        sql/storage_buckets.sql
+
         db/storage/storagerepository.h db/storage/storagerepository.cpp
         utils/helper/apphelper.h utils/helper/apphelper.cpp
 
@@ -99,6 +99,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         src/screens/create_community/widgets/community_description/community_description_widget.h src/screens/create_community/widgets/community_description/community_description_widget.cpp
         src/screens/create_community/widgets/banner_selection/banner_selection_widget.h src/screens/create_community/widgets/banner_selection/banner_selection_widget.cpp
         src/screens/create_community/widgets/category/category_widget.h src/screens/create_community/widgets/category/category_widget.cpp
+        src/network/category/categoryrepository.h src/network/category/categoryrepository.cpp
+        src/models/category/category_model.h src/models/category/category_model.cpp
 
 
 

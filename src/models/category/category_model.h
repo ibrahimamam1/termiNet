@@ -6,14 +6,14 @@ class CategoryModel
 {
 public:
     CategoryModel();
-    CategoryModel(const int _id, const QString _name);
-    int getId() const;
+    CategoryModel(const size_t& _id, const QString& _name);
+    size_t getId() const;
     QString getName() const;
 
 
 
 private:
-    int id;
+    size_t id;
     QString name;
 };
 

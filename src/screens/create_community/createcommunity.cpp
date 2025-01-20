@@ -1,5 +1,6 @@
 #include "createcommunity.h"
 #include "../../../db/communityrepository.h"
+#include "../../../helpers/apphelper.h"
 #include<QMessageBox>
 
 
@@ -44,9 +45,12 @@ CreateCommunity::CreateCommunity(QWidget *parent)
             QString comm_banner_path = page2->bannerImagePath->text();
             QImage iconImage(comm_icon_path);
             QImage bannerImage(comm_banner_path);
-            std::vector<CategoryModel> categories_id = page3->getSelectedCategories();
+            //Scale the icon and banner images
+            QImage scaledIconImage = AppHelper::createRoundedIcon(iconImage);
+            QImage scaledBannerImage = bannerImage.scaled(100, 100, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            QList<CategoryModel> categories_id = page3->getSelectedCategories();
 
-            if(!CommunityRepository::addNewCommunity(CommunityModel(-1 ,comm_name, comm_des, iconImage, bannerImage, categories_id))){
+            if(!CommunityRepository::addNewCommunity(CommunityModel(comm_name, comm_des, scaledIconImage, scaledBannerImage, categories_id))){
                 QMessageBox *errorBox = new QMessageBox(QMessageBox::Critical, "Cannot Create Community", "Failed to create your community. Please Check your internet Connection and try again");
             }
             else{
@@ -61,8 +65,8 @@ CreateCommunity::CreateCommunity(QWidget *parent)
             pages->setCurrentIndex(currentIndex - 1);
         }
     });
-    connect(cancelBtn,&QPushButton::clicked, [=]() {
-        qDebug() << "Will go back to Home";
+    connect(cancelBtn,&QPushButton::clicked, [&]() {
+        this->hide();
     });
 
     //setup bottom Bar
