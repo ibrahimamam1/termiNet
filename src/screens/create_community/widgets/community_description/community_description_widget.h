@@ -7,10 +7,10 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 
-class ComunityDescriptionPage : public QWidget{
+class ComunityDescriptionWidget : public QWidget{
     Q_OBJECT
 public:
-    ComunityDescriptionPage();
+    ComunityDescriptionWidget();
     QVBoxLayout *page1Layout;
     QLabel *headertext;
     QLineEdit *communityNameField;

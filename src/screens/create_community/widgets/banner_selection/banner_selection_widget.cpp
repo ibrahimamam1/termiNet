@@ -1,7 +1,7 @@
-#include "communitybannerpage.h"
-#include "../../styles/buttonStyles.h"
+#include "banner_selection_widget.h"
+#include "../../../../screens/styles/buttonStyles.h"
 
-CommunityBannerPage::CommunityBannerPage(QWidget *parent)
+BannerSelectionWidget::BannerSelectionWidget(QWidget *parent)
     : QWidget{parent}
 {
     page2Layout = new QVBoxLayout(this);

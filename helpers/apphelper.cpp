@@ -126,3 +126,39 @@ const QJsonDocument AppHelper::loadJsonFromFile(const QString& filePath){
 
     return document;
 }
+
+#include <QImage>
+#include <QPainter>
+#include <QPainterPath>
+#include <QBrush>
+#include <QPen>
+
+QImage AppHelper::createRoundedIcon(const QImage& inputImage) {
+    // Resize the image to 50x50
+    QImage resizedImage = inputImage.scaled(50, 50, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+
+    // Create a new transparent image of the same size
+    QImage roundedImage(50, 50, QImage::Format_ARGB32);
+    roundedImage.fill(Qt::transparent);
+
+    // Create a painter to draw on the new image
+    QPainter painter(&roundedImage);
+    painter.setRenderHint(QPainter::Antialiasing, true);
+
+    // Create a rounded rectangle path
+    QPainterPath path;
+    path.addRoundedRect(0, 0, 50, 50, 25, 25); // 25 is the radius for rounded corners (half of 50)
+
+    // Set the clipping path to make the image rounded
+    painter.setClipPath(path);
+
+    // Draw the resized image onto the roundedImage
+    painter.drawImage(0, 0, resizedImage);
+
+    // Optionally, draw a border around the rounded image
+    painter.setPen(QPen(Qt::black, 2)); // Border color and thickness
+    painter.setBrush(Qt::NoBrush); // No fill
+    painter.drawPath(path);
+
+    return roundedImage;
+}

@@ -11,11 +11,11 @@
 #include <QHBoxLayout>
 #include <QFileDialog>
 
-class CommunityBannerPage : public QWidget
+class BannerSelectionWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit CommunityBannerPage(QWidget *parent = nullptr);
+    explicit BannerSelectionWidget(QWidget *parent = nullptr);
     QVBoxLayout *page2Layout;
     QHBoxLayout *bannerRow;
     QHBoxLayout *iconRow;

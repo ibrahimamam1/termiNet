@@ -83,7 +83,7 @@ std::vector<ThreadModel> ThreadRepository::loadThreads(const QString& filter, co
     return threads;
 }
 std::vector<ThreadModel> ThreadRepository::loadAllThreads(){
-    return loadThreads("n", "0");
+    return loadThreads("none", "0");
 }
 std::vector<ThreadModel> ThreadRepository::loadAllThreadsFromUser(const QString& userId){
     return loadThreads("user_id", userId);

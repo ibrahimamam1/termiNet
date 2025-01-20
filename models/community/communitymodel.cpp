@@ -11,13 +11,14 @@ CommunityModel::CommunityModel()
     categories()
 {}
 
-CommunityModel::CommunityModel(int id, const QString& name, const QString& description, const QImage& iconImage, const QImage& bannerImage, const std::vector<CategoryModel>& categories, const QString& created_at)
-    : id(id),
-    name(name),
+CommunityModel::CommunityModel(const QString& name, const QString& description, const QImage& iconImage, const QImage& bannerImage, const QList<CategoryModel>& categories, const size_t id,const QString& created_at)
+    :name(name),
     description(description),
     iconImage(iconImage),
     bannerImage(bannerImage),
-    categories(categories)
+    categories(categories),
+    id(id),
+    created_at(created_at)
 {
     threads = ThreadRepository::loadAllThreadsFromCommunity(id);
 }
@@ -42,7 +43,10 @@ QImage CommunityModel::getBannerImage() const {
     return bannerImage;
 }
 
-std::vector<CategoryModel> CommunityModel::getCategories() const {
+QString CommunityModel::getCreatedAt() const {
+    return created_at;
+}
+QList<CategoryModel> CommunityModel::getCategories() const {
     return categories;
 }
 

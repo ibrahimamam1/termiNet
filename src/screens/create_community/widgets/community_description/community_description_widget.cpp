@@ -1,7 +1,7 @@
-#include "comunitydescriptionpage.h"
+#include "community_description_widget.h"
 
 
-ComunityDescriptionPage::ComunityDescriptionPage() {
+ComunityDescriptionWidget::ComunityDescriptionWidget() {
 
     page1Layout = new QVBoxLayout(this);
     headertext = new QLabel();
