@@ -6,12 +6,12 @@
 #include <QWidget>
 #include <QLabel>
 
-#include "../../../models/categorymodel.h"
+#include "../../../../models/categorymodel.h"
 
-class CategorySelectionScreen : public QWidget {
+class CategorySelectionWidget : public QWidget {
     Q_OBJECT
 public:
-    explicit CategorySelectionScreen(QWidget* parent = nullptr);
+    explicit CategorySelectionWidget(QWidget* parent = nullptr);
 
     // Method to get selected categories
     QList<CategoryModel> getCategories() const;

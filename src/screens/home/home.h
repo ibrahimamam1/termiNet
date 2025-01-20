@@ -14,7 +14,7 @@
 #include "../../models/user/usermodel.h"
 #include "../../../models/community/communitymodel.h"
 #include "../../../db/communityrepository.h"
-#include "../../../screens/create_community/createcommunity.h"
+#include "../../screens/create_community/createcommunity.h"
 #include "../../../screens/community_page/communitypage.h"
 #include "widgets/thread_view/threadview.h"
 #include "../../models/user/authenticateduser.h"

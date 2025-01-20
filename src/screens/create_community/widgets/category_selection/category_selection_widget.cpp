@@ -1,9 +1,9 @@
-#include "categoryselectionscreen.h"
-#include "../../../db/category_repository.h"
-#include "../widgets/categorywidget.h"
+#include "category_selection_widget.h"
+#include "../../../../db/category_repository.h"
+#include "../category/category_widget.h"
 
 
-CategorySelectionScreen::CategorySelectionScreen(QWidget* parent)
+CategorySelectionWidget::CategorySelectionWidget(QWidget* parent)
     :QWidget{parent}
 {
     mainLayout = new QVBoxLayout(this);
@@ -23,11 +23,11 @@ CategorySelectionScreen::CategorySelectionScreen(QWidget* parent)
 
 }
 
-QList<CategoryModel> CategorySelectionScreen::getCategories() const{
+QList<CategoryModel> CategorySelectionWidget::getCategories() const{
     return CategoryRepository::getCategories();
 }
 
-std::vector<CategoryModel> CategorySelectionScreen::getSelectedCategories() const{
+std::vector<CategoryModel> CategorySelectionWidget::getSelectedCategories() const{
     std::vector<CategoryModel> selectedCategories;
 
     // Iterate through all child widgets in the categoriesLayout

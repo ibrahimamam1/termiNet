@@ -1,5 +1,5 @@
 #include "createcommunity.h"
-#include "../../db/communityrepository.h"
+#include "../../../db/communityrepository.h"
 #include<QMessageBox>
 
 
@@ -7,10 +7,10 @@ CreateCommunity::CreateCommunity(QWidget *parent)
     :QWidget{parent}
 {
     pageContainer = new QVBoxLayout(this);
-    views = new QStackedWidget();
-    page1 = new ComunityDescriptionPage();
-    page2 = new CommunityBannerPage();
-    page3 = new CategorySelectionScreen();
+    pages = new QStackedWidget();
+    page1 = new ComunityDescriptionWidget();
+    page2 = new BannerSelectionWidget();
+    page3 = new CategorySelectionWidget();
     bottombar = new QHBoxLayout();
     cancelBtn = new QPushButton("Cancel");
     prevBtn = new QPushButton("Previous");
@@ -18,17 +18,25 @@ CreateCommunity::CreateCommunity(QWidget *parent)
 
 
     //add pages to stackedWidget
-    views->addWidget(page1);
-    views->addWidget(page2);
-    views->addWidget(page3);
+    pages->addWidget(page1);
+    pages->addWidget(page2);
+    pages->addWidget(page3);
 
     //configure navigation between pages
     connect(nextBtn, &QPushButton::clicked, [=]() {
-        int currentIndex = views->currentIndex();
-        if (currentIndex < views->count() - 1) {
-            views->setCurrentIndex(currentIndex + 1);
+        int currentIndex = pages->currentIndex();
+        if (currentIndex == 0) {
+            QString name = page1->communityNameField->text();
+            QString des = page1->communityDescription->toPlainText();
+            if(name.isEmpty() || des.isEmpty()){
+                QMessageBox::critical(this, "Input Error", "Please Fill all fields", QMessageBox::Ok);
+            }else{
+                pages->setCurrentIndex(1);
+            }
+        }else if(currentIndex < pages->count() - 1){
+            pages->setCurrentIndex(pages->currentIndex() + 1);
         }
-        else if(currentIndex == views->count() - 1) {
+        else if(currentIndex == pages->count() - 1) {
             //do db operations
             QString comm_name = page1->communityNameField->text();
             QString comm_des = page1->communityDescription->toPlainText();
@@ -39,7 +47,7 @@ CreateCommunity::CreateCommunity(QWidget *parent)
             std::vector<CategoryModel> categories_id = page3->getSelectedCategories();
 
             if(!CommunityRepository::addNewCommunity(CommunityModel(-1 ,comm_name, comm_des, iconImage, bannerImage, categories_id))){
-                 QMessageBox *errorBox = new QMessageBox(QMessageBox::Critical, "Cannot Create Community", "Failed to create your community. Please Check your internet Connection and try again");
+                QMessageBox *errorBox = new QMessageBox(QMessageBox::Critical, "Cannot Create Community", "Failed to create your community. Please Check your internet Connection and try again");
             }
             else{
                 qDebug() << "Let's switch to community page";
@@ -48,9 +56,9 @@ CreateCommunity::CreateCommunity(QWidget *parent)
         }
     });
     connect(prevBtn,&QPushButton::clicked, [=]() {
-        int currentIndex = views->currentIndex();
+        int currentIndex = pages->currentIndex();
         if (currentIndex > 0) {
-            views->setCurrentIndex(currentIndex - 1);
+            pages->setCurrentIndex(currentIndex - 1);
         }
     });
     connect(cancelBtn,&QPushButton::clicked, [=]() {
@@ -64,7 +72,7 @@ CreateCommunity::CreateCommunity(QWidget *parent)
     bottombar->addWidget(nextBtn, 1);
 
     //add everything to page container
-    pageContainer->addWidget(views, 8);
+    pageContainer->addWidget(pages, 8);
     pageContainer->addLayout(bottombar, 2);
 
 }

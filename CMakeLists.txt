@@ -30,15 +30,11 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES} ${PROJECT_RESOURCES}
 
-        screens/create_community/createcommunity.h
-        screens/create_community/createcommunity.cpp
         screens/styles/buttonStyles.h
-        screens/create_community/widgets/categorywidget.h screens/create_community/widgets/categorywidget.cpp
-        screens/create_community/pages/categoryselectionscreen.h screens/create_community/pages/categoryselectionscreen.cpp
         models/categorymodel.h models/categorymodel.cpp
         db/category_repository.h db/category_repository.cpp
-        screens/create_community/pages/comunitydescriptionpage.h screens/create_community/pages/comunitydescriptionpage.cpp
-        screens/create_community/pages/communitybannerpage.h screens/create_community/pages/communitybannerpage.cpp
+
+
 
         db/communityrepository.h db/communityrepository.cpp
         screens/community_page/communitypage.h screens/community_page/communitypage.cpp
@@ -48,15 +44,6 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         sql/storage_buckets.sql
         db/storage/storagerepository.h db/storage/storagerepository.cpp
         utils/helper/apphelper.h utils/helper/apphelper.cpp
-
-
-
-
-
-
-
-
-
 
         screens/community_page/widgets/communitydescriptionwidget.h screens/community_page/widgets/communitydescriptionwidget.cpp
         models/community/communitymodel.h models/community/communitymodel.cpp
@@ -107,6 +94,12 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         src/screens/home/widgets/thread_view/widgets/thread/threadwidget.h src/screens/home/widgets/thread_view/widgets/thread/threadwidget.cpp
         src/screens/home/widgets/thread_view/widgets/replyBox/replybox.h src/screens/home/widgets/thread_view/widgets/replyBox/replybox.cpp
         src/screens/home/widgets/topBar/topbar.h src/screens/home/widgets/topBar/topbar.cpp
+        src/screens/create_community/createcommunity.h src/screens/create_community/createcommunity.cpp
+        src/screens/create_community/widgets/category_selection/category_selection_widget.h src/screens/create_community/widgets/category_selection/category_selection_widget.cpp
+        src/screens/create_community/widgets/community_description/community_description_widget.h src/screens/create_community/widgets/community_description/community_description_widget.cpp
+        src/screens/create_community/widgets/banner_selection/banner_selection_widget.h src/screens/create_community/widgets/banner_selection/banner_selection_widget.cpp
+        src/screens/create_community/widgets/category/category_widget.h src/screens/create_community/widgets/category/category_widget.cpp
+
 
 
 

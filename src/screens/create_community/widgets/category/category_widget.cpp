@@ -1,4 +1,4 @@
-#include "categorywidget.h"
+#include "category_widget.h"
 
 CategoryWidget::CategoryWidget(const QString& categoryName, const int categoryId, const bool& isSelected, QWidget *parent)
     : m_categoryName(categoryName), m_categoryId(categoryId), m_isSelected(isSelected), QWidget{parent}
