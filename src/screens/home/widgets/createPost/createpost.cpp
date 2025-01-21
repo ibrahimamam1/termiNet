@@ -33,6 +33,7 @@ void CreatePost::onPostBtnClicked()
         communityId = Home::getInstance().communityPage->getCommunity().getId();
     }
     ThreadModel thread(title, text, user, communityId);
+    qDebug() << "Posting From Community" << communityId;
     bool success = ThreadRepository::postNewThread(thread);
     if(success){
         title.clear();

@@ -91,6 +91,7 @@ QList<CommunityModel> CommunityRepository::getCommunities(const QString& filter,
                     QString created_at = jsonObject["created_at"].toString();
                     size_t id = static_cast<size_t>(jsonObject["community_id"].toInt());
                     size_t memberCount = static_cast<size_t>(jsonObject["member_count"].toInt());
+                    qDebug() << name << " has " << memberCount << "members";
 
                     QImage iconImage = QImage::fromData(iconImageData, "PNG");
                     QImage bannerImage = QImage::fromData(bannerImageData, "PNG");
