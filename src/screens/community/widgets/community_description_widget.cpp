@@ -1,6 +1,6 @@
-#include "communitydescriptionwidget.h"
+#include "community_description_widget.h"
 #include "../communitypage.h"
-#include "../../styles/buttonStyles.h"
+#include "../../../common/style/styles.h"
 
 CommunityDescriptionWidget::CommunityDescriptionWidget(CommunityModel& community, QWidget *parent)
     : QWidget{parent}
@@ -22,8 +22,6 @@ CommunityDescriptionWidget::CommunityDescriptionWidget(CommunityModel& community
     QPixmap bannerPixMap;
     bannerPixMap.convertFromImage(community.getBannerImage());
     bannerImage->setPixmap(bannerPixMap);
-
-
 
 
     // horizontal layout for icon and name

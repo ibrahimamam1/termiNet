@@ -7,7 +7,7 @@
 #include <QScrollArea>
 #include "../../../../models/community/communitymodel.h"
 #include "../../../../models/user/usermodel.h"
-#include "../../../../db/communityrepository.h"
+#include "../../../../network/community/communityrepository.h"
 
 class LeftNavigationWidget : public QWidget
 {
@@ -24,7 +24,7 @@ class LeftNavigationWidget : public QWidget
     QLabel* community;
     QLabel *createCommunity;
 
-    std::vector<CommunityModel>userCommunities;
+    QList<CommunityModel>userCommunities;
 public:
     explicit LeftNavigationWidget(QWidget *parent = nullptr);
     void getUserCommunities(QVBoxLayout* layout);

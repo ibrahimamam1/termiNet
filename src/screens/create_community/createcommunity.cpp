@@ -1,6 +1,7 @@
 #include "createcommunity.h"
-#include "../../../db/communityrepository.h"
+#include "../../network/community/communityrepository.h"
 #include "../../../helpers/apphelper.h"
+#include "../home/home.h"
 #include<QMessageBox>
 
 
@@ -50,11 +51,20 @@ CreateCommunity::CreateCommunity(QWidget *parent)
             QImage scaledBannerImage = bannerImage.scaled(100, 100, Qt::KeepAspectRatio, Qt::SmoothTransformation);
             QList<CategoryModel> categories_id = page3->getSelectedCategories();
 
-            if(!CommunityRepository::addNewCommunity(CommunityModel(comm_name, comm_des, scaledIconImage, scaledBannerImage, categories_id))){
+            CommunityModel community(comm_name, comm_des, scaledIconImage, scaledBannerImage);
+            community.setCategories(categories_id);
+            if(!CommunityRepository::addNewCommunity(community)){
                 QMessageBox *errorBox = new QMessageBox(QMessageBox::Critical, "Cannot Create Community", "Failed to create your community. Please Check your internet Connection and try again");
             }
             else{
-                qDebug() << "Let's switch to community page";
+                QMessageBox::information(this, "Sucess", "Your Community Have been Created Succesfully", "Ok");
+
+                Home& home = Home::getInstance();
+
+                home.communityPage->clearCommunityPage();
+                home.communityPage->setCommunityPage(community);
+                this->hide();
+                home.centerArea->setCurrentIndex(1);
             }
 
         }

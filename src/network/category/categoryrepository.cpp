@@ -33,6 +33,7 @@ QList<CategoryModel> CategoryRepository::getCategories(const QString& filter, co
                     // Extract values from the JSON object
                     QString name = jsonObject["category_name"].toString();
                     size_t id = static_cast<size_t>(jsonObject["category_id"].toInt());
+                    qDebug() << "Found Category in Json: " << id << " -> " << name;
 
                     CategoryModel cat(id, name);
                     result.append(cat);

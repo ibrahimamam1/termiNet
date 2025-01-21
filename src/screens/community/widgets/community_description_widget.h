@@ -28,7 +28,7 @@ public:
 signals:
 
 private slots:
-     void onJoinBtnClicked();
+    void onJoinBtnClicked();
 };
 
 #endif // COMMUNITYDESCRIPTIONWIDGET_H

@@ -12,10 +12,10 @@
 #include"../../common/widgets//clickable_label.h"
 #include "widgets/thread_view/widgets/thread/threadwidget.h"
 #include "../../models/user/usermodel.h"
-#include "../../../models/community/communitymodel.h"
-#include "../../../db/communityrepository.h"
+#include "../../models/community/communitymodel.h"
+#include "../../network/community/communityrepository.h"
 #include "../../screens/create_community/createcommunity.h"
-#include "../../../screens/community_page/communitypage.h"
+#include "../community/communitypage.h"
 #include "widgets/thread_view/threadview.h"
 #include "../../models/user/authenticateduser.h"
 #include "../../../screens/message/messagepage.h"
@@ -56,8 +56,8 @@ private slots:
 private:
     UserModel& user;
     static std::unique_ptr<Home> instance;
-    std::vector<ThreadModel>threads;
-    std::vector<ThreadModel>savedThreads;
+    QList<ThreadModel>threads;
+    QList<ThreadModel>savedThreads;
 };
 
 #endif // HOME_H

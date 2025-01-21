@@ -24,25 +24,18 @@ QNetworkReply* ApiClient::makeGetRequest(const QString &url){
 QNetworkReply* ApiClient::makePostRequest(const QString &url, const QJsonObject& data) {
 
     QNetworkRequest request(url);
-    qDebug() << "Converting JSON...";
     QJsonDocument doc(data);
     QByteArray jsonData = doc.toJson();
 
-
-
-    qDebug() << "Setting Headers...";
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     request.setHeader(QNetworkRequest::ContentLengthHeader, QByteArray::number(jsonData.size()));
     request.setRawHeader("X-Custom-Client-Header", "Qt-Client");
 
-    qDebug() << "Making Request...";
     QNetworkReply *reply = manager->post(request, jsonData);
-    qDebug() << "made request";
     // Connect signals for proper memory management
     connect(reply, &QNetworkReply::finished, reply, &QNetworkReply::deleteLater);
     connect(reply, &QNetworkReply::errorOccurred, this, &ApiClient::handleNetworkError);
 
-    qDebug() << "Sent JSON:" << QString(jsonData);
     return reply;
 }
 

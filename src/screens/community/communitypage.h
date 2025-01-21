@@ -3,9 +3,9 @@
 
 #include <QWidget>
 
-#include "../../src/screens/home/widgets/topBar/topbar.h"
-#include "../../src/screens/home/widgets/thread_view/threadview.h"
-#include "widgets/communitydescriptionwidget.h"
+#include "../home/widgets/topBar/topbar.h"
+#include "../home/widgets/thread_view/threadview.h"
+#include "widgets/community_description_widget.h"
 
 class CommunityPage : public QWidget
 {
@@ -14,7 +14,7 @@ class CommunityPage : public QWidget
     ThreadView *threadView;
     CommunityDescriptionWidget *communityDescriptionWidget;
     CommunityModel community;
-    std::vector<ThreadModel> threads;
+    QList<ThreadModel> threads;
 
 public:
     explicit CommunityPage(QWidget *parent = nullptr);

@@ -25,11 +25,11 @@ private:
     QWidget *commentsContainer;
     QVBoxLayout *commentsLayout;
     ReplyBox *replyBox;
-    std::vector<ThreadModel> threads;
-    std::vector<ThreadModel> comments;
+    QList<ThreadModel> threads;
+    QList<ThreadModel> comments;
 
 public:
-    explicit ThreadView(std::vector<ThreadModel>t_threads, QWidget *parent = nullptr);
+    explicit ThreadView(const QList<ThreadModel>& t_threads, QWidget *parent = nullptr);
     void switchToCommentScreen(const ThreadModel& thread);
     void switchToHomeScreen();
     ~ThreadView();  // Destructor to clean up dynamically allocated widgets
