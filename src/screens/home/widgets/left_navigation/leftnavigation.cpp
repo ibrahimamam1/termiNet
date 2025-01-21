@@ -25,21 +25,25 @@ LeftNavigationWidget::LeftNavigationWidget(QWidget *parent)
 
     // Community navigation
     communityNav = new QVBoxLayout();
-    community = new QLabel("Communities");
+    community = new QLabel("Your Communities");
     createCommunity = new QLabel();
     createCommunity->setText("<a href='#' style='color: #007bff; text-decoration: underline;'>Create Community</a>");
     createCommunity->setTextFormat(Qt::RichText);
     createCommunity->setTextInteractionFlags(Qt::TextBrowserInteraction);
     connect(createCommunity, &QLabel::linkActivated, this, &LeftNavigationWidget::onCreateCommunityBtnClicked);
 
+
     communityNav->addWidget(community);
-    communityNav->addWidget(createCommunity);
     getUserCommunities(communityNav);
-    communityNav->addStretch();
+    auto communityContainer = new QVBoxLayout();
+    communityContainer->addLayout(communityNav);
+    communityContainer->addStretch();
+    communityContainer->addWidget(createCommunity);
+
 
     communityScrollArea = new QScrollArea(this);
     communityContent = new QWidget(this);
-    communityContent->setLayout(communityNav);
+    communityContent->setLayout(communityContainer);
     communityScrollArea->setWidget(communityContent);
     communityScrollArea->setWidgetResizable(true);
 
@@ -64,6 +68,17 @@ void LeftNavigationWidget::getUserCommunities(QVBoxLayout* layout){
     }
 }
 
+void LeftNavigationWidget::addUserCommunity(CommunityModel comm){
+    QLabel *commLabel = new QLabel();
+    QString labelText = "<a href='#'>" + comm.getName() + "</a>";
+    commLabel->setText(labelText);
+    commLabel->setTextInteractionFlags(Qt::TextBrowserInteraction);
+    connect(commLabel, &QLabel::linkActivated, this, [this, comm]() {
+        onCommunityLabelClicked(comm);
+    });
+    communityNav->addWidget(commLabel);
+}
+
 void LeftNavigationWidget::onCreateCommunityBtnClicked(){
     CreateCommunity *createCommunityWidget = new CreateCommunity();
     createCommunityWidget->show();
@@ -73,8 +88,7 @@ void LeftNavigationWidget::onCommunityLabelClicked(CommunityModel community){
     qDebug() << "Okay let's switch to community page for" << community.getName();
     Home& home = Home::getInstance();
 
-    home.communityPage->clearCommunityPage();
     home.communityPage->setCommunityPage(community);
+    home.communityPage->update();
     home.centerArea->setCurrentIndex(1);
-
 }

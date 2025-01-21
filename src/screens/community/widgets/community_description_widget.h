@@ -22,10 +22,14 @@ class CommunityDescriptionWidget : public QWidget
     QLabel *bannerImage;
     QLabel *iconImage;
     QLabel *memberCount;
+    size_t communityId;
+    CommunityModel community;
 public:
     explicit CommunityDescriptionWidget(CommunityModel& community, QWidget *parent = nullptr);
+    void setCommunity(const CommunityModel& comm);
 
 signals:
+    void communityJoined();
 
 private slots:
     void onJoinBtnClicked();

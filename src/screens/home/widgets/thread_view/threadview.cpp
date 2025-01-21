@@ -97,3 +97,26 @@ void ThreadView::switchToCommentScreen(const ThreadModel& thread) {
 void ThreadView::switchToHomeScreen(){
     threadPages->setCurrentIndex(0);
 }
+
+void ThreadView::setThreads(const QList<ThreadModel>& t){
+    // Clear the existing layout
+    QLayoutItem* item;
+    while ((item = threadsLayout->takeAt(0)) != nullptr) {
+        if (item->widget()) {
+            delete item->widget(); // Delete the widget
+        }
+        delete item; // Delete the layout item
+    }
+
+
+    threads = t;
+    for(const auto& thread : t){
+        ThreadWidget *threadWidget = new ThreadWidget(thread);
+        connect(threadWidget, &ThreadWidget::commentIconClicked, this, [this, thread]() {
+            switchToCommentScreen(thread);
+        });
+
+        threadsLayout->addWidget(threadWidget);
+    }
+    this->update();
+}

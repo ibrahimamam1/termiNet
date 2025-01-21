@@ -30,6 +30,7 @@ private:
 
 public:
     explicit ThreadView(const QList<ThreadModel>& t_threads, QWidget *parent = nullptr);
+    void setThreads(const QList<ThreadModel>& t);
     void switchToCommentScreen(const ThreadModel& thread);
     void switchToHomeScreen();
     ~ThreadView();  // Destructor to clean up dynamically allocated widgets

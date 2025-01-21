@@ -1,19 +1,22 @@
 #include "community_description_widget.h"
 #include "../communitypage.h"
+#include "../../../network/community/communityrepository.h"
 #include "../../../common/style/styles.h"
+#include "../../../models/user/authenticateduser.h"
 #include <QFont>
 #include <QFontDatabase>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QSpacerItem>
 
-CommunityDescriptionWidget::CommunityDescriptionWidget(CommunityModel& community, QWidget *parent)
+CommunityDescriptionWidget::CommunityDescriptionWidget(CommunityModel& comm, QWidget *parent)
     : QWidget{parent}
 {
+    community = comm;
     // Main layout
     communityInfoContainer = new QVBoxLayout(this);
-    communityInfoContainer->setSpacing(20); // Add spacing between widgets
-    communityInfoContainer->setContentsMargins(20, 20, 20, 20); // Add margins
+    communityInfoContainer->setSpacing(10); // Add spacing between widgets
+    communityInfoContainer->setContentsMargins(10, 10, 10, 10); // Add margins
 
     // Banner image
     bannerImage = new QLabel();
@@ -68,7 +71,12 @@ CommunityDescriptionWidget::CommunityDescriptionWidget(CommunityModel& community
     communityDescription->setText(community.getDescription());
 
     // Join button
-    joinBtn = new QPushButton("Join Community");
+    joinBtn = new QPushButton("");
+    if(community.getJoined() == true)
+        joinBtn->setText("Leave");
+    else
+       joinBtn->setText("False");
+
     joinBtn->setStyleSheet(
         "QPushButton {"
         "   background-color: #0079D3;"
@@ -94,5 +102,32 @@ CommunityDescriptionWidget::CommunityDescriptionWidget(CommunityModel& community
 }
 
 void CommunityDescriptionWidget::onJoinBtnClicked() {
-    qDebug() << "Yaaay time to handle joining logic";
+    if(community.getJoined() == false){
+        bool success = CommunityRepository::addUserToCommunity(AuthenticatedUser::getInstance().getId(), communityId);
+        if(success){
+            joinBtn->setText("Leave");
+            community.setJoined(true);
+        }
+    }else{
+        bool success = CommunityRepository::removeUserFromCommunity(AuthenticatedUser::getInstance().getId(), communityId);
+        if(success){
+            joinBtn->setText("Join");
+            community.setJoined(false);
+        }
+    }
+
+}
+void CommunityDescriptionWidget::setCommunity(const CommunityModel& comm){
+    communityId = comm.getId();
+    QPixmap bannerPixMap;
+    bannerPixMap.convertFromImage(comm.getBannerImage());
+    bannerImage->setPixmap(bannerPixMap.scaled(800, 200, Qt::KeepAspectRatioByExpanding));
+
+    QPixmap iconPixMap;
+    iconPixMap.convertFromImage(comm.getIconImage());
+    iconImage->setPixmap(iconPixMap.scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+
+    communityName->setText(comm.getName());
+    communityDescription->setText(comm.getDescription());
+    memberCount->setText(QString::number(comm.getMemberCount()) + " members");
 }

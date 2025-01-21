@@ -21,7 +21,12 @@ Home::Home(QWidget *parent) : QMainWindow(parent), user(AuthenticatedUser::getIn
     connect(topBar, &CustomTopBar::profileIconClicked, this, &Home::onProfileIconClicked);
     leftNav = new LeftNavigationWidget();
     connect(leftNav, &LeftNavigationWidget::homeClicked, this, [this]{
-        threadView->switchToHomeScreen();
+        if(centerArea->currentIndex() == 0){
+            threadView->switchToHomeScreen();
+        }else{
+            centerArea->setCurrentIndex(0);
+        }
+
     });
 
     // Center area layout

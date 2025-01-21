@@ -60,8 +60,7 @@ CreateCommunity::CreateCommunity(QWidget *parent)
                 QMessageBox::information(this, "Sucess", "Your Community Have been Created Succesfully", "Ok");
 
                 Home& home = Home::getInstance();
-
-                home.communityPage->clearCommunityPage();
+                home.leftNav->addUserCommunity(community);
                 home.communityPage->setCommunityPage(community);
                 this->hide();
                 home.centerArea->setCurrentIndex(1);

@@ -27,6 +27,7 @@ class LeftNavigationWidget : public QWidget
     QList<CommunityModel>userCommunities;
 public:
     explicit LeftNavigationWidget(QWidget *parent = nullptr);
+    void addUserCommunity(CommunityModel comm);
     void getUserCommunities(QVBoxLayout* layout);
     void onCreateCommunityBtnClicked();
 

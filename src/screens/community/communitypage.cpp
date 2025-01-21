@@ -4,7 +4,7 @@
 CommunityPage::CommunityPage(QWidget *parent)
     :QWidget{parent}
 {
-
+    isSet = false;
 }
 
 
@@ -15,16 +15,18 @@ void CommunityPage::setCommunityPage(const CommunityModel& comm){
     community = comm;
     threads = comm.getThreads();
 
-    //setup scrollable area for threads
-    threadView = new ThreadView(threads);
-    communityDescriptionWidget = new CommunityDescriptionWidget(community);
-
-    //main container
-    mainContainer = new QHBoxLayout(this);
-    mainContainer->addWidget(threadView, 4);
-    mainContainer->addWidget(communityDescriptionWidget,1);
-}
-void CommunityPage::clearCommunityPage(){
+    if(!isSet){
+        isSet = true;
+        threadView = new ThreadView(threads);
+        communityDescriptionWidget = new CommunityDescriptionWidget(community);
+        mainContainer = new QHBoxLayout(this);
+        mainContainer->addWidget(threadView);
+        mainContainer->addWidget(communityDescriptionWidget);
+    }
+    else{
+        communityDescriptionWidget->setCommunity(comm);
+        threadView->setThreads(threads);
+    }
 
 }
 

@@ -97,6 +97,7 @@ QList<CommunityModel> CommunityRepository::getCommunities(const QString& filter,
                     QImage bannerImage = QImage::fromData(bannerImageData, "PNG");
 
                     CommunityModel comm(name, description, iconImage, bannerImage, id, created_at, memberCount);
+                    comm.setJoined(true);
 
                     comms.append(comm);
                 }
@@ -111,5 +112,33 @@ QList<CommunityModel> CommunityRepository::getCommunities(const QString& filter,
 }
 QList<CommunityModel> CommunityRepository::getUserCommunities(const QString& user_id){
     return getCommunities("user_id", user_id);
+}
+
+bool CommunityRepository::addUserToCommunity(const QString& user_id, const size_t& community_id){
+    return true;
+}
+
+bool CommunityRepository::removeUserFromCommunity(const QString& user_id, const size_t& community_id){
+    ApiClient& client = ApiClient::getInstance();
+    QString url = client.getCommunitiesUrl() + "users/remove/" + user_id + "/" + QString::number(community_id);
+
+    QEventLoop loop;
+    QNetworkReply* reply = client.makeGetRequest(url);
+    QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
+
+    loop.exec();
+    if(reply->error() == QNetworkReply::NoError){
+        QByteArray data = reply->readAll();
+        QJsonDocument jsonDoc = QJsonDocument::fromJson(data);
+        if (!jsonDoc.isNull() && jsonDoc.isObject()) {
+            QJsonObject jsonObject = jsonDoc.object();
+            if (jsonObject.contains("body")) {
+                QJsonObject body = jsonObject["body"].toObject();
+                bool success = body["Status"].toBool();
+                return success;
+            }
+        }
+    }
+    return false;
 }
 
