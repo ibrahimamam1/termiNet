@@ -30,23 +30,23 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES} ${PROJECT_RESOURCES}
 
-        screens/styles/buttonStyles.h
 
 
 
 
 
-        db/communityrepository.h db/communityrepository.cpp
-        screens/community_page/communitypage.h screens/community_page/communitypage.cpp
 
 
 
 
-        db/storage/storagerepository.h db/storage/storagerepository.cpp
-        utils/helper/apphelper.h utils/helper/apphelper.cpp
 
-        screens/community_page/widgets/communitydescriptionwidget.h screens/community_page/widgets/communitydescriptionwidget.cpp
-        models/community/communitymodel.h models/community/communitymodel.cpp
+
+
+
+
+
+
+
 
         screens/message/messagepage.h screens/message/messagepage.cpp
         screens/message/widgets/message_list_view/messagelistview.h screens/message/widgets/message_list_view/messagelistview.cpp
@@ -101,6 +101,11 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         src/screens/create_community/widgets/category/category_widget.h src/screens/create_community/widgets/category/category_widget.cpp
         src/network/category/categoryrepository.h src/network/category/categoryrepository.cpp
         src/models/category/category_model.h src/models/category/category_model.cpp
+        src/screens/community/communitypage.h src/screens/community/communitypage.cpp
+        src/screens/community/widgets/community_description_widget.h src/screens/community/widgets/community_description_widget.cpp
+        src/models/community/communitymodel.h src/models/community/communitymodel.cpp
+        src/network/community/communityrepository.h src/network/community/communityrepository.cpp
+        src/common/style/styles.h
 
 
 

@@ -7,12 +7,11 @@ class ThreadRepository
 public:
     ThreadRepository();
     static bool postNewThread(ThreadModel& thread);
-    static std::vector<ThreadModel> loadAllThreads();
-    static std::vector<ThreadModel> loadThreads(const QString& filter, const QString& value);
-    static std::vector<ThreadModel> loadAllThreadsFromCommunity(const int& communityId );
-    static std::vector<ThreadModel> loadAllThreadsFromUser(const QString& user_id);
-    static std::vector<ThreadModel> loadAllThreadsFromParentThread(int parent_thread_id);
-    static ThreadModel getSingleThread(int thread_id);
+    static QList<ThreadModel> loadAllThreads();
+    static QList<ThreadModel> loadThreads(const QString& filter, const QString& value);
+    static QList<ThreadModel> loadAllThreadsFromCommunity(const int& communityId );
+    static QList<ThreadModel> loadAllThreadsFromUser(const QString& user_id);
+    static QList<ThreadModel> loadAllThreadsFromParentThread(int parent_thread_id);
 };
 
 #endif // THREAD_REPOSITORY_H

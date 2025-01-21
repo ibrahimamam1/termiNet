@@ -1,6 +1,5 @@
-#ifndef BUTTONSTYLES_H
-#define BUTTONSTYLES_H
-
+#ifndef STYLES_H
+#define STYLES_H
 #include<QString>
 
 const QString circularBtn = R"(
@@ -12,4 +11,4 @@ const QString circularBtn = R"(
     }
 )";
 
-#endif // BUTTONSTYLES_H
+#endif // STYLES_H

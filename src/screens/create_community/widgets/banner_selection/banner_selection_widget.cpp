@@ -1,5 +1,5 @@
 #include "banner_selection_widget.h"
-#include "../../../../screens/styles/buttonStyles.h"
+#include "../../../../common/style/styles.h"
 
 BannerSelectionWidget::BannerSelectionWidget(QWidget *parent)
     : QWidget{parent}

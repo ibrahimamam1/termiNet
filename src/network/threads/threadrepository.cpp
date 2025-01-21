@@ -34,7 +34,7 @@ bool ThreadRepository::postNewThread(ThreadModel& thread){
     return false;
 }
 
-std::vector<ThreadModel> ThreadRepository::loadThreads(const QString& filter, const QString& value) {
+QList<ThreadModel> ThreadRepository::loadThreads(const QString& filter, const QString& value) {
     qDebug() << "Thread Repo loading threads";
     ApiClient& client = ApiClient::getInstance();
     QString url = client.getThreadsUrl() + filter + "/" + value;
@@ -43,7 +43,7 @@ std::vector<ThreadModel> ThreadRepository::loadThreads(const QString& filter, co
     QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
 
     loop.exec();
-    std::vector<ThreadModel> threads;
+    QList<ThreadModel> threads;
 
     if (reply->error() == QNetworkReply::NoError) {
         QByteArray data = reply->readAll();
@@ -69,7 +69,7 @@ std::vector<ThreadModel> ThreadRepository::loadThreads(const QString& filter, co
                     UserModel author = UserRepository::getUserFromId(authorId);
                     ThreadModel thread(title, content, author, communityId, parentThreadId, threadId, createdAt, commentCount);
 
-                    threads.push_back(thread);
+                    threads.append(thread);
                 }
             }
         } else {
@@ -82,17 +82,17 @@ std::vector<ThreadModel> ThreadRepository::loadThreads(const QString& filter, co
     reply->deleteLater();
     return threads;
 }
-std::vector<ThreadModel> ThreadRepository::loadAllThreads(){
+QList<ThreadModel> ThreadRepository::loadAllThreads(){
     return loadThreads("none", "0");
 }
-std::vector<ThreadModel> ThreadRepository::loadAllThreadsFromUser(const QString& userId){
+QList<ThreadModel> ThreadRepository::loadAllThreadsFromUser(const QString& userId){
     return loadThreads("user_id", userId);
 }
-std::vector<ThreadModel> ThreadRepository::loadAllThreadsFromCommunity(const int& communityId){
+QList<ThreadModel> ThreadRepository::loadAllThreadsFromCommunity(const int& communityId){
     return loadThreads("community_id", QString::number(communityId));
 }
 
-std::vector<ThreadModel> ThreadRepository::loadAllThreadsFromParentThread(const int parent_thread_id) {
+QList<ThreadModel> ThreadRepository::loadAllThreadsFromParentThread(const int parent_thread_id) {
     return loadThreads("parent_thread_id", QString::number(parent_thread_id));
 }
 

@@ -1,9 +1,9 @@
 #include "communitymodel.h"
-#include "../../db/communityrepository.h"
-#include "../../src/network/threads/threadrepository.h"
+#include "../../network/community/communityrepository.h"
+#include "../../network/threads/threadrepository.h"
 
 CommunityModel::CommunityModel()
-    : id(-1),
+    : id(0),
     name(""),
     description(""),
     iconImage(""),
@@ -11,19 +11,22 @@ CommunityModel::CommunityModel()
     categories()
 {}
 
-CommunityModel::CommunityModel(const QString& name, const QString& description, const QImage& iconImage, const QImage& bannerImage, const QList<CategoryModel>& categories, const size_t id,const QString& created_at)
+CommunityModel::CommunityModel(const QString& name, const QString& description,
+                               const QImage& iconImage, const QImage& bannerImage,
+                               const size_t id, const QString& created_at,
+                               const size_t m_count)
     :name(name),
     description(description),
     iconImage(iconImage),
     bannerImage(bannerImage),
-    categories(categories),
     id(id),
-    created_at(created_at)
+    created_at(created_at),
+    memberCount(m_count)
 {
     threads = ThreadRepository::loadAllThreadsFromCommunity(id);
 }
 
-int CommunityModel::getId() const {
+size_t CommunityModel::getId() const {
     return id;
 }
 
@@ -49,11 +52,13 @@ QString CommunityModel::getCreatedAt() const {
 QList<CategoryModel> CommunityModel::getCategories() const {
     return categories;
 }
-
-int CommunityModel::getMemberCount() const {
-    return CommunityRepository::getMemberCount(id);
+void CommunityModel::setCategories(const QList<CategoryModel>& cats){
+    categories = cats;
+}
+size_t CommunityModel::getMemberCount() const {
+    return memberCount;
 }
 
-std::vector<ThreadModel> CommunityModel::getThreads() const{
+QList<ThreadModel> CommunityModel::getThreads() const{
     return threads;
 }

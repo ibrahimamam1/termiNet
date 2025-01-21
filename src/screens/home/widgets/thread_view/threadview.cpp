@@ -3,7 +3,7 @@
 #include "../../../../network/threads/threadrepository.h"
 #include <QScrollBar>
 
-ThreadView::ThreadView(std::vector<ThreadModel>t_threads, QWidget *parent)
+ThreadView::ThreadView(const QList<ThreadModel>& t_threads, QWidget *parent)
     : threads(t_threads), QWidget{parent}
 {
     // Set up main layout
