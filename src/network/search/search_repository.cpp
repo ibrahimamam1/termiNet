@@ -1,5 +1,5 @@
 #include "search_repository.h"
-#include "../../../helpers/api_client/apiclient.h"
+#include "../api/apiclient.h"
 #include "../../network/user/user_repository.h"
 #include <QEventLoop>
 #include <QJsonObject>

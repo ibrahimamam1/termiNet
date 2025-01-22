@@ -1,5 +1,5 @@
 #include "home.h"
-#include "../../../helpers/websocket_client/websocketclient.h"
+#include "../../network/websocket/websocketclient.h"
 #include "../../db/manager/databasemanager.h"
 #include "../../network/search/search_repository.h"
 #include<QTextBrowser>

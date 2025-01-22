@@ -3,7 +3,7 @@
 #include <QJsonObject>
 #include <QNetworkRequest>
 #include <QNetworkReply>
-#include "../../src/models/user/authenticateduser.h"
+#include "../../models/user/authenticateduser.h"
 
 std::unique_ptr<ApiClient> ApiClient::instance = nullptr;
 

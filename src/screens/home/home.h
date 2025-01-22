@@ -18,7 +18,7 @@
 #include "../community/communitypage.h"
 #include "widgets/thread_view/threadview.h"
 #include "../../models/user/authenticateduser.h"
-#include "../../../screens/message/messagepage.h"
+#include "../message/messagepage.h"
 #include "../../screens/profile/profileview.h"
 #include "../../screens/search/searchview.h"
 

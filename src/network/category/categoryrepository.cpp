@@ -4,7 +4,7 @@
 #include <QJsonObject>
 #include <QEventLoop>
 #include "../../models/category/category_model.h"
-#include "../../../helpers/api_client/apiclient.h"
+#include "../api/apiclient.h"
 
 CategoryRepository::CategoryRepository() {}
 

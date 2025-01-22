@@ -12,7 +12,7 @@
 #include "../../models/user/usermodel.h"
 #include "../../models/user/authenticateduser.h"
 #include "../../network/category/categoryrepository.h"
-#include "../../../helpers/api_client/apiclient.h"
+#include "../api/apiclient.h"
 
 CommunityRepository::CommunityRepository() {}
 

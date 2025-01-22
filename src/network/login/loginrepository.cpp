@@ -1,6 +1,6 @@
 #include "loginrepository.h"
-#include "../../../helpers/api_client/apiclient.h"
-#include "../../../helpers/apphelper.h"
+#include "../api/apiclient.h"
+#include "../../helpers/apphelper.h"
 #include <QPointer>
 #include <QJsonDocument>
 #include <QJsonObject>

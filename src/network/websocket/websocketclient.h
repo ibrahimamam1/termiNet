@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <QWebSocket>
-#include "../api_client/apiclient.h"
+#include "../api/apiclient.h"
 
 class WebSocketClient : public QObject
 {

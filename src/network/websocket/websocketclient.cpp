@@ -1,5 +1,5 @@
 #include "websocketclient.h"
-#include "../../src/models/user/authenticateduser.h"
+#include "../../models/user/authenticateduser.h"
 #include <QJsonObject>
 #include <QJsonDocument>
 
@@ -14,7 +14,7 @@ WebSocketClient::WebSocketClient(QObject *parent)
     connect(&webSocket, &QWebSocket::errorOccurred,
             this, &WebSocketClient::onError);
     connect(&webSocket, &QWebSocket::textMessageReceived,
-           this, &WebSocketClient::onTextMessageReceived);
+            this, &WebSocketClient::onTextMessageReceived);
 }
 
 WebSocketClient& WebSocketClient::getInstance() {

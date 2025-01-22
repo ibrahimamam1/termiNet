@@ -1,6 +1,6 @@
 #include "user_repository.h"
-#include "../../../helpers/api_client/apiclient.h"
-#include "../../../helpers/apphelper.h"
+#include "../api/apiclient.h"
+#include "../../helpers/apphelper.h"
 #include "../../models/user/authenticateduser.h"
 #include <QEventLoop>
 #include <QPointer>

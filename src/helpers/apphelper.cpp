@@ -162,3 +162,9 @@ QImage AppHelper::createRoundedIcon(const QImage& inputImage) {
 
     return roundedImage;
 }
+
+QString AppHelper::hashString(const QString& target) {
+    QByteArray byteArray = target.toUtf8();
+    QByteArray hash = QCryptographicHash::hash(byteArray, QCryptographicHash::Sha256);
+    return hash.toHex();
+}

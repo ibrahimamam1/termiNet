@@ -1,9 +1,9 @@
 #include "signup.h"
 #include "../../network/user/user_repository.h"
-#include "../../../helpers/api_client/apiclient.h"
-#include "../../../helpers/hash_helper/hashhelper.h"
+#include "../../network/api/apiclient.h"
+#include "../../helpers/apphelper.h"
 #include "../../helpers/validators/formvalidator.h"
-#include "../../../helpers/apphelper.h"
+#include "../../helpers/apphelper.h"
 #include "../../network/signup/signup_repository.h"
 #include "../../models/user/authenticateduser.h"
 #include <QJsonDocument>

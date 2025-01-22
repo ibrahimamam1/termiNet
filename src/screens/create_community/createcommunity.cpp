@@ -1,6 +1,6 @@
 #include "createcommunity.h"
 #include "../../network/community/communityrepository.h"
-#include "../../../helpers/apphelper.h"
+#include "../../helpers/apphelper.h"
 #include "../home/home.h"
 #include<QMessageBox>
 
