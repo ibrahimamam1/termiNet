@@ -47,7 +47,7 @@ void CustomTopBar::onPostCreated(bool success){
     emit postCreated(success);
 }
 void CustomTopBar::onSearchTriggered(){
-
+    emit searchActivated(searchBar->text());
 }
 void CustomTopBar::onMessageIconClicked(){
     qDebug() << "Message Btn Clicked";

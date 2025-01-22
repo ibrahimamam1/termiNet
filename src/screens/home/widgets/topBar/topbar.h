@@ -32,6 +32,7 @@ signals:
     void messageIconClicked();
     void profileIconClicked();
     void postCreated(bool success);
+    void searchActivated(const QString target);
 };
 
 #endif // CUSTOMTOPBAR_H

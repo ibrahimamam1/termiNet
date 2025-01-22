@@ -24,6 +24,7 @@ class Signup : public QDialog
     QVBoxLayout *signUpFormContainer;
     QLabel *titleText;
     QLineEdit* userNameInput;
+    QLineEdit* secondPageUserNameInput;
     QLineEdit* emailInput;
     QLineEdit* passwordInput;
     QLineEdit* confirmPasswordInput;

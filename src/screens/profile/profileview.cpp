@@ -1,6 +1,6 @@
 #include "profileview.h"
-#include "../../src/models/user/authenticateduser.h"
-#include "../../src/network/user/user_repository.h"
+#include "../../models/user/authenticateduser.h"
+#include "../../network/user/user_repository.h"
 #include <QLabel>
 #include <QFileDialog>
 #include <QStandardPaths>
@@ -13,7 +13,6 @@ ProfileView::ProfileView(QWidget *parent)
     setLayout(&mainLayout);
 
     // Profile Picture Section
-
     profileIcon = AuthenticatedUser::getInstance().getProfilePic();
     profilePic = new QLabel();
     profilePic->setPixmap(profileIcon.pixmap(QSize(100, 100)));
@@ -60,8 +59,8 @@ ProfileView::ProfileView(QWidget *parent)
 
     // Date of Birth Row
     auto userDobRow = new QHBoxLayout();
-    userDob = new QLineEdit(this);
-    userDob->setText(AuthenticatedUser::getInstance().getDob());
+    userDob = new QDateEdit(this);
+    userDob->setDate(AuthenticatedUser::getInstance().getDob());
     userDob->setReadOnly(true);
     changeUserDob = new QPushButton("Edit", this);
     connect(changeUserDob, &QPushButton::clicked, this, [this]() {
@@ -74,7 +73,7 @@ ProfileView::ProfileView(QWidget *parent)
     // Bio Row
     auto userBioRow = new QHBoxLayout();
     userBio = new QLineEdit(this);
-    userBio->setPlaceholderText(AuthenticatedUser::getInstance().getBio());
+    userBio->setText(AuthenticatedUser::getInstance().getBio());
     userBio->setReadOnly(true);
     changeUserBio = new QPushButton("Edit", this);
     connect(changeUserBio, &QPushButton::clicked, this, [this]() {
@@ -105,37 +104,39 @@ ProfileView::ProfileView(QWidget *parent)
 
 void ProfileView::onSaveButtonClicked() {
     auto instance = AuthenticatedUser::getInstance();
-
+    bool sucess = false;
     // Update the username if it has changed
     if (instance.getName() != userName->text()) {
         qDebug() << "Updating User Name";
-        UserRepository::updateUserName(userName->text());
+        sucess = UserRepository::updateUserName(userName->text());
     }
 
     // Update the email if it has changed
     if (instance.getEmail() != userEmail->text()) {
         qDebug() << "Updating User Email";
-        UserRepository::updateUserEmail(userEmail->text());
+        sucess = UserRepository::updateUserEmail(userEmail->text());
     }
 
     // Update the date of birth if it has changed
-    if (instance.getDob() != userDob->text()) {
+    if (instance.getDob() != userDob->date()) {
         qDebug() << "Updating User Dob";
-        UserRepository::updateUserDob(userDob->text());
+        sucess = UserRepository::updateUserDob(userDob->text());
     }
 
     // Update the bio if it has changed
     if (instance.getBio() != userBio->text()) {
         qDebug() << "Updating User Bio";
-        UserRepository::updateUserBio(userBio->text());
+        sucess = UserRepository::updateUserBio(userBio->text());
     }
 
     // Update the profile picture if it has changed
     if (profileIcon.cacheKey() != instance.getProfilePic().cacheKey()) {
         qDebug() << "Updating User Profile Pic";
-        UserRepository::updateUserProfilePic(profileIcon);
+        sucess = UserRepository::updateUserProfilePic(profileIcon);
     }
 
-    // Optionally, you can notify the user that changes have been saved
-    QMessageBox::information(this, "Success", "Your changes have been saved!");
+    if(sucess)
+        QMessageBox::information(this, "Success", "Your changes have been saved!");
+    else
+        QMessageBox::critical(this, "Failed", "Failed to save your changes! Please try again");
 }

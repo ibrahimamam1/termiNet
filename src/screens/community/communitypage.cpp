@@ -12,6 +12,7 @@ CommunityModel CommunityPage::getCommunity() const{
     return community;
 }
 void CommunityPage::setCommunityPage(const CommunityModel& comm){
+    qDebug() << "Switching to community " << comm.getId();
     community = comm;
     threads = comm.getThreads();
 

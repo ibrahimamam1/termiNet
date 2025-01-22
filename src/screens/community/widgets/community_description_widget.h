@@ -22,7 +22,6 @@ class CommunityDescriptionWidget : public QWidget
     QLabel *bannerImage;
     QLabel *iconImage;
     QLabel *memberCount;
-    size_t communityId;
     CommunityModel community;
 public:
     explicit CommunityDescriptionWidget(CommunityModel& community, QWidget *parent = nullptr);

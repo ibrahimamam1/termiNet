@@ -75,7 +75,7 @@ CommunityDescriptionWidget::CommunityDescriptionWidget(CommunityModel& comm, QWi
     if(community.getJoined() == true)
         joinBtn->setText("Leave");
     else
-       joinBtn->setText("False");
+       joinBtn->setText("Join");
 
     joinBtn->setStyleSheet(
         "QPushButton {"
@@ -103,13 +103,13 @@ CommunityDescriptionWidget::CommunityDescriptionWidget(CommunityModel& comm, QWi
 
 void CommunityDescriptionWidget::onJoinBtnClicked() {
     if(community.getJoined() == false){
-        bool success = CommunityRepository::addUserToCommunity(AuthenticatedUser::getInstance().getId(), communityId);
+        bool success = CommunityRepository::addUserToCommunity(AuthenticatedUser::getInstance().getId(), community.getId());
         if(success){
             joinBtn->setText("Leave");
             community.setJoined(true);
         }
     }else{
-        bool success = CommunityRepository::removeUserFromCommunity(AuthenticatedUser::getInstance().getId(), communityId);
+        bool success = CommunityRepository::removeUserFromCommunity(AuthenticatedUser::getInstance().getId(), community.getId());
         if(success){
             joinBtn->setText("Join");
             community.setJoined(false);
@@ -118,7 +118,7 @@ void CommunityDescriptionWidget::onJoinBtnClicked() {
 
 }
 void CommunityDescriptionWidget::setCommunity(const CommunityModel& comm){
-    communityId = comm.getId();
+    community = comm;
     QPixmap bannerPixMap;
     bannerPixMap.convertFromImage(comm.getBannerImage());
     bannerImage->setPixmap(bannerPixMap.scaled(800, 200, Qt::KeepAspectRatioByExpanding));

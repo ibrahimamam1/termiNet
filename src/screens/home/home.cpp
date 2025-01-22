@@ -1,8 +1,10 @@
 #include "home.h"
 #include "../../../helpers/websocket_client/websocketclient.h"
 #include "../../db/manager/databasemanager.h"
+#include "../../network/search/search_repository.h"
 #include<QTextBrowser>
 #include<QTimer>
+#include <QMessageBox>
 
 Home::Home(QWidget *parent) : QMainWindow(parent), user(AuthenticatedUser::getInstance())
 {
@@ -19,6 +21,7 @@ Home::Home(QWidget *parent) : QMainWindow(parent), user(AuthenticatedUser::getIn
     connect(topBar, &CustomTopBar::postCreated, this, &Home::onPostCreated);
     connect(topBar, &CustomTopBar::messageIconClicked, this, &Home::onMessageIconClicked);
     connect(topBar, &CustomTopBar::profileIconClicked, this, &Home::onProfileIconClicked);
+    connect(topBar, &CustomTopBar::searchActivated, this, &Home::onSearchActivated);
     leftNav = new LeftNavigationWidget();
     connect(leftNav, &LeftNavigationWidget::homeClicked, this, [this]{
         if(centerArea->currentIndex() == 0){
@@ -33,9 +36,11 @@ Home::Home(QWidget *parent) : QMainWindow(parent), user(AuthenticatedUser::getIn
     centerArea = new QStackedWidget();
     threadView = new ThreadView(threads);
     communityPage = new CommunityPage();
+    searchView = new SearchView();
 
     centerArea->addWidget(threadView);
     centerArea->addWidget(communityPage);
+    centerArea->addWidget(searchView);
 
     //setup profile view
     profileview = new ProfileView(this);
@@ -154,6 +159,25 @@ void Home::onPostCreated(bool success){
         mainContainer->removeWidget(messageLabel);
         delete messageLabel;
     });
+}
+
+void Home::onSearchActivated(const QString& searchString){
+    qDebug() << "Initiating search For: " << searchString;
+    QList<ThreadModel>threads;
+    QList<CommunityModel>communities;
+    QList<UserModel>users;
+
+    int err = SearchRepository::searchFor(searchString, threads, communities, users);
+    if(err){
+        QMessageBox::critical(this, "Error", "Connection Error. Please try again", "OK");
+        return;
+    }
+    qDebug() << "Search result are here hoorah";
+    qDebug() << "Found threads : " << threads.size();
+    qDebug() << "Found comms : " << communities.size();
+    qDebug() << "Found users : " << users.size();
+    searchView->setSearchView(threads, communities, users);
+    centerArea->setCurrentIndex(2);
 }
 
 

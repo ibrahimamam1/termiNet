@@ -35,6 +35,7 @@ int main(int argc, char *argv[])
     bool initializationComplete = false;
 
     QString userId = AppHelper::checkPersitentLogin();
+    //QString userId = "";
     if(userId.length() <= 5){
         // Create and show login/signup window
         auto loginWindow = new Login();
