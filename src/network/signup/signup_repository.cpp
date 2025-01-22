@@ -1,7 +1,7 @@
 #include "signup_repository.h"
-#include "../../../helpers/api_client/apiclient.h"
-#include "../../../helpers/apphelper.h"
-#include "../../../helpers/hash_helper/hashhelper.h"
+#include "../api/apiclient.h"
+#include "../../helpers/apphelper.h"
+#include "../../helpers/apphelper.h"
 #include <QOAuth2AuthorizationCodeFlow>
 #include <QOAuthHttpServerReplyHandler>
 #include <QDesktopServices>
@@ -125,7 +125,7 @@ int SignupRepository::createNewUserAccountWithEmailAndPassword(const QString& na
     jsonData["user_email"] = email;
     jsonData["user_dob"] = dateOfBirth.toString("yyyy-MM-dd");
     jsonData["user_bio"] = "";
-    jsonData["password"] = HashHelper::hashString(password);
+    jsonData["password"] = AppHelper::hashString(password);
     jsonData["created_at"] = QDateTime::currentDateTimeUtc().toString(Qt::ISODate);
 
     return createNewUserAccount(jsonData, error_msg);

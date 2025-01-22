@@ -62,3 +62,7 @@ size_t CommunityModel::getMemberCount() const {
 QList<ThreadModel> CommunityModel::getThreads() const{
     return threads;
 }
+
+void CommunityModel::setJoined(bool val) {joined = val; }
+
+bool CommunityModel::getJoined() const{return joined;}

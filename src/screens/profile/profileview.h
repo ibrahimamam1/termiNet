@@ -8,7 +8,8 @@
 #include <QLineEdit>
 #include <QTextEdit>
 #include <QPushButton>
-#include "QIcon"
+#include <QDateEdit>
+#include <QIcon>
 class ProfileView : public QWidget
 {
     Q_OBJECT
@@ -20,7 +21,7 @@ class ProfileView : public QWidget
     QPushButton *changeUserName;
     QLineEdit *userEmail;
     QPushButton *changeUserEmail;
-    QLineEdit *userDob;
+    QDateEdit *userDob;
     QPushButton *changeUserDob;
     QLineEdit *userBio;
     QPushButton *changeUserBio;

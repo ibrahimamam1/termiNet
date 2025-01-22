@@ -1,6 +1,6 @@
 #include "user_repository.h"
-#include "../../../helpers/api_client/apiclient.h"
-#include "../../../helpers/apphelper.h"
+#include "../api/apiclient.h"
+#include "../../helpers/apphelper.h"
 #include "../../models/user/authenticateduser.h"
 #include <QEventLoop>
 #include <QPointer>
@@ -30,10 +30,10 @@ UserModel UserRepository::getUser(const QString& userUri){
                     user.setId(body["user_id"].toString());
                     user.setName(body["user_name"].toString());
                     user.setEmail(body["user_email"].toString());
-                    user.setSex(body["user_sex"].toString());
-                    user.setDob(body["user_dob"].toString());
+                    user.setBio(body["user_bio"].toString());
+                    user.setDob(QDate::fromString(body["user_dob"].toString()));
                     user.setCreatedAt(body["created_at"].toString());
-                    QString base64Data = body["profile_image"].toString();
+                    QString base64Data = body["profile_picture"].toString();
                     if(base64Data != ""){
                         qDebug() << "Got Some Image from sever";
                         QByteArray imageData = QByteArray::fromBase64(base64Data.toUtf8());
@@ -134,6 +134,6 @@ bool UserRepository::updateUserProfilePic(const QIcon &newProfilePic) {
 
     // Convert QByteArray to a base64 encoded string
     QString base64Image = QString::fromLatin1(byteArray.toBase64().data());
-    return updateUser("profile_image", base64Image);
+    return updateUser("profile_picture", base64Image);
 }
 

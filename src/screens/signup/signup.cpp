@@ -1,9 +1,9 @@
 #include "signup.h"
 #include "../../network/user/user_repository.h"
-#include "../../../helpers/api_client/apiclient.h"
-#include "../../../helpers/hash_helper/hashhelper.h"
+#include "../../network/api/apiclient.h"
+#include "../../helpers/apphelper.h"
 #include "../../helpers/validators/formvalidator.h"
-#include "../../../helpers/apphelper.h"
+#include "../../helpers/apphelper.h"
 #include "../../network/signup/signup_repository.h"
 #include "../../models/user/authenticateduser.h"
 #include <QJsonDocument>
@@ -52,7 +52,7 @@ void Signup::setupUI() {
 
     //second page
     secondPageContainer = new QVBoxLayout();
-    secondPageUserNameField = createFormField("Username", "Choose Your Username");
+    secondPageUserNameField = createFormField("username", "Choose Your Username");
     auto dateLabel = new QLabel("Date Of Birth");
     secondPageDateOfBirthField = new QDateEdit(QDate::currentDate());
     finishButton = new QPushButton("Done");
@@ -131,6 +131,7 @@ QVBoxLayout* Signup::createFormField(const QString& labelText, const QString& pl
 
     // Store the reference when creating
     if (labelText == "Username") userNameInput = field;
+    if (labelText == "username") secondPageUserNameInput = field;
     else if (labelText == "Email") emailInput = field;
     else if (labelText == "Password") passwordInput = field;
     else if (labelText == "Confirm Password") confirmPasswordInput = field;
@@ -217,7 +218,7 @@ void Signup::onGoogleSignup(){
     if(!reply.accessToken.isEmpty()){
         pages->setCurrentIndex(1);
         connect(finishButton, &QPushButton::clicked,this,[&]{
-            auto userName = userNameInput->text();
+            auto userName = secondPageUserNameInput->text();
             auto dob = secondPageDateOfBirthField->date();
 
             QString errorMessage;

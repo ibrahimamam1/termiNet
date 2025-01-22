@@ -15,6 +15,7 @@ class CommunityModel
     QList<ThreadModel> threads;
     QString created_at;
     size_t memberCount;
+    bool joined = false;
 
 public:
     CommunityModel();
@@ -33,5 +34,7 @@ public:
     QList<CategoryModel> getCategories() const;
     void setCategories(const QList<CategoryModel>& cats);
     QList<ThreadModel> getThreads() const;
+    void setJoined(bool val);
+    bool getJoined() const;
 };
 #endif // COMMUNITYMODEL_H

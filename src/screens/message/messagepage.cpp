@@ -1,9 +1,9 @@
 #include "messagepage.h"
-#include "../../db/message/messagerepository.h"
-#include "../../src/models/user/authenticateduser.h"
-#include "../../src/network/user/user_repository.h"
-#include "../../src/screens/home/home.h"
-#include "../../src/db/manager/databasemanager.h"
+#include "../../../db/message/messagerepository.h"
+#include "../../models/user/authenticateduser.h"
+#include "../../network/user/user_repository.h"
+#include "../../screens/home/home.h"
+#include "../../db/manager/databasemanager.h"
 #include <algorithm>
 #include <QJsonDocument>
 #include <QJsonObject>

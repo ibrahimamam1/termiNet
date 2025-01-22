@@ -1,10 +1,10 @@
 #include "login.h"
 
-#include "../../../helpers/api_client/apiclient.h"
-#include "../../../helpers/hash_helper/hashhelper.h"
+#include "../../network/api/apiclient.h"
+#include "../../helpers/apphelper.h"
 #include "../../network/login/loginrepository.h"
 #include "../../network/user/user_repository.h"
-#include "../../../helpers/apphelper.h"
+#include "../../helpers/apphelper.h"
 #include "../../models/user/authenticateduser.h"
 #include "../../helpers/validators/formvalidator.h"
 #include "../../common/type/types.h"
@@ -120,7 +120,7 @@ void Login::onLoginButtonClicked()
         return;
     }
 
-    QString hashedPassword = HashHelper::hashString(password);
+    QString hashedPassword = AppHelper::hashString(password);
     LoginResult loginResult = LoginRepository::login(email, hashedPassword);
 
     if (loginResult == LoginResult::SUCCESS) {

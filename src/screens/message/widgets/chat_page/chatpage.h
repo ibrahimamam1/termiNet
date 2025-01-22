@@ -6,7 +6,7 @@
 #include <QScrollArea>
 #include <QTextEdit>
 #include <QPushButton>
-#include "singleMessage/singlemessage.h"
+#include "single_message/singlemessage.h"
 #include "../../../../src/models/user/usermodel.h"
 
 

@@ -15,12 +15,13 @@ class CommunityPage : public QWidget
     CommunityDescriptionWidget *communityDescriptionWidget;
     CommunityModel community;
     QList<ThreadModel> threads;
+    bool isSet = false;
+    bool joined = false;
 
 public:
     explicit CommunityPage(QWidget *parent = nullptr);
     CommunityModel getCommunity() const;
     void setCommunityPage(const CommunityModel& comm);
-    void clearCommunityPage();
 
 signals:
 

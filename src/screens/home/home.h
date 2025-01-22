@@ -18,8 +18,9 @@
 #include "../community/communitypage.h"
 #include "widgets/thread_view/threadview.h"
 #include "../../models/user/authenticateduser.h"
-#include "../../../screens/message/messagepage.h"
-#include "../../../screens/profile_view/profileview.h"
+#include "../message/messagepage.h"
+#include "../../screens/profile/profileview.h"
+#include "../../screens/search/searchview.h"
 
 class Home : public QMainWindow
 {
@@ -42,6 +43,7 @@ public:
     QStackedWidget *centerArea;
     ThreadView *threadView;
     ProfileView *profileview;
+    SearchView *searchView;
     CommunityPage *communityPage;
     MessagePage *msgPage;
     bool profileVisible;
@@ -52,6 +54,7 @@ private slots:
     void onMessageIconClicked();
     void onProfileIconClicked();
     void onPostCreated(bool success);
+    void onSearchActivated(const QString& searchString);
 
 private:
     UserModel& user;

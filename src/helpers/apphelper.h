@@ -12,6 +12,7 @@ public:
     static const QString getDefaultProfilePicturePath();
     static const QJsonDocument loadJsonFromFile(const QString& filePath);
     static QImage createRoundedIcon(const QImage& inputImage);
+    static QString hashString(const QString& target);
 };
 
 #endif // APPHELPER_H

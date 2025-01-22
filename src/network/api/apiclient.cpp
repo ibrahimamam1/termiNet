@@ -3,7 +3,7 @@
 #include <QJsonObject>
 #include <QNetworkRequest>
 #include <QNetworkReply>
-#include "../../src/models/user/authenticateduser.h"
+#include "../../models/user/authenticateduser.h"
 
 std::unique_ptr<ApiClient> ApiClient::instance = nullptr;
 
@@ -56,3 +56,4 @@ const QString& ApiClient::getPostThreadUrl() const {return postThreadUrl;}
 const QString& ApiClient::getThreadsUrl() const{ return threadsUrl; }
 const QString& ApiClient::getCategoriesUrl() const{ return categoryUrl; }
 const QString& ApiClient::getCommunitiesUrl() const{ return communityUrl; }
+const QString& ApiClient::getSearchUrl() const{ return searchUrl; }

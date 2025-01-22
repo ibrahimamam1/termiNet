@@ -9,8 +9,8 @@
 #include <QApplication>
 #include <QMessageBox>
 #include <QStyleHints>
-#include "helpers/apphelper.h"
-#include "helpers/websocket_client/websocketclient.h"
+#include "src/helpers/apphelper.h"
+#include "src/network/websocket/websocketclient.h"
 #include "src/db/manager/databasemanager.h"
 
 std::unique_ptr<Home> Home::instance = nullptr;
@@ -35,6 +35,7 @@ int main(int argc, char *argv[])
     bool initializationComplete = false;
 
     QString userId = AppHelper::checkPersitentLogin();
+    //QString userId = "";
     if(userId.length() <= 5){
         // Create and show login/signup window
         auto loginWindow = new Login();

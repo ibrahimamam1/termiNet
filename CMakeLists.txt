@@ -48,22 +48,22 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 
 
 
-        screens/message/messagepage.h screens/message/messagepage.cpp
-        screens/message/widgets/message_list_view/messagelistview.h screens/message/widgets/message_list_view/messagelistview.cpp
 
-        screens/message/widgets/message/messagewidget.h screens/message/widgets/message/messagewidget.cpp
+
+
+
         db/message/messagerepository.h db/message/messagerepository.cpp
-        screens/message/widgets/create_message/createmessage.h screens/message/widgets/create_message/createmessage.cpp
 
-        helpers/api_client/apiclient.h helpers/api_client/apiclient.cpp
-        helpers/hash_helper/hashhelper.h helpers/hash_helper/hashhelper.cpp
-        helpers/message_client/messageclient.h helpers/message_client/messageclient.cpp
 
-        screens/message/widgets/chat_page/singleMessage/singlemessage.h screens/message/widgets/chat_page/singleMessage/singlemessage.cpp
-        screens/message/widgets/chat_page/chatpage.h screens/message/widgets/chat_page/chatpage.cpp
-        helpers/apphelper.h helpers/apphelper.cpp
 
-        helpers/websocket_client/websocketclient.h helpers/websocket_client/websocketclient.cpp
+
+
+
+
+
+
+
+
 
 
         src/db/manager/databasemanager.h src/db/manager/databasemanager.cpp
@@ -72,7 +72,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         src/network/user/user_repository.h src/network/user/user_repository.cpp
         src/models/user/usermodel.h src/models/user/usermodel.cpp
         src/models/user/authenticateduser.h src/models/user/authenticateduser.cpp
-        screens/profile_view/profileview.h screens/profile_view/profileview.cpp
+
         src/common/theme/apptheme.h src/common/theme/apptheme.cpp
         src/common/type/types.h
         src/network/login/loginrepository.h src/network/login/loginrepository.cpp
@@ -106,6 +106,21 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         src/models/community/communitymodel.h src/models/community/communitymodel.cpp
         src/network/community/communityrepository.h src/network/community/communityrepository.cpp
         src/common/style/styles.h
+        src/screens/profile/profileview.h src/screens/profile/profileview.cpp
+        src/screens/search/searchview.h src/screens/search/searchview.cpp
+        src/network/search/search_repository.h src/network/search/search_repository.cpp
+        src/screens/message/messagepage.h src/screens/message/messagepage.cpp
+        src/screens/message/widgets/chat_page/single_message/singlemessage.h src/screens/message/widgets/chat_page/single_message/singlemessage.cpp
+        src/screens/message/widgets/chat_page/chatpage.h src/screens/message/widgets/chat_page/chatpage.cpp
+        src/screens/message/widgets/create_message/createmessage.h src/screens/message/widgets/create_message/createmessage.cpp
+        src/screens/message/widgets/message/messagewidget.h src/screens/message/widgets/message/messagewidget.cpp
+        src/screens/message/widgets/message_list_view/messagelistview.h src/screens/message/widgets/message_list_view/messagelistview.cpp
+        src/network/api/apiclient.h src/network/api/apiclient.cpp
+        src/network/websocket/websocketclient.h src/network/websocket/websocketclient.cpp
+
+        src/helpers/apphelper.h src/helpers/apphelper.cpp
+
+
 
 
 

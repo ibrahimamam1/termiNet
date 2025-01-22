@@ -22,6 +22,7 @@ public:
     const QString& getThreadsUrl() const;
     const QString& getCategoriesUrl() const;
     const QString& getCommunitiesUrl() const;
+    const QString& getSearchUrl() const;
     static ApiClient& getInstance();
 
 private:
@@ -37,6 +38,7 @@ private:
     const QString threadsUrl = baseUrl + "threads/";
     const QString categoryUrl = baseUrl + "categories/";
     const QString communityUrl = baseUrl + "communities/";
+    const QString searchUrl = baseUrl + "search/";
 
 signals:
 private slots:

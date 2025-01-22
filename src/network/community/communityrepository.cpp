@@ -12,7 +12,7 @@
 #include "../../models/user/usermodel.h"
 #include "../../models/user/authenticateduser.h"
 #include "../../network/category/categoryrepository.h"
-#include "../../../helpers/api_client/apiclient.h"
+#include "../api/apiclient.h"
 
 CommunityRepository::CommunityRepository() {}
 
@@ -91,11 +91,13 @@ QList<CommunityModel> CommunityRepository::getCommunities(const QString& filter,
                     QString created_at = jsonObject["created_at"].toString();
                     size_t id = static_cast<size_t>(jsonObject["community_id"].toInt());
                     size_t memberCount = static_cast<size_t>(jsonObject["member_count"].toInt());
+                    qDebug() << name << " has " << memberCount << "members";
 
                     QImage iconImage = QImage::fromData(iconImageData, "PNG");
                     QImage bannerImage = QImage::fromData(bannerImageData, "PNG");
 
                     CommunityModel comm(name, description, iconImage, bannerImage, id, created_at, memberCount);
+                    comm.setJoined(true);
 
                     comms.append(comm);
                 }
@@ -110,5 +112,47 @@ QList<CommunityModel> CommunityRepository::getCommunities(const QString& filter,
 }
 QList<CommunityModel> CommunityRepository::getUserCommunities(const QString& user_id){
     return getCommunities("user_id", user_id);
+}
+
+bool CommunityRepository::addUserToCommunity(const QString& user_id, const size_t& community_id){
+    ApiClient& client = ApiClient::getInstance();
+    QString url = client.getCommunitiesUrl() + "users/add/" + user_id + "/" + QString::number(community_id);
+
+    QEventLoop loop;
+    QNetworkReply* reply = client.makeGetRequest(url);
+    QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
+
+    loop.exec();
+    if(reply->error() == QNetworkReply::NoError){
+        QByteArray data = reply->readAll();
+        QJsonDocument jsonDoc = QJsonDocument::fromJson(data);
+        if (!jsonDoc.isNull() && jsonDoc.isObject()) {
+            QJsonObject jsonObject = jsonDoc.object();
+            bool success = jsonObject["Status"].toBool();
+            return success;
+        }
+    }
+    return false;
+}
+
+bool CommunityRepository::removeUserFromCommunity(const QString& user_id, const size_t& community_id){
+    ApiClient& client = ApiClient::getInstance();
+    QString url = client.getCommunitiesUrl() + "users/remove/" + user_id + "/" + QString::number(community_id);
+
+    QEventLoop loop;
+    QNetworkReply* reply = client.makeGetRequest(url);
+    QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
+
+    loop.exec();
+    if(reply->error() == QNetworkReply::NoError){
+        QByteArray data = reply->readAll();
+        QJsonDocument jsonDoc = QJsonDocument::fromJson(data);
+        if (!jsonDoc.isNull() && jsonDoc.isObject()) {
+            QJsonObject jsonObject = jsonDoc.object();
+            bool success = jsonObject["Status"].toBool();
+            return success;
+        }
+    }
+    return false;
 }
 

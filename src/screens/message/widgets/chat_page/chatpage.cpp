@@ -1,5 +1,5 @@
 #include "chatpage.h"
-#include "../../../../helpers/websocket_client/websocketclient.h"
+#include "../../../../network/websocket/websocketclient.h"
 #include "../../../../src/db/manager/databasemanager.h"
 #include "../../../../src/models/user/authenticateduser.h"
 #include <QScrollBar>
@@ -96,7 +96,7 @@ void ChatPage::setMessages(std::vector<MessageModel> msgs){
         SingleMessage *messageWidget = new SingleMessage(message, direction, this);
         chatContainer->addWidget(messageWidget);
     }
-     qDebug() << "You should see " << messages.size() << " messages";
+    qDebug() << "You should see " << messages.size() << " messages";
     updateUi();
 }
 

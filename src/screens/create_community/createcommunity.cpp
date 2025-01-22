@@ -1,6 +1,6 @@
 #include "createcommunity.h"
 #include "../../network/community/communityrepository.h"
-#include "../../../helpers/apphelper.h"
+#include "../../helpers/apphelper.h"
 #include "../home/home.h"
 #include<QMessageBox>
 
@@ -48,7 +48,7 @@ CreateCommunity::CreateCommunity(QWidget *parent)
             QImage bannerImage(comm_banner_path);
             //Scale the icon and banner images
             QImage scaledIconImage = AppHelper::createRoundedIcon(iconImage);
-            QImage scaledBannerImage = bannerImage.scaled(100, 100, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            QImage scaledBannerImage = bannerImage.scaled(500, 500, Qt::KeepAspectRatio, Qt::SmoothTransformation);
             QList<CategoryModel> categories_id = page3->getSelectedCategories();
 
             CommunityModel community(comm_name, comm_des, scaledIconImage, scaledBannerImage);
@@ -60,8 +60,8 @@ CreateCommunity::CreateCommunity(QWidget *parent)
                 QMessageBox::information(this, "Sucess", "Your Community Have been Created Succesfully", "Ok");
 
                 Home& home = Home::getInstance();
-
-                home.communityPage->clearCommunityPage();
+                community.setJoined(true);
+                home.leftNav->addUserCommunity(community);
                 home.communityPage->setCommunityPage(community);
                 this->hide();
                 home.centerArea->setCurrentIndex(1);
